@@ -1,4 +1,4 @@
-package pl.edu.utp.pz1.service;
+package pl.edu.utp.pz1.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.model.Task;
 import pl.edu.utp.pz1.repository.TaskRepository;
+import pl.edu.utp.pz1.service.TaskService;
 
 import java.util.List;
 import java.util.Optional;
