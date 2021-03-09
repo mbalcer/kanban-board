@@ -19,4 +19,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT t FROM Task t WHERE t.project.projectId = :projectId")
     List<Task> findTasksByProjectId(@Param("projectId") Integer projectId);
 
+    boolean deleteByTaskId(Integer taskId);
+
 }
