@@ -2,7 +2,7 @@ package pl.edu.utp.pz1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,18 +23,18 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping
-    public ResponseEntity<Task> findTaskById(@RequestParam("taskId") Integer taskId) {
+    @GetMapping("/{taskId}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Integer taskId) {
         return ResponseEntity.of(taskService.findTask(taskId));
     }
 
     @GetMapping
-    public Page<Task> getTasks(@RequestParam("projectId") Integer projectId, Pageable pageable) {
-        return taskService.getTasks(projectId, pageable);
+    public Page<Task> getTasksByProjectId(@RequestParam("projectId") Integer projectId, @RequestParam("page") int page, @RequestParam("size") int size) {
+        return taskService.getTasks(projectId, PageRequest.of(page, size));
     }
 
-    @GetMapping
-    public List<Task> getTasks(@RequestParam("projectId") Integer projectId) {
+    @GetMapping("/all")
+    public List<Task> getTasksByProjectId(@RequestParam("projectId") Integer projectId) {
         return taskService.getTasks(projectId);
     }
 
