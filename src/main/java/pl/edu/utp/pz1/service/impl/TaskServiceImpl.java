@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(Task task) {
-        Task newTask = new Task(task.getName(), task.getDescription(), task.getOrder());
+        Task newTask = new Task(task.getName(), task.getDescription(), task.getSequence());
         return taskRepository.save(newTask);
     }
 
@@ -49,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
             Task task = optionalTask.get();
             task.setName(updatedTask.getName());
             task.setDescription(updatedTask.getDescription());
-            task.setOrder(updatedTask.getOrder());
+            task.setSequence(updatedTask.getSequence());
             return taskRepository.save(task);
         } else {
             return null;

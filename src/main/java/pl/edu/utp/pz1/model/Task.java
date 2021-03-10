@@ -24,7 +24,7 @@ public class Task {
     @Column(length = 1000)
     private String description;
 
-    private Integer order;
+    private Integer sequence;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -35,10 +35,10 @@ public class Task {
     @JsonIgnoreProperties({"task"})
     private Project project;
 
-    public Task(String name, String description, Integer order) {
+    public Task(String name, String description, Integer sequence) {
         this.name = name;
         this.description = description;
-        this.order = order;
+        this.sequence = sequence;
     }
 
 }
