@@ -37,28 +37,30 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(Task task) {
-        Task newTask = new Task(task.getName(), task.getDescription(), task.getSequence());
-        return taskRepository.save(newTask);
-    }
-
-    @Override
-    public Task updateTask(Integer taskId, Task updatedTask) {
-        Optional<Task> optionalTask = taskRepository.findById(taskId);
-        if (optionalTask.isPresent()) {
-            Task task = optionalTask.get();
-            task.setName(updatedTask.getName());
-            task.setDescription(updatedTask.getDescription());
-            task.setSequence(updatedTask.getSequence());
-            return taskRepository.save(task);
-        } else {
-            return null;
+    public Task create(Task task) {
+        if (task.getTaskId() != null) {
+            throw new IllegalArgumentException("Given object already has an ID");
         }
+        return taskRepository.save(task);
     }
 
     @Override
-    public boolean deleteTask(Integer taskId) {
-        return taskRepository.deleteByTaskId(taskId);
+    public Task update(Integer taskId, Task updatedTask) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        Task task = optionalTask.orElseThrow(() -> new IllegalArgumentException("Object with given ID does not exist"));
+        task.setName(updatedTask.getName());
+        task.setDescription(updatedTask.getDescription());
+        task.setSequence(updatedTask.getSequence());
+        return taskRepository.save(task);
+    }
+
+    @Override
+    public void delete(Integer taskId) {
+        if (taskRepository.existsById(taskId)) {
+            taskRepository.deleteById(taskId);
+        } else {
+            throw new IllegalArgumentException("Object with given ID does not exist");
+        }
     }
 
 }

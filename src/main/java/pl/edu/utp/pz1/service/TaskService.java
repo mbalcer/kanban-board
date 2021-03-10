@@ -15,10 +15,10 @@ public interface TaskService {
 
     List<Task> getTasks(Integer projectId);
 
-    Task createTask(Task task);
+    Task create(Task task);
 
-    Task updateTask(Integer taskId, Task updatedTask);
+    Task update(Integer taskId, Task updatedTask);
 
-    boolean deleteTask(Integer taskId);
+    void delete(Integer taskId);
 
 }

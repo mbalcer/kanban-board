@@ -40,7 +40,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Task createdTask = taskService.createTask(task);
+        Task createdTask = taskService.create(task);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("taskId", createdTask.getTaskId()).build().toUri();
         return ResponseEntity.created(location).build();
@@ -49,21 +49,14 @@ public class TaskController {
     @PutMapping
     public ResponseEntity<Task> updateTask(@RequestParam("taskId") Integer taskId,
                                            @RequestBody Task task) {
-        Task updatedTask = taskService.updateTask(taskId, task);
-        if (updatedTask != null) {
-            return ResponseEntity.ok(updatedTask);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Task updatedTask = taskService.update(taskId, task);
+        return ResponseEntity.ok(updatedTask);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteTask(@RequestParam("taskId") Integer taskId) {
-        if (taskService.deleteTask(taskId)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        taskService.delete(taskId);
+        return ResponseEntity.noContent().build();
     }
 
 }
