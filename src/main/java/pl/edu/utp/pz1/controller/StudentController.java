@@ -39,7 +39,7 @@ public class StudentController {
     public ResponseEntity<Student> createTask(@RequestBody Student student) {
         Student newStudent = studentService.create(student);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/" + String.valueOf(newStudent.getStudentId())).build().toUri();
+                .path("/" + newStudent.getStudentId()).build().toUri();
         return ResponseEntity.created(location).body(newStudent);
     }
 

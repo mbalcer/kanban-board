@@ -39,7 +39,7 @@ public class ProjectController {
     public ResponseEntity<Project> createProject(@RequestBody Project project) {
         Project newProject = projectService.create(project);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/" + String.valueOf(newProject.getProjectId())).build().toUri();
+                .path("/" + newProject.getProjectId()).build().toUri();
         return ResponseEntity.created(location).body(newProject);
     }
 
