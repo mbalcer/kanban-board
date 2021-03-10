@@ -26,7 +26,7 @@ public class StudentController {
     }
 
     @GetMapping
-    public Page<Student> getStudents(@RequestParam("page") int page, @RequestParam int size) {
+    public Page<Student> getStudents(@RequestParam("page") int page, @RequestParam("size") int size) {
         return studentService.getStudents(PageRequest.of(page, size));
     }
 
@@ -39,7 +39,7 @@ public class StudentController {
     public ResponseEntity<Student> createTask(@RequestBody Student student) {
         Student newStudent = studentService.create(student);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .fragment(String.valueOf(newStudent.getStudentId())).build().toUri();
+                .path("/" + String.valueOf(newStudent.getStudentId())).build().toUri();
         return ResponseEntity.created(location).body(newStudent);
     }
 
