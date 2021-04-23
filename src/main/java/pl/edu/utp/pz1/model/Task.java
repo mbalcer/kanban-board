@@ -1,6 +1,7 @@
 package pl.edu.utp.pz1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tasks")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Task {
 

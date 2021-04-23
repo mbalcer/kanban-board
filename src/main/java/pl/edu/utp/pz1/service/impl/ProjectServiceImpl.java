@@ -35,10 +35,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project create(Project project) {
-        if (project.getProjectId() != null) {
-            throw new IllegalArgumentException("");
-        }
-
         return projectRepository.save(project);
     }
 
