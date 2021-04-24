@@ -13,6 +13,6 @@ export class TaskService {
   constructor(private httpClient: HttpClient) { }
 
   getTasksByProject(projectId: number): Observable<Task[]> {
-    return this.httpClient.get<Task[]>(this.TASK_URL + '/all?projectId=' + projectId);
+    return this.httpClient.get<Task[]>(this.TASK_URL + '/project/' + projectId);
   }
 }

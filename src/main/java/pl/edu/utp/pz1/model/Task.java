@@ -28,6 +28,9 @@ public class Task {
 
     private Integer sequence;
 
+    @Enumerated(EnumType.STRING)
+    private TaskState state = TaskState.TODO;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createDateTime;

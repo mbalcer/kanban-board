@@ -3,6 +3,7 @@ export interface Task {
   name?: string;
   description?: string;
   sequence?: number;
+  state?: string;
   createDateTime?: string;
   project?: any;
 }

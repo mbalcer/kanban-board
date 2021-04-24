@@ -22,16 +22,18 @@ export class TasksComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   initBoards() {
-    this.boards.push({name: 'Do zrobienia', tasks: []});
-    this.boards.push({name: 'W trakcie', tasks: []});
-    this.boards.push({name: 'Testowanie', tasks: []});
-    this.boards.push({name: 'Zrobione', tasks: []});
+    this.boards.push({name: 'TODO', value: 'Do zrobienia', tasks: []});
+    this.boards.push({name: 'IN_PROGRESS', value: 'W trakcie', tasks: []});
+    this.boards.push({name: 'TESTING', value: 'Testowanie', tasks: []});
+    this.boards.push({name: 'DONE', value: 'Zrobione', tasks: []});
   }
 
   // tslint:disable-next-line:typedef
   getTasks() {
-    this.taskService.getTasksByProject(1).subscribe(result => {
-      this.boards[0].tasks = result;
+    this.taskService.getTasksByProject(1).subscribe(result => { // TODO: change projectId from parameter
+      this.boards.forEach(board => {
+        board.tasks = result.filter(r => r.state === board.name);
+      });
     }, error => console.log(error));
   }
 

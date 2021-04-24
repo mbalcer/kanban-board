@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.model.Project;
 import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.model.Task;
+import pl.edu.utp.pz1.model.TaskState;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class InitService {
         project3 = projectService.create(project3);
 
         for (int i = 0; i < 10; i++) {
-            Task task = new Task(null, "zadanie" + i, "opis" + i, i, LocalDateTime.now(), project1);
+            Task task = new Task(null, "zadanie" + i, "opis" + i, i, TaskState.TODO, LocalDateTime.now(), project1);
             taskService.create(task);
         }
 
