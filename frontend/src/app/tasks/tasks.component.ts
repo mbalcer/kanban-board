@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Task} from './task';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Board} from './board';
+import {TaskService} from './task.service';
 
 @Component({
   selector: 'app-tasks',
@@ -11,11 +12,9 @@ import {Board} from './board';
 export class TasksComponent implements OnInit {
   boards: Board[] = [];
 
-  constructor() {
+  constructor(private taskService: TaskService) {
     this.initBoards();
-    this.boards[0].tasks.push({id: 1, name: 'task', description: 'description', createDateTime: '2021-04-22'});
-    this.boards[0].tasks.push({id: 2, name: 'new_task', description: 'description', createDateTime: '2021-04-21'});
-    this.boards[0].tasks.push({id: 3, name: 'old_task', description: 'description', createDateTime: '2021-04-22'});
+    this.getTasks();
   }
 
   ngOnInit(): void {
@@ -30,6 +29,13 @@ export class TasksComponent implements OnInit {
   }
 
   // tslint:disable-next-line:typedef
+  getTasks() {
+    this.taskService.getTasksByProject(1).subscribe(result => {
+      this.boards[0].tasks = result;
+    }, error => console.log(error));
+  }
+
+  // tslint:disable-next-line:typedef
   drop(event: CdkDragDrop<Task[], any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -38,6 +44,5 @@ export class TasksComponent implements OnInit {
                         event.previousIndex, event.currentIndex);
     }
   }
-
 
 }
