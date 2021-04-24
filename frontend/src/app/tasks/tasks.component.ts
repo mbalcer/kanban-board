@@ -38,12 +38,16 @@ export class TasksComponent implements OnInit {
   }
 
   // tslint:disable-next-line:typedef
-  drop(event: CdkDragDrop<Task[], any>) {
+  drop(event: CdkDragDrop<Task[], any>, board: Board) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data, event.container.data,
-                        event.previousIndex, event.currentIndex);
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      const taskToEdit = event.container.data[event.currentIndex];
+      taskToEdit.state = board.name;
+      this.taskService.updateTask(taskToEdit).subscribe(result => {
+        event.container.data[event.currentIndex] = result;
+      }, error => console.log(error));
     }
   }
 

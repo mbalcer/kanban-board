@@ -15,4 +15,9 @@ export class TaskService {
   getTasksByProject(projectId: number): Observable<Task[]> {
     return this.httpClient.get<Task[]>(this.TASK_URL + '/project/' + projectId);
   }
+
+  updateTask(task: Task): Observable<Task> {
+    task.project = null;
+    return this.httpClient.put<Task>(this.TASK_URL + '/' + task.taskId, task);
+  }
 }

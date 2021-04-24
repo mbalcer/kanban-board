@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -36,6 +37,7 @@ public class Task {
     private LocalDateTime createDateTime;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "projectId")
     @JsonIgnoreProperties({"task"})
     private Project project;

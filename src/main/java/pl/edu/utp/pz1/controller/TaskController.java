@@ -40,15 +40,15 @@ public class TaskController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping
-    public ResponseEntity<Task> updateTask(@RequestParam("taskId") Integer taskId,
+    @PutMapping("/{taskId}")
+    public ResponseEntity<Task> updateTask(@PathVariable("taskId") Integer taskId,
                                            @RequestBody Task task) {
         Task updatedTask = taskService.update(taskId, task);
         return ResponseEntity.ok(updatedTask);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteTask(@RequestParam("taskId") Integer taskId) {
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<Void> deleteTask(@PathVariable("taskId") Integer taskId) {
         taskService.delete(taskId);
         return ResponseEntity.noContent().build();
     }

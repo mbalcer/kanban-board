@@ -6,7 +6,7 @@
       cdkDropList
       [cdkDropListData]="board.tasks"
       class="task-list"
-      (cdkDropListDropped)="drop($event)">
+      (cdkDropListDropped)="drop($event, board)">
       <div class="item-box" *ngFor="let item of board.tasks" cdkDrag>{{item.name}}</div>
     </div>
   </div>
