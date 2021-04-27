@@ -1,8 +1,10 @@
 package pl.edu.utp.pz1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tasks")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Task {
 
@@ -26,11 +29,15 @@ public class Task {
 
     private Integer sequence;
 
+    @Enumerated(EnumType.STRING)
+    private TaskState state = TaskState.TODO;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createDateTime;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "projectId")
     @JsonIgnoreProperties({"task"})
     private Project project;

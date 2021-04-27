@@ -38,9 +38,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task create(Task task) {
-        if (task.getTaskId() != null) {
-            throw new IllegalArgumentException("Given object already has an ID");
-        }
         return taskRepository.save(task);
     }
 

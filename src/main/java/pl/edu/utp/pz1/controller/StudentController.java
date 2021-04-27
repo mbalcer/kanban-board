@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/student")
+@CrossOrigin(origins = "http://localhost:4200")
 public class StudentController {
     private StudentService studentService;
 
@@ -36,7 +37,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createTask(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         Student newStudent = studentService.create(student);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/" + newStudent.getStudentId()).build().toUri();
@@ -44,14 +45,14 @@ public class StudentController {
     }
 
     @PutMapping("/{studentId}")
-    public ResponseEntity<Student> updateTask(@PathVariable Integer studentId, @RequestBody Student student) {
+    public ResponseEntity<Student> updateStudent(@PathVariable Integer studentId, @RequestBody Student student) {
         Student updatedStudent = studentService.update(studentId, student);
 
         return ResponseEntity.ok(updatedStudent);
     }
 
     @DeleteMapping("/{studentId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Integer studentId) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable Integer studentId) {
         studentService.delete(studentId);
         return ResponseEntity.noContent().build();
     }

@@ -35,10 +35,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(Student student) {
-        if (student.getStudentId() != null) {
-            throw new IllegalArgumentException("");
-        }
-
         return studentRepository.save(student);
     }
 
