@@ -13,6 +13,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     Optional<Student> findByIndexNumber(String indexNumber);
 
+    Optional<Student> findByEmail(String email);
+
     Page<Student> findByIndexNumberStartsWith(String indexNumber, Pageable pageable);
 
     Page<Student> findByLastNameStartsWithIgnoreCase(String lastName, Pageable pageable);
