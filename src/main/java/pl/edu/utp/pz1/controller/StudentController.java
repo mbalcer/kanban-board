@@ -2,6 +2,7 @@ package pl.edu.utp.pz1.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/student")
 @CrossOrigin(origins = "http://localhost:4200")
 public class StudentController {
+
     private StudentService studentService;
 
     public StudentController(StudentService studentService) {
@@ -39,9 +41,13 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         Student newStudent = studentService.create(student);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/" + newStudent.getStudentId()).build().toUri();
-        return ResponseEntity.created(location).body(newStudent);
+        if (newStudent != null) {
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/" + newStudent.getStudentId()).build().toUri();
+            return ResponseEntity.created(location).body(newStudent);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @PutMapping("/{studentId}")
