@@ -1,0 +1,39 @@
+<div class="background">
+  <div class="form">
+    <div class="title">REJESTRACJA
+      <p>Masz już swoje konto? <a routerLink="/login"><strong>Zaloguj się!</strong></a></p>
+    </div>
+    <form name="form">
+      <div class="row">
+        <label>
+          <input type="text" placeholder="Imię" [(ngModel)]="firstName" name="firstName"/>
+        </label>
+        <label class="column-space">
+          <input type="text" placeholder="Nazwisko" [(ngModel)]="lastName" name="lastName"/>
+        </label>
+      </div>
+      <div class="row">
+        <label>
+          <input type="text" placeholder="Numer indeksu" [(ngModel)]="indexNumber" name="indexNumber"/>
+        </label>
+        <mat-form-field appearance="fill" class="column-space">
+          <mat-label>Tryb studiów</mat-label>
+          <mat-select [(ngModel)]="fullTime" name="fullTime">
+            <mat-option value="true">Stacjonarne</mat-option>
+            <mat-option value="false">Niestacjonarne</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <label>
+          <input type="text" placeholder="Adres email" [(ngModel)]="email" name="email"/>
+        </label>
+        <label class="column-space">
+          <input type="password" placeholder="Hasło" [(ngModel)]="password" name="password"/>
+        </label>
+      </div>
+      <button (click)=register()>DOŁĄCZ</button>
+    </form>
+    <div class="message">{{feedback}}</div>
+  </div>
+</div>
