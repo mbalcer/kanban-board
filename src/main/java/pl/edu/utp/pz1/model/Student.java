@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Set;
 
@@ -31,11 +32,15 @@ public class Student implements UserDetails {
     @Column(nullable = false, unique = true, length = 20)
     private String indexNumber;
 
+    @Column(nullable = false)
+    private Boolean fullTime;
+
     @Column(length = 50)
     private String email;
 
     @Column(nullable = false)
-    private Boolean fullTime;
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$")
+    private String password;
 
     @ManyToMany(mappedBy = "students")
     @JsonIgnoreProperties({"student"})
@@ -47,12 +52,14 @@ public class Student implements UserDetails {
         this.indexNumber = indexNumber;
     }
 
-    public Student(String firstName, String lastName, String indexNumber, String email, Boolean fullTime) {
+    public Student(String firstName, String lastName, String indexNumber,
+                   Boolean fullTime, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.indexNumber = indexNumber;
-        this.email = email;
         this.fullTime = fullTime;
+        this.email = email;
+        this.password = password;
     }
 
     @Override
@@ -62,9 +69,8 @@ public class Student implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
-
 
     @Override
     public String getUsername() {
