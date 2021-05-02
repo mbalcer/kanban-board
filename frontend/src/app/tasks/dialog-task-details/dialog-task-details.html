@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{data.name}}</h1>
+<p class="list-details">jest na liście {{data.state}}</p>
+<div mat-dialog-content>
+  <h2>Opis</h2>
+  {{data.description}}
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Close</button>
+</div>
