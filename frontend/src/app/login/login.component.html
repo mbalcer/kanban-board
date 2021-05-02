@@ -1,0 +1,20 @@
+<div class="background">
+  <div class="form">
+    <div class="title">ZAPROJEKTOWANI
+      <p>Jesteś tu po raz pierwszy? <a routerLink="/register"><strong>Załóż konto!</strong></a></p>
+    </div>
+    <form name="form">
+      <div class="row">
+        <label>
+          <input type="text" placeholder="Adres email" [(ngModel)]="email" name="email"/>
+        </label>
+      </div>
+      <div class="row">
+        <label>
+          <input type="password" placeholder="Hasło" [(ngModel)]="password" name="password"/>
+        </label>
+      </div>
+      <button (click)=login()>ZALOGUJ SIĘ</button>
+    </form>
+  </div>
+</div>
