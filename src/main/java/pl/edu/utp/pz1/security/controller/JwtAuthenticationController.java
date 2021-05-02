@@ -19,8 +19,9 @@ import pl.edu.utp.pz1.security.utils.JwtTokenUtil;
 /**
  * Kontroler do uwierzytelniania zapytań HTTP
  */
-@CrossOrigin
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class JwtAuthenticationController {
 
     private final Log logger = LogFactory.getLog(this.getClass());
@@ -44,7 +45,7 @@ public class JwtAuthenticationController {
      * @param request zapytanie HTTP
      * @return wygenerowany token lub błąd uwierzytelnienia
      */
-    @PostMapping(value = "/rest/authenticate")
+    @PostMapping(value = "/authenticate")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest request) {
         UserDetails userDetails;
         try {
@@ -74,6 +75,14 @@ public class JwtAuthenticationController {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Email: " + username + " and given password are not correct");
         }
+    }
+
+    /**
+     * Metoda wykorzystywana do weryfikacji użytkownika
+     * na podstawie poprawności tokenu JWT.
+     */
+    @GetMapping(value = "/activate")
+    public void canActivate() {
     }
 
 }
