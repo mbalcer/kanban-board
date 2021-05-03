@@ -1,3 +1,27 @@
+.information-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.information-container > .icon-container {
+  margin: 0.15em 0.5em;
+}
+
+.information-container > .details-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .list-details {
   color: gray;
+  text-align: center;
+}
+
+h1 {
+  margin: 0.2em 0;
+  text-align: center;
+}
+
+.actions > button{
+  margin: 0 auto
 }

@@ -1,9 +1,38 @@
 <h1 mat-dialog-title>{{data.name}}</h1>
 <p class="list-details">jest na liście {{data.state}}</p>
-<div mat-dialog-content>
-  <h2>Opis</h2>
-  {{data.description}}
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Opis" class="icon-container">description</mat-icon>
+  <div class="details-container">
+    <h2 class="title-container">Opis</h2>
+    <p>{{data.description}}</p>
+  </div>
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Close</button>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Student" class="icon-container">person_outline</mat-icon>
+  <div class="details-container">
+    <h2>Przypisane do </h2>
+    <p>Jan Kowalski</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Data utworzenia" class="icon-container">date_range</mat-icon>
+  <div class="details-container">
+    <h2>Data utworzenia zadania</h2>
+    <p>{{data.createDateTime | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Sekwencja" class="icon-container">hourglass_empty</mat-icon>
+  <div class="details-container">
+    <h2>Sekwencja</h2>
+    <p>{{data.sequence}}</p>
+  </div>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <button mat-raised-button color="warn" (click)="onNoClick()">Close</button>
 </div>
