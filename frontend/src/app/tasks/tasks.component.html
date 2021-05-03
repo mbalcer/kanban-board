@@ -6,8 +6,11 @@
       cdkDropList
       [cdkDropListData]="board.tasks"
       class="task-list"
+      [ngClass]="{'list-without-tasks': board.tasks.length === 0}"
       (cdkDropListDropped)="drop($event, board)">
-      <div class="item-box" *ngFor="let item of board.tasks" cdkDrag>{{item.name}}</div>
+      <div class="item-box" *ngFor="let item of board.tasks" cdkDrag (click)="openDialog(item)">
+        {{item.name}}
+      </div>
     </div>
   </div>
 </div>

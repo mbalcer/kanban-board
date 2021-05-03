@@ -14,14 +14,16 @@ import {CryptoJsService} from './crypto-js-service/crypto-js.service';
 import {StudentService} from './student/student.service';
 import {AuthGuardService} from './auth-guard/auth-guard.service';
 import {AppRoutingModule} from './app-routing.module';
-import {MatSelectModule} from '@angular/material/select';
+import {DialogTaskDetails} from './tasks/dialog-task-details/dialog-task-details';
+import {MaterialModule} from './material-module';
 
 @NgModule({
   declarations: [
     AppComponent,
     TasksComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    DialogTaskDetails
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,7 @@ import {MatSelectModule} from '@angular/material/select';
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    MatSelectModule
+    MaterialModule
   ],
   providers: [
     AuthService,
@@ -38,7 +40,8 @@ import {MatSelectModule} from '@angular/material/select';
     CryptoJsService,
     StudentService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DialogTaskDetails]
 })
 export class AppModule {
 }
