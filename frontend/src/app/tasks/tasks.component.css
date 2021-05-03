@@ -1,21 +1,32 @@
+:host {
+  background-color: #3498db;
+  padding-top: 1em;
+}
+
 .board {
   width: 23%;
   margin: 0 1%;
   display: inline-block;
   vertical-align: top;
+  background-color: #ebecf0;
+  border-radius: 0.3em;
 }
 
 .board-title {
   text-align: center;
+  margin: 8px 0;
 }
 
 .task-list {
-  border: solid 1px #ccc;
+  background-color: #ebecf0;
+  border-top: 1px solid #a3a3a3;
   min-height: 60px;
-  background: white;
-  border-radius: 4px;
   overflow: hidden;
   display: block;
+}
+
+.list-without-tasks {
+  border: 1px dashed #a3a3a3;
 }
 
 .item-box {
@@ -30,6 +41,8 @@
   cursor: move;
   background: white;
   font-size: 14px;
+  margin: 0.5em;
+  border-radius: 0.3em;
 }
 
 .cdk-drag-preview {
