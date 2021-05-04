@@ -16,6 +16,8 @@ import {AuthGuardService} from './auth-guard/auth-guard.service';
 import {AppRoutingModule} from './app-routing.module';
 import {DialogTaskDetails} from './tasks/dialog-task-details/dialog-task-details';
 import {MaterialModule} from './material-module';
+import {InitialsPipe} from './tasks/pipes/initials.pipe';
+import {StudentNamePipe} from './tasks/pipes/student-name.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import {MaterialModule} from './material-module';
     TasksComponent,
     LoginComponent,
     RegistrationComponent,
-    DialogTaskDetails
+    DialogTaskDetails,
+    InitialsPipe,
+    StudentNamePipe
   ],
   imports: [
     BrowserModule,

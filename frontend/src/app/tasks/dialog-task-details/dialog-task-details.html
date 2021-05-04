@@ -13,7 +13,7 @@
   <mat-icon aria-hidden="false" aria-label="Student" class="icon-container">person_outline</mat-icon>
   <div class="details-container">
     <h2>Student</h2>
-    <p *ngIf="data.student !== null">{{data.student.firstName + ' ' + data.student.lastName + ' (' + data.student.email + ')'}}</p>
+    <p *ngIf="data.student !== null">{{data.student | studentName}}</p>
     <p *ngIf="data.student === null">Nie przypisano żadnego studenta</p>
   </div>
 </div>
