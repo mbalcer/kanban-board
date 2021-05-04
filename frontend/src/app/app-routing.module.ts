@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {RegistrationComponent} from './registration/registration.component';
-import {AuthGuardService} from './auth-guard/auth-guard.service';
 import {TasksComponent} from './tasks/tasks.component';
+import {AuthGuardService} from './auth/auth-guard/auth-guard.service';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},

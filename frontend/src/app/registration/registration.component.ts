@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Utils} from '../utils/utils';
-import {TextConstants} from '../utils/text-constants';
 import {Router} from '@angular/router';
-import {AuthService} from '../auth-service/auth.service';
-import {StudentService} from '../student/student.service';
-import {Student} from '../student/student.model';
+import {AuthService} from '../auth/auth-service/auth.service';
+import {StudentService} from '../auth/student/student.service';
+import {TextConstants} from '../auth/utils/text-constants';
+import {Utils} from '../auth/utils/utils';
+import {Student} from '../auth/student/student.model';
 
 @Component({
   selector: 'app-registration',

@@ -1,4 +1,4 @@
-import {Student} from '../student/student.model';
+import {Student} from '../auth/student/student.model';
 
 export interface Task {
   taskId?: number;

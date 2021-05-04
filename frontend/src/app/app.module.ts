@@ -9,15 +9,16 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {LoginComponent} from './login/login.component';
 import {RegistrationComponent} from './registration/registration.component';
-import {AuthService} from './auth-service/auth.service';
-import {CryptoJsService} from './crypto-js-service/crypto-js.service';
-import {StudentService} from './student/student.service';
-import {AuthGuardService} from './auth-guard/auth-guard.service';
 import {AppRoutingModule} from './app-routing.module';
 import {DialogTaskDetails} from './tasks/dialog-task-details/dialog-task-details';
 import {MaterialModule} from './material-module';
 import {InitialsPipe} from './tasks/pipes/initials.pipe';
 import {StudentNamePipe} from './tasks/pipes/student-name.pipe';
+import {HomeComponent} from './home/home.component';
+import {AuthService} from './auth/auth-service/auth.service';
+import {AuthGuardService} from './auth/auth-guard/auth-guard.service';
+import {CryptoJsService} from './auth/crypto-js-service/crypto-js.service';
+import {StudentService} from './auth/student/student.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {StudentNamePipe} from './tasks/pipes/student-name.pipe';
     RegistrationComponent,
     DialogTaskDetails,
     InitialsPipe,
-    StudentNamePipe
+    StudentNamePipe,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { CryptoJsService } from './crypto-js.service';
+import {CryptoJsService} from './crypto-js.service';
 
 describe('CryptoJsService', () => {
   let service: CryptoJsService;
