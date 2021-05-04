@@ -42,6 +42,10 @@ public class Task {
     @JsonIgnoreProperties({"task"})
     private Project project;
 
+    @ManyToOne
+    @JoinColumn(name = "studentId")
+    private Student student;
+
     public Task(String name, String description, Integer sequence) {
         this.name = name;
         this.description = description;

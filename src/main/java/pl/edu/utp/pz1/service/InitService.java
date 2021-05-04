@@ -37,12 +37,13 @@ public class InitService {
         project2 = projectService.create(project2);
         project3 = projectService.create(project3);
 
+        Student student = new Student(null, "Jan", "Kowalski", "111000", true, "jankow@wp.pl", passwordEncoder.encode("Qwerty.1"), Set.of(project1, project2, project3));
+        student = studentService.create(student);
+
         for (int i = 0; i < 10; i++) {
-            Task task = new Task(null, "zadanie" + i, "opis" + i, i, TaskState.TODO, LocalDateTime.now(), project1);
+            Task task = new Task(null, "zadanie" + i, "opis" + i, i, TaskState.TODO, LocalDateTime.now(), project1, student);
             taskService.create(task);
         }
 
-        Student student = new Student(null, "Jan", "Kowalski", "111000", true, "jankow@wp.pl", passwordEncoder.encode("Qwerty.1"), Set.of(project1, project2, project3));
-        studentService.create(student);
     }
 }

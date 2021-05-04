@@ -12,8 +12,9 @@
 <div class="information-container" mat-dialog-content>
   <mat-icon aria-hidden="false" aria-label="Student" class="icon-container">person_outline</mat-icon>
   <div class="details-container">
-    <h2>Przypisane do </h2>
-    <p>Jan Kowalski</p>
+    <h2>Student</h2>
+    <p *ngIf="data.student !== null">{{data.student.firstName + ' ' + data.student.lastName + ' (' + data.student.email + ')'}}</p>
+    <p *ngIf="data.student === null">Nie przypisano żadnego studenta</p>
   </div>
 </div>
 
