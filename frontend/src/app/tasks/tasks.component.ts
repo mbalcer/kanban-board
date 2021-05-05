@@ -3,6 +3,8 @@ import {Task} from './task';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Board} from './board';
 import {TaskService} from './task.service';
+import {MatDialog} from '@angular/material/dialog';
+import {DialogTaskDetails} from './dialog-task-details/dialog-task-details';
 
 @Component({
   selector: 'app-tasks',
@@ -12,7 +14,7 @@ import {TaskService} from './task.service';
 export class TasksComponent implements OnInit {
   boards: Board[] = [];
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService, private dialog: MatDialog) {
     this.initBoards();
     this.getTasks();
   }
@@ -20,16 +22,14 @@ export class TasksComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // tslint:disable-next-line:typedef
-  initBoards() {
+  initBoards(): void {
     this.boards.push({name: 'TODO', value: 'Do zrobienia', tasks: []});
     this.boards.push({name: 'IN_PROGRESS', value: 'W trakcie', tasks: []});
     this.boards.push({name: 'TESTING', value: 'Testowanie', tasks: []});
     this.boards.push({name: 'DONE', value: 'Zrobione', tasks: []});
   }
 
-  // tslint:disable-next-line:typedef
-  getTasks() {
+  getTasks(): void {
     this.taskService.getTasksByProject(1).subscribe(result => { // TODO: change projectId from parameter
       this.boards.forEach(board => {
         board.tasks = result.filter(r => r.state === board.name);
@@ -37,8 +37,7 @@ export class TasksComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  // tslint:disable-next-line:typedef
-  drop(event: CdkDragDrop<Task[], any>, board: Board) {
+  drop(event: CdkDragDrop<Task[], any>, board: Board): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -49,6 +48,17 @@ export class TasksComponent implements OnInit {
         event.container.data[event.currentIndex] = result;
       }, error => console.log(error));
     }
+  }
+
+  openDialog(task: Task): void {
+    const dialogRef = this.dialog.open(DialogTaskDetails, {
+      width: '50%',
+      data: task
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

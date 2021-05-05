@@ -47,6 +47,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = optionalTask.orElseThrow(() -> new IllegalArgumentException("Object with given ID does not exist"));
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
+        task.setState(updatedTask.getState());
         task.setSequence(updatedTask.getSequence());
         return taskRepository.save(task);
     }

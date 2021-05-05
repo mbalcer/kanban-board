@@ -1,25 +1,36 @@
+:host {
+  background-color: #3498db;
+  padding-top: 1em;
+}
+
 .board {
   width: 23%;
   margin: 0 1%;
   display: inline-block;
   vertical-align: top;
+  background-color: #ebecf0;
+  border-radius: 0.3em;
 }
 
 .board-title {
   text-align: center;
+  margin: 8px 0;
 }
 
 .task-list {
-  border: solid 1px #ccc;
+  background-color: #ebecf0;
+  border-top: 1px solid #a3a3a3;
   min-height: 60px;
-  background: white;
-  border-radius: 4px;
   overflow: hidden;
   display: block;
 }
 
+.list-without-tasks {
+  border: 1px dashed #a3a3a3;
+}
+
 .item-box {
-  padding: 20px 10px;
+  padding: 15px 10px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
@@ -30,6 +41,22 @@
   cursor: move;
   background: white;
   font-size: 14px;
+  margin: 0.5em;
+  border-radius: 0.3em;
+}
+
+.task-name {
+  margin: 0;
+}
+
+.assigned-student {
+  background-color: #dadada;
+  border-radius: 1em;
+  font-weight: bold;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
 }
 
 .cdk-drag-preview {
