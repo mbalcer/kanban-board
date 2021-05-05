@@ -1,6 +1,5 @@
 package pl.edu.utp.pz1.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.model.Project;
 import pl.edu.utp.pz1.model.Student;
@@ -17,14 +16,11 @@ public class InitService {
     private ProjectService projectService;
     private TaskService taskService;
     private StudentService studentService;
-    private PasswordEncoder passwordEncoder;
 
-    public InitService(ProjectService projectService, TaskService taskService,
-                       StudentService studentService, PasswordEncoder passwordEncoder) {
+    public InitService(ProjectService projectService, TaskService taskService, StudentService studentService) {
         this.projectService = projectService;
         this.taskService = taskService;
         this.studentService = studentService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
@@ -37,7 +33,7 @@ public class InitService {
         project2 = projectService.create(project2);
         project3 = projectService.create(project3);
 
-        Student student = new Student(null, "Jan", "Kowalski", "111000", true, "jankow@wp.pl", passwordEncoder.encode("Qwerty.1"), Set.of(project1, project2, project3));
+        Student student = new Student(null, "Jan", "Kowalski", "111000", true, "jankow@wp.pl", "Qwerty.1", Set.of(project1, project2, project3));
         student = studentService.create(student);
 
         for (int i = 0; i < 10; i++) {
