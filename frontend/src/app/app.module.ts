@@ -14,11 +14,13 @@ import {DialogTaskDetails} from './tasks/dialog-task-details/dialog-task-details
 import {MaterialModule} from './material-module';
 import {InitialsPipe} from './tasks/pipes/initials.pipe';
 import {StudentNamePipe} from './tasks/pipes/student-name.pipe';
+import {HomeComponent} from './home/home.component';
 import {AuthService} from './auth/auth-service/auth.service';
 import {AuthGuardService} from './auth/auth-guard/auth-guard.service';
 import {CryptoJsService} from './auth/crypto-js-service/crypto-js.service';
 import {StudentService} from './auth/student/student.service';
 import {HeaderComponent} from './header/header.component';
+import {ProjectsComponent} from './home/projects/projects.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import {HeaderComponent} from './header/header.component';
     DialogTaskDetails,
     InitialsPipe,
     StudentNamePipe,
-    HeaderComponent
+    HomeComponent,
+    HeaderComponent,
+    ProjectsComponent
   ],
   imports: [
     BrowserModule,

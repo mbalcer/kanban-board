@@ -4,12 +4,18 @@ import {LoginComponent} from './login/login.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {TasksComponent} from './tasks/tasks.component';
 import {AuthGuardService} from './auth/auth-guard/auth-guard.service';
+import {HomeComponent} from './home/home.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {
     path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'tasks',
     component: TasksComponent,
     canActivate: [AuthGuardService]
   },

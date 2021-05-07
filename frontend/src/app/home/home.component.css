@@ -1,0 +1,13 @@
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  flex: 0 1 auto;
+}
+
+.projects {
+  flex: 1 1 auto;
+}
