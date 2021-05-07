@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button class="icon-sign-off">
+    <mat-icon>view_week</mat-icon>
+  </button>
+  <span class="app-title">Zaprojektowani</span>
+  <span class="spacer"></span>
+  <button mat-mini-fab class="icon-user" [matTooltip]="user | studentName">
+    {{user | initials}}
+  </button>
+  <button mat-mini-fab color="warn" class="icon-sign-off" matTooltip="Wyloguj się">
+    <mat-icon>power_settings_new</mat-icon>
+  </button>
+</mat-toolbar>
