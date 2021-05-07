@@ -5,6 +5,8 @@ import {Board} from './board';
 import {TaskService} from './task.service';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogTaskDetails} from './dialog-task-details/dialog-task-details';
+import {Student} from '../auth/student/student.model';
+import {StudentService} from '../auth/student/student.service';
 
 @Component({
   selector: 'app-tasks',
@@ -12,11 +14,13 @@ import {DialogTaskDetails} from './dialog-task-details/dialog-task-details';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
+  user: Student;
   boards: Board[] = [];
 
-  constructor(private taskService: TaskService, private dialog: MatDialog) {
+  constructor(private studentService: StudentService, private taskService: TaskService, private dialog: MatDialog) {
     this.initBoards();
     this.getTasks();
+    this.getUser();
   }
 
   ngOnInit(): void {
@@ -27,6 +31,12 @@ export class TasksComponent implements OnInit {
     this.boards.push({name: 'IN_PROGRESS', value: 'W trakcie', tasks: []});
     this.boards.push({name: 'TESTING', value: 'Testowanie', tasks: []});
     this.boards.push({name: 'DONE', value: 'Zrobione', tasks: []});
+  }
+
+  getUser(): void {
+    this.studentService.getLoggedUser().subscribe(result => {
+      this.user = result;
+    }, error => console.log(error));
   }
 
   getTasks(): void {

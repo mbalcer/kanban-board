@@ -7,7 +7,9 @@ import {Student} from '../../auth/student/student.model';
 export class StudentNamePipe implements PipeTransform {
 
   transform(value: Student): string {
-    return value.firstName + ' ' + value.lastName + ' (' + value.email + ')';
+    if (value != null) {
+      return value.firstName + ' ' + value.lastName + ' (' + value.email + ')';
+    }
   }
 
 }

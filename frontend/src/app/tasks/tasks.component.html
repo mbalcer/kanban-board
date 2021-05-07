@@ -1,5 +1,5 @@
 <div class="container-tasks">
-  <app-header class="header"></app-header>
+  <app-header class="header" [user]="user"></app-header>
 
   <div cdkDropListGroup class="tasks">
     <div class="board" *ngFor="let board of boards">

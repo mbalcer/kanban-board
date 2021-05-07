@@ -7,7 +7,9 @@ import {Student} from '../../auth/student/student.model';
 export class InitialsPipe implements PipeTransform {
 
   transform(value: Student): string {
-    return value.firstName.substr(0, 1).toUpperCase() + value.lastName.substr(0, 1).toUpperCase();
+    if (value != null) {
+      return value.firstName.substr(0, 1).toUpperCase() + value.lastName.substr(0, 1).toUpperCase();
+    }
   }
 
 }

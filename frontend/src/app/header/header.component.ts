@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Student} from '../auth/student/student.model';
 
 @Component({
@@ -7,7 +7,7 @@ import {Student} from '../auth/student/student.model';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  user: Student = new Student(1, 'Jan', 'Kowalski', '111111', true, 'jankow@wp.pl', '');
+  @Input() user: Student;
 
   constructor() { }
 
