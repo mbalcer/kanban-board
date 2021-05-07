@@ -33,6 +33,11 @@ public class StudentController {
         return studentService.getStudents(PageRequest.of(page, size));
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Student> getStudentByEmail(@PathVariable String email) {
+        return ResponseEntity.of(studentService.findByEmail(email));
+    }
+
     @GetMapping("/all")
     public List<Student> findAll() {
         return studentService.findAll();

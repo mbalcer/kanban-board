@@ -69,4 +69,9 @@ public class StudentServiceImpl implements StudentService {
             throw new IllegalArgumentException("");
         }
     }
+
+    @Override
+    public Optional<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email);
+    }
 }

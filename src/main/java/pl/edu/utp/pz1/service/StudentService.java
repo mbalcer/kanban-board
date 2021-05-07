@@ -20,4 +20,5 @@ public interface StudentService {
 
     void delete(Integer studentId);
 
+    Optional<Student> findByEmail(String email);
 }

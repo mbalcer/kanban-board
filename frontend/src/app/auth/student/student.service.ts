@@ -20,4 +20,9 @@ export class StudentService {
     return this.http.post<Student>(this.STUDENT_URL, student);
   }
 
+  public getLoggedUser(): Observable<Student> {
+    const email = this.authService.getUserEmail();
+    return this.http.get<Student>(this.STUDENT_URL + '/email/' + email);
+  }
+
 }
