@@ -1,6 +1,18 @@
-:host {
-  background-color: #3498db;
+.container-tasks {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  flex: 0 1 auto;
+}
+
+.tasks {
+  background: url('../../assets/background.jpg') no-repeat center;
+  background-size: cover;
   padding-top: 1em;
+  flex: 1 1 auto;
 }
 
 .board {

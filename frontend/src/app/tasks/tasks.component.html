@@ -1,19 +1,23 @@
-<div cdkDropListGroup>
-  <div class="board" *ngFor="let board of boards">
-    <h2 class="board-title">{{board.value}}</h2>
+<div class="container-tasks">
+  <app-header class="header"></app-header>
 
-    <div
-      cdkDropList
-      [cdkDropListData]="board.tasks"
-      class="task-list"
-      [ngClass]="{'list-without-tasks': board.tasks.length === 0}"
-      (cdkDropListDropped)="drop($event, board)">
-      <div class="item-box" *ngFor="let item of board.tasks" cdkDrag (click)="openDialog(item)">
-        <p class="task-name">{{item.name}}</p>
-        <div class="assigned-student"
-             *ngIf="item.student !== null"
-             [matTooltip]="item.student | studentName">
-          {{item.student | initials}}
+  <div cdkDropListGroup class="tasks">
+    <div class="board" *ngFor="let board of boards">
+      <h2 class="board-title">{{board.value}}</h2>
+
+      <div
+        cdkDropList
+        [cdkDropListData]="board.tasks"
+        class="task-list"
+        [ngClass]="{'list-without-tasks': board.tasks.length === 0}"
+        (cdkDropListDropped)="drop($event, board)">
+        <div class="item-box" *ngFor="let item of board.tasks" cdkDrag (click)="openDialog(item)">
+          <p class="task-name">{{item.name}}</p>
+          <div class="assigned-student"
+               *ngIf="item.student !== null"
+               [matTooltip]="item.student | studentName">
+            {{item.student | initials}}
+          </div>
         </div>
       </div>
     </div>
