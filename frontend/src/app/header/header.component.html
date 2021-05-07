@@ -7,7 +7,7 @@
   <button mat-mini-fab class="icon-user" [matTooltip]="user | studentName">
     {{user | initials}}
   </button>
-  <button mat-mini-fab color="warn" class="icon-sign-off" matTooltip="Wyloguj się">
+  <button mat-mini-fab color="warn" class="icon-sign-out" matTooltip="Wyloguj się" (click)="signOut()">
     <mat-icon>power_settings_new</mat-icon>
   </button>
 </mat-toolbar>
