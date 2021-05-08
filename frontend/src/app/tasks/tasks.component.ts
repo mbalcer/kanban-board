@@ -7,6 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {DialogTaskDetails} from './dialog-task-details/dialog-task-details';
 import {Student} from '../auth/student/student.model';
 import {StudentService} from '../auth/student/student.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-tasks',
@@ -17,9 +18,11 @@ export class TasksComponent implements OnInit {
   user: Student;
   boards: Board[] = [];
 
-  constructor(private studentService: StudentService, private taskService: TaskService, private dialog: MatDialog) {
+  constructor(private studentService: StudentService, private taskService: TaskService,
+              private dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+    const projectId = this.route.snapshot.paramMap.get('projectId');
     this.initBoards();
-    this.getTasks();
+    this.getTasks(Number(projectId));
     this.getUser();
   }
 
@@ -39,12 +42,18 @@ export class TasksComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  getTasks(): void {
-    this.taskService.getTasksByProject(1).subscribe(result => { // TODO: change projectId from parameter
+  getTasks(projectId: number): void {
+    this.taskService.getTasksByProject(projectId).subscribe(result => {
       this.boards.forEach(board => {
         board.tasks = result.filter(r => r.state === board.name);
       });
-    }, error => console.log(error));
+    }, error => {
+      if (error.status === 404) {
+        this.router.navigate(['/not-found']);
+      } else {
+        console.log(error);
+      }
+    });
   }
 
   drop(event: CdkDragDrop<Task[], any>, board: Board): void {

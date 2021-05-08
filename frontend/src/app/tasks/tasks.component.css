@@ -35,6 +35,8 @@
   min-height: 60px;
   overflow: hidden;
   display: block;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .list-without-tasks {
