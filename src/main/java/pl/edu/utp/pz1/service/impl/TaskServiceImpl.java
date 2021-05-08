@@ -1,10 +1,11 @@
 package pl.edu.utp.pz1.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.edu.utp.pz1.exception.ProjectNotFoundException;
 import pl.edu.utp.pz1.model.Task;
+import pl.edu.utp.pz1.repository.ProjectRepository;
 import pl.edu.utp.pz1.repository.TaskRepository;
 import pl.edu.utp.pz1.service.TaskService;
 
@@ -15,10 +16,11 @@ import java.util.Optional;
 public class TaskServiceImpl implements TaskService {
 
     private TaskRepository taskRepository;
+    private ProjectRepository projectRepository;
 
-    @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ProjectRepository projectRepository) {
         this.taskRepository = taskRepository;
+        this.projectRepository = projectRepository;
     }
 
     @Override
@@ -33,6 +35,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks(Integer projectId) {
+        if (!projectRepository.existsById(projectId)) {
+            throw new ProjectNotFoundException();
+        }
         return taskRepository.findTasksByProjectId(projectId);
     }
 
