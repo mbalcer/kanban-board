@@ -5,6 +5,7 @@ import {RegistrationComponent} from './registration/registration.component';
 import {TasksComponent} from './tasks/tasks.component';
 import {AuthGuardService} from './auth/auth-guard/auth-guard.service';
 import {HomeComponent} from './home/home.component';
+import {NotFoundComponent} from './not-found/not-found.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -20,7 +21,8 @@ const routes: Routes = [
     component: TasksComponent,
     canActivate: [AuthGuardService]
   },
-  {path: '**', pathMatch: 'full', redirectTo: 'login'}
+  {path: 'not-found', component: NotFoundComponent},
+  {path: '**', pathMatch: 'full', redirectTo: 'not-found'}
 ];
 
 @NgModule({

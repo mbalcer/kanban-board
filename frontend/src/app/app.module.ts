@@ -21,6 +21,7 @@ import {CryptoJsService} from './auth/crypto-js-service/crypto-js.service';
 import {StudentService} from './auth/student/student.service';
 import {HeaderComponent} from './header/header.component';
 import {ProjectsComponent} from './home/projects/projects.component';
+import {NotFoundComponent} from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {ProjectsComponent} from './home/projects/projects.component';
     StudentNamePipe,
     HomeComponent,
     HeaderComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
