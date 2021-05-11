@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Dodawanie nowego zadania</h1>
+
+<div class="form-add" mat-dialog-content>
+  <form #f="ngForm" novalidate>
+    <mat-form-field appearance="standard">
+      <mat-label>Nazwa</mat-label>
+      <input matInput [(ngModel)]="taskToAdd.name" name="name" [formControl]="formControl.name">
+      <mat-error *ngIf="formControl.name.hasError('required')">
+        Nazwa jest <strong>wymagana</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Opis</mat-label>
+      <textarea matInput [(ngModel)]="taskToAdd.description" name="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Sekwencja</mat-label>
+      <input matInput [(ngModel)]="taskToAdd.sequence" name="sequence" type="number" min="0" [formControl]="formControl.sequence">
+      <mat-error *ngIf="formControl.name.hasError('required')">
+        Sekwencja jest <strong>wymagana</strong>
+      </mat-error>
+      <mat-error *ngIf="formControl.name.hasError('min')">
+        Sekwencja nie może być mniejsza od 0
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Student</mat-label>
+      <input type="text" matInput [formControl]="formControl.student">
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <span class="spacer"></span>
+  <button mat-stroked-button color="warn" (click)="onNoClick()">Close</button>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="taskToAdd" cdkFocusInitial
+          [disabled]="formControl.name.invalid || formControl.sequence.invalid">Dodaj</button>
+</div>

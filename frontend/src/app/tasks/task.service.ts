@@ -16,6 +16,10 @@ export class TaskService {
     return this.httpClient.get<Task[]>(this.TASK_URL + '/project/' + projectId);
   }
 
+  createTask(task: Task): Observable<Task> {
+    return this.httpClient.post<Task>(this.TASK_URL, task);
+  }
+
   updateTask(task: Task): Observable<Task> {
     task.project = null;
     return this.httpClient.put<Task>(this.TASK_URL + '/' + task.taskId, task);

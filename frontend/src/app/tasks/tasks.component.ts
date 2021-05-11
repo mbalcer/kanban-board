@@ -10,6 +10,7 @@ import {StudentService} from '../auth/student/student.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from '../home/projects/project';
 import {ProjectService} from '../home/projects/project.service';
+import {DialogAddTask} from './dialog-add-task/dialog-add-task';
 
 @Component({
   selector: 'app-tasks',
@@ -79,9 +80,21 @@ export class TasksComponent implements OnInit {
       data: task
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+    dialogRef.afterClosed().subscribe(result => {});
   }
 
+  openAddTask(): void {
+    const dialogRef = this.dialog.open(DialogAddTask, {
+      width: '50%',
+      data: [this.project.students]
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      result.project = this.project;
+      result.project.tasks = [];
+      this.taskService.createTask(result).subscribe(createResult => {
+        this.boards[0].tasks.push(createResult);
+      });
+    });
+  }
 }

@@ -6,7 +6,7 @@ import {TasksComponent} from './tasks/tasks.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LoginComponent} from './login/login.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {AppRoutingModule} from './app-routing.module';
@@ -22,6 +22,7 @@ import {StudentService} from './auth/student/student.service';
 import {HeaderComponent} from './header/header.component';
 import {ProjectsComponent} from './home/projects/projects.component';
 import {NotFoundComponent} from './not-found/not-found.component';
+import {DialogAddTask} from './tasks/dialog-add-task/dialog-add-task';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {NotFoundComponent} from './not-found/not-found.component';
     LoginComponent,
     RegistrationComponent,
     DialogTaskDetails,
+    DialogAddTask,
     InitialsPipe,
     StudentNamePipe,
     HomeComponent,
@@ -44,7 +46,8 @@ import {NotFoundComponent} from './not-found/not-found.component';
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthService,
@@ -53,7 +56,7 @@ import {NotFoundComponent} from './not-found/not-found.component';
     StudentService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogTaskDetails]
+  entryComponents: [DialogTaskDetails, DialogAddTask]
 })
 export class AppModule {
 }
