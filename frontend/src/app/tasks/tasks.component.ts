@@ -8,6 +8,8 @@ import {DialogTaskDetails} from './dialog-task-details/dialog-task-details';
 import {Student} from '../auth/student/student.model';
 import {StudentService} from '../auth/student/student.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Project} from '../home/projects/project';
+import {ProjectService} from '../home/projects/project.service';
 
 @Component({
   selector: 'app-tasks',
@@ -16,13 +18,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class TasksComponent implements OnInit {
   user: Student;
+  project: Project;
   boards: Board[] = [];
 
-  constructor(private studentService: StudentService, private taskService: TaskService,
+  constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
     const projectId = this.route.snapshot.paramMap.get('projectId');
     this.initBoards();
-    this.getTasks(Number(projectId));
+    this.getProject(Number(projectId));
     this.getUser();
   }
 
@@ -42,10 +45,11 @@ export class TasksComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  getTasks(projectId: number): void {
-    this.taskService.getTasksByProject(projectId).subscribe(result => {
+  getProject(id: number): void {
+    this.projectService.getProjectById(id).subscribe(result => {
+      this.project = result;
       this.boards.forEach(board => {
-        board.tasks = result.filter(r => r.state === board.name);
+        board.tasks = result.tasks.filter(r => r.state === board.name);
       });
     }, error => {
       if (error.status === 404) {
@@ -69,7 +73,7 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  openDialog(task: Task): void {
+  openTaskDetails(task: Task): void {
     const dialogRef = this.dialog.open(DialogTaskDetails, {
       width: '50%',
       data: task

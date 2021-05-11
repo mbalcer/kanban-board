@@ -11,7 +11,7 @@
         class="task-list"
         [ngClass]="{'list-without-tasks': board.tasks.length === 0}"
         (cdkDropListDropped)="drop($event, board)">
-        <div class="item-box" *ngFor="let item of board.tasks" cdkDrag (click)="openDialog(item)">
+        <div class="item-box" *ngFor="let item of board.tasks" cdkDrag (click)="openTaskDetails(item)">
           <p class="task-name">{{item.name}}</p>
           <div class="assigned-student"
                *ngIf="item.student !== null"

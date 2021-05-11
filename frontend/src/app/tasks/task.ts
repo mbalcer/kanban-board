@@ -1,4 +1,5 @@
 import {Student} from '../auth/student/student.model';
+import {Project} from '../home/projects/project';
 
 export interface Task {
   taskId?: number;
@@ -7,6 +8,6 @@ export interface Task {
   sequence?: number;
   state?: string;
   createDateTime?: string;
-  project?: any;
+  project?: Project;
   student?: Student;
 }

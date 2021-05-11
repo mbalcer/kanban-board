@@ -22,6 +22,7 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {path: 'not-found', component: NotFoundComponent},
+  {path: '', pathMatch: 'full', redirectTo: 'login'},
   {path: '**', pathMatch: 'full', redirectTo: 'not-found'}
 ];
 
