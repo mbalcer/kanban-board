@@ -37,7 +37,7 @@ public class TaskController {
         Task createdTask = taskService.create(task);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("taskId", createdTask.getTaskId()).build().toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(createdTask);
     }
 
     @PutMapping("/{taskId}")

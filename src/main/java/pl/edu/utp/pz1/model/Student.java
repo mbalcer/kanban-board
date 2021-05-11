@@ -1,15 +1,14 @@
 package pl.edu.utp.pz1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,8 +42,10 @@ public class Student implements UserDetails {
     private String password;
 
     @ManyToMany(mappedBy = "students")
-    @JsonIgnoreProperties({"student"})
-    private Set<Project> projects;
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Project> projects = new HashSet<>();
 
     public Student(String firstName, String lastName, String indexNumber) {
         this.firstName = firstName;
