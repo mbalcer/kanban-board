@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{data.name}}</h1>
 <p class="list-details">jest na liście {{data.state}}</p>
 
-<div class="information-container" mat-dialog-content>
+<div class="information-container" mat-dialog-content *ngIf="data.description !== null && data.description.length !== 0">
   <mat-icon aria-hidden="false" aria-label="Opis" class="icon-container">description</mat-icon>
   <div class="details-container">
     <h2 class="title-container">Opis</h2>
@@ -27,9 +27,9 @@
 </div>
 
 <div class="information-container" mat-dialog-content>
-  <mat-icon aria-hidden="false" aria-label="Sekwencja" class="icon-container">hourglass_empty</mat-icon>
+  <mat-icon aria-hidden="false" aria-label="Priorytet" class="icon-container">hourglass_empty</mat-icon>
   <div class="details-container">
-    <h2>Sekwencja</h2>
+    <h2>Priorytet</h2>
     <p>{{data.sequence}}</p>
   </div>
 </div>

@@ -50,7 +50,7 @@ export class TasksComponent implements OnInit {
     this.projectService.getProjectById(id).subscribe(result => {
       this.project = result;
       this.boards.forEach(board => {
-        board.tasks = result.tasks.filter(r => r.state === board.name);
+        board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);
       });
     }, error => {
       if (error.status === 404) {

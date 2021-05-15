@@ -16,13 +16,10 @@
     </mat-form-field>
 
     <mat-form-field appearance="standard">
-      <mat-label>Sekwencja</mat-label>
+      <mat-label>Priorytet</mat-label>
       <input matInput [(ngModel)]="taskToAdd.sequence" name="sequence" type="number" min="0" [formControl]="formControl.sequence">
-      <mat-error *ngIf="formControl.name.hasError('required')">
-        Sekwencja jest <strong>wymagana</strong>
-      </mat-error>
-      <mat-error *ngIf="formControl.name.hasError('min')">
-        Sekwencja nie może być mniejsza od 0
+      <mat-error>
+        Priorytet jest <strong>wymagany</strong> i nie może być ujemny
       </mat-error>
     </mat-form-field>
 

@@ -20,7 +20,7 @@ export class DialogAddTask {
   taskToAdd: Task = {
     name: '',
     description: '',
-    sequence: 0
+    sequence: null
   };
 
   constructor(public dialogRef: MatDialogRef<DialogAddTask>,
