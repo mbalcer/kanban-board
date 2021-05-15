@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Task} from '../task';
 import {FormControl, Validators} from '@angular/forms';
 import {Student} from '../../auth/student/student.model';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-dialog-task-details',
@@ -17,6 +18,8 @@ export class DialogAddTask {
     student: new FormControl('')
   };
 
+  options: Student[] = [];
+
   taskToAdd: Task = {
     name: '',
     description: '',
@@ -24,7 +27,9 @@ export class DialogAddTask {
   };
 
   constructor(public dialogRef: MatDialogRef<DialogAddTask>,
-              @Inject(MAT_DIALOG_DATA) public data: Student[]) {}
+              @Inject(MAT_DIALOG_DATA) public data: Observable<Student[]>) {
+    this.options = data[0];
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
