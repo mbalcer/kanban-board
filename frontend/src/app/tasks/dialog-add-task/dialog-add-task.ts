@@ -14,8 +14,7 @@ import {Observable} from 'rxjs';
 export class DialogAddTask {
   formControl = {
     name: new FormControl('', [Validators.required]),
-    sequence: new FormControl('', [Validators.required, Validators.min(0)]),
-    student: new FormControl('')
+    sequence: new FormControl('', [Validators.required, Validators.min(0)])
   };
 
   options: Student[] = [];

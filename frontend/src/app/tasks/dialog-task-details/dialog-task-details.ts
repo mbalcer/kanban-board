@@ -9,13 +9,22 @@ import {Task} from '../task';
 })
 // tslint:disable-next-line:component-class-suffix
 export class DialogTaskDetails {
+  editAction: TaskAction;
+  deleteAction: TaskAction;
 
   constructor(
     public dialogRef: MatDialogRef<DialogTaskDetails>,
     @Inject(MAT_DIALOG_DATA) public data: Task) {
+    this.editAction = {action: 'edit', data};
+    this.deleteAction = {action: 'delete', data};
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
+}
+
+export interface TaskAction {
+  action: string;
+  data: Task;
 }

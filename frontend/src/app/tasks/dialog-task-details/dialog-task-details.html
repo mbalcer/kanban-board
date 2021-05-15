@@ -35,5 +35,13 @@
 </div>
 
 <div mat-dialog-actions class="actions">
-  <button mat-raised-button color="warn" (click)="onNoClick()">Close</button>
+  <button mat-icon-button color="warn" [matDialogClose]="deleteAction" matTooltip="Usuń">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <button mat-icon-button color="accent" [matDialogClose]="editAction" matTooltip="Edytuj">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button (click)="onNoClick()" matTooltip="Wyjdź">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>

@@ -80,7 +80,11 @@ export class TasksComponent implements OnInit {
       data: task
     });
 
-    dialogRef.afterClosed().subscribe(result => {});
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.action === 'delete') {
+        this.deleteTask(result.data);
+      }
+    });
   }
 
   openAddTask(): void {
@@ -96,5 +100,13 @@ export class TasksComponent implements OnInit {
         this.boards[0].tasks.push(createResult);
       });
     });
+  }
+
+  deleteTask(task: Task): void {
+    this.taskService.deleteTask(task).subscribe(result => {
+      const indexBoard = this.boards.findIndex(board => board.name === task.state);
+      const indexTask = this.boards[indexBoard].tasks.findIndex(t => t.taskId === task.taskId);
+      this.boards[indexBoard].tasks.splice(indexTask, 1);
+    }, error => console.log(error));
   }
 }

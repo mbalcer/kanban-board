@@ -24,4 +24,8 @@ export class TaskService {
     task.project = null;
     return this.httpClient.put<Task>(this.TASK_URL + '/' + task.taskId, task);
   }
+
+  deleteTask(task: Task): Observable<any> {
+    return this.httpClient.delete<any>(this.TASK_URL + '/' + task.taskId);
+  }
 }
