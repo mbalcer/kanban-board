@@ -11,6 +11,7 @@ import {Project} from '../home/projects/project';
 import {ProjectService} from '../home/projects/project.service';
 import {DialogAddTask} from './dialogs/dialog-add-task/dialog-add-task';
 import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-details';
+import {NotificationService} from '../notification.service';
 
 @Component({
   selector: 'app-tasks',
@@ -23,7 +24,7 @@ export class TasksComponent implements OnInit {
   boards: Board[] = [];
 
   constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
-              private dialog: MatDialog, private route: ActivatedRoute, private router: Router) {
+              private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private notification: NotificationService) {
     const projectId = this.route.snapshot.paramMap.get('projectId');
     this.initBoards();
     this.getProject(Number(projectId));
@@ -43,7 +44,7 @@ export class TasksComponent implements OnInit {
   getUser(): void {
     this.studentService.getLoggedUser().subscribe(result => {
       this.user = result;
-    }, error => console.log(error));
+    }, error => this.notification.error(error.error.message));
   }
 
   getProject(id: number): void {
@@ -70,7 +71,8 @@ export class TasksComponent implements OnInit {
       taskToEdit.state = board.name;
       this.taskService.updateTask(taskToEdit).subscribe(result => {
         event.container.data[event.currentIndex] = result;
-      }, error => console.log(error));
+        this.notification.success('Zadanie "' + result.name + '" zostało przesunięte do listy "' + board.value + '".');
+      }, error => this.notification.error(error.error.message));
     }
   }
 
@@ -104,14 +106,16 @@ export class TasksComponent implements OnInit {
         if (result.action === 'add') {
           this.taskService.createTask(result.data).subscribe(createResult => {
             this.boards[0].tasks.push(createResult);
-          });
+            this.notification.success('Pomyślnie dodano zadanie');
+          }, error => this.notification.error(error.error.message));
         } else if (result.action === 'edit') {
           this.taskService.updateTask(result.data).subscribe(updateResult => {
             this.boards.forEach(board => {
-              const indexTask = board.tasks.findIndex(t => t.taskId === updateResult.taskId)
+              const indexTask = board.tasks.findIndex(t => t.taskId === updateResult.taskId);
               board.tasks[indexTask] = updateResult;
             });
-          });
+            this.notification.success('Pomyślnie edytowano zadanie');
+          }, error => this.notification.error(error.error.message));
         }
       }
     });
@@ -122,7 +126,8 @@ export class TasksComponent implements OnInit {
       const indexBoard = this.boards.findIndex(board => board.name === task.state);
       const indexTask = this.boards[indexBoard].tasks.findIndex(t => t.taskId === task.taskId);
       this.boards[indexBoard].tasks.splice(indexTask, 1);
-    }, error => console.log(error));
+      this.notification.success('Pomyślnie usunąłeś zadanie');
+    }, error => this.notification.error(error.error.message));
   }
 
   editTask(task: Task): void {
