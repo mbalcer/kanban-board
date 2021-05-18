@@ -1,4 +1,5 @@
-<h1 mat-dialog-title>Dodawanie nowego zadania</h1>
+<h1 mat-dialog-title *ngIf="formResult.action==='add'">Dodawanie nowego zadania</h1>
+<h1 mat-dialog-title *ngIf="formResult.action==='edit'">Edycja zadania</h1>
 
 <div class="form-add" mat-dialog-content>
   <form #f="ngForm" novalidate>
@@ -25,7 +26,7 @@
 
     <mat-form-field appearance="standard">
       <mat-label>Student</mat-label>
-      <mat-select [(ngModel)]="taskToAdd.student" name="student">
+      <mat-select [(ngModel)]="taskToAdd.student" name="student" [compareWith]="objectComparisonFunction">
         <mat-option *ngFor="let option of options" [value]="option">
           {{option | studentName}}
         </mat-option>
@@ -36,7 +37,9 @@
 
 <div mat-dialog-actions class="actions">
   <span class="spacer"></span>
-  <button mat-stroked-button color="warn" (click)="onNoClick()">Close</button>
-  <button mat-stroked-button color="primary" [mat-dialog-close]="taskToAdd" cdkFocusInitial
-          [disabled]="formControl.name.invalid || formControl.sequence.invalid">Dodaj</button>
+  <button mat-stroked-button color="warn" (click)="onNoClick()">Zamknij</button>
+  <button mat-stroked-button color="primary" (click)="closeForm()" cdkFocusInitial
+          [disabled]="formControl.name.invalid || formControl.sequence.invalid">
+    {{formResult.action === 'add' ? 'Dodaj' : 'Edytuj'}}
+  </button>
 </div>

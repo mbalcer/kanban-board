@@ -10,7 +10,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LoginComponent} from './login/login.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {AppRoutingModule} from './app-routing.module';
-import {DialogTaskDetails} from './tasks/dialog-task-details/dialog-task-details';
 import {MaterialModule} from './material-module';
 import {InitialsPipe} from './tasks/pipes/initials.pipe';
 import {StudentNamePipe} from './tasks/pipes/student-name.pipe';
@@ -22,7 +21,8 @@ import {StudentService} from './auth/student/student.service';
 import {HeaderComponent} from './header/header.component';
 import {ProjectsComponent} from './home/projects/projects.component';
 import {NotFoundComponent} from './not-found/not-found.component';
-import {DialogAddTask} from './tasks/dialog-add-task/dialog-add-task';
+import {DialogAddTask} from './tasks/dialogs/dialog-add-task/dialog-add-task';
+import {DialogTaskDetails} from './tasks/dialogs/dialog-task-details/dialog-task-details';
 
 @NgModule({
   declarations: [

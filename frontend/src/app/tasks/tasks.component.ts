@@ -4,13 +4,13 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Board} from './board';
 import {TaskService} from './task.service';
 import {MatDialog} from '@angular/material/dialog';
-import {DialogTaskDetails} from './dialog-task-details/dialog-task-details';
 import {Student} from '../auth/student/student.model';
 import {StudentService} from '../auth/student/student.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from '../home/projects/project';
 import {ProjectService} from '../home/projects/project.service';
-import {DialogAddTask} from './dialog-add-task/dialog-add-task';
+import {DialogAddTask} from './dialogs/dialog-add-task/dialog-add-task';
+import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-details';
 
 @Component({
   selector: 'app-tasks',
@@ -81,24 +81,39 @@ export class TasksComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.action === 'delete') {
+      if (result !== undefined && result.action === 'delete') {
         this.deleteTask(result.data);
+      } else if (result !== undefined && result.action === 'edit') {
+        this.editTask(result.data);
       }
     });
   }
 
-  openAddTask(): void {
+  openAddTask(action, task?): void {
+    const addEditAction: AddEditAction = {action, students: this.project.students, task};
     const dialogRef = this.dialog.open(DialogAddTask, {
       width: '50%',
-      data: [this.project.students]
+      data: addEditAction
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      result.project = this.project;
-      result.project.tasks = [];
-      this.taskService.createTask(result).subscribe(createResult => {
-        this.boards[0].tasks.push(createResult);
-      });
+      if (result !== undefined) {
+        result.data.project = this.project;
+        result.data.project.tasks = [];
+
+        if (result.action === 'add') {
+          this.taskService.createTask(result.data).subscribe(createResult => {
+            this.boards[0].tasks.push(createResult);
+          });
+        } else if (result.action === 'edit') {
+          this.taskService.updateTask(result.data).subscribe(updateResult => {
+            this.boards.forEach(board => {
+              const indexTask = board.tasks.findIndex(t => t.taskId === updateResult.taskId)
+              board.tasks[indexTask] = updateResult;
+            });
+          });
+        }
+      }
     });
   }
 
@@ -109,4 +124,14 @@ export class TasksComponent implements OnInit {
       this.boards[indexBoard].tasks.splice(indexTask, 1);
     }, error => console.log(error));
   }
+
+  editTask(task: Task): void {
+    this.openAddTask('edit', task);
+  }
+}
+
+export interface AddEditAction {
+  action: string;
+  task: Task;
+  students: Student[];
 }

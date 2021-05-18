@@ -1,6 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Task} from '../task';
+import {Task} from '../../task';
+import {DialogAction} from '../dialog-action';
 
 @Component({
   selector: 'app-dialog-task-details',
@@ -9,8 +10,8 @@ import {Task} from '../task';
 })
 // tslint:disable-next-line:component-class-suffix
 export class DialogTaskDetails {
-  editAction: TaskAction;
-  deleteAction: TaskAction;
+  editAction: DialogAction;
+  deleteAction: DialogAction;
 
   constructor(
     public dialogRef: MatDialogRef<DialogTaskDetails>,
@@ -22,9 +23,4 @@ export class DialogTaskDetails {
   onNoClick(): void {
     this.dialogRef.close();
   }
-}
-
-export interface TaskAction {
-  action: string;
-  data: Task;
 }
