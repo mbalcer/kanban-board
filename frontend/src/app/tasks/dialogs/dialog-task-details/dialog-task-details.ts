@@ -20,7 +20,13 @@ export class DialogTaskDetails {
     this.deleteAction = {action: 'delete', data};
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  closeDialog(action?): void {
+    this.dialogRef.close(action);
+  }
+
+  delete(): void {
+    if (confirm('Jesteś pewien że chcesz usunąć zadanie "' + this.deleteAction.data.name + '"?')) {
+      this.closeDialog(this.deleteAction);
+    }
   }
 }

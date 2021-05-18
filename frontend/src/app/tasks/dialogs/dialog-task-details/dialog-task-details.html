@@ -35,13 +35,13 @@
 </div>
 
 <div mat-dialog-actions class="actions">
-  <button mat-icon-button color="warn" [matDialogClose]="deleteAction" matTooltip="Usuń">
+  <button mat-icon-button color="warn" (click)="delete()" matTooltip="Usuń">
     <mat-icon>delete</mat-icon>
   </button>
-  <button mat-icon-button color="accent" [matDialogClose]="editAction" matTooltip="Edytuj">
+  <button mat-icon-button color="accent" (click)="closeDialog(editAction)" matTooltip="Edytuj">
     <mat-icon>edit</mat-icon>
   </button>
-  <button mat-icon-button (click)="onNoClick()" matTooltip="Zamknij">
+  <button mat-icon-button (click)="closeDialog()" matTooltip="Zamknij">
     <mat-icon>close</mat-icon>
   </button>
 </div>
