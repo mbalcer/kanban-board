@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.exception.ProjectNotFoundException;
+import pl.edu.utp.pz1.exception.TaskNotFoundException;
 import pl.edu.utp.pz1.model.Task;
 import pl.edu.utp.pz1.repository.ProjectRepository;
 import pl.edu.utp.pz1.repository.TaskRepository;
@@ -49,7 +50,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task update(Integer taskId, Task updatedTask) {
         Optional<Task> optionalTask = taskRepository.findById(taskId);
-        Task task = optionalTask.orElseThrow(() -> new IllegalArgumentException("Object with given ID does not exist"));
+        Task task = optionalTask.orElseThrow(() -> new TaskNotFoundException());
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
         task.setState(updatedTask.getState());
@@ -63,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
         if (taskRepository.existsById(taskId)) {
             taskRepository.deleteById(taskId);
         } else {
-            throw new IllegalArgumentException("Object with given ID does not exist");
+            throw new TaskNotFoundException();
         }
     }
 

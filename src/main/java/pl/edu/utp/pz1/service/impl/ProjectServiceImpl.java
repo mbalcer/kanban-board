@@ -3,6 +3,7 @@ package pl.edu.utp.pz1.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.edu.utp.pz1.exception.ProjectNotFoundException;
 import pl.edu.utp.pz1.model.Project;
 import pl.edu.utp.pz1.repository.ProjectRepository;
 import pl.edu.utp.pz1.service.ProjectService;
@@ -41,7 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project update(Integer id, Project updatedProject) {
         Optional<Project> projectOptional = projectRepository.findById(id);
-        Project project = projectOptional.orElseThrow(() -> new IllegalArgumentException(""));
+        Project project = projectOptional.orElseThrow(() -> new ProjectNotFoundException());
 
         project.setName(updatedProject.getName());
         project.setDescription(updatedProject.getDescription());
@@ -56,7 +57,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (projectRepository.existsById(id)) {
             projectRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("");
+            throw new ProjectNotFoundException();
         }
     }
 }

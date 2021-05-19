@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.edu.utp.pz1.exception.EmailAlreadyUsedException;
+import pl.edu.utp.pz1.exception.StudentNotFoundException;
 import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.repository.StudentRepository;
 import pl.edu.utp.pz1.service.StudentService;
@@ -43,14 +45,14 @@ public class StudentServiceImpl implements StudentService {
             student.setPassword(passwordEncoder.encode(student.getPassword()));
             return studentRepository.save(student);
         } else {
-            return null;
+            throw new EmailAlreadyUsedException();
         }
     }
 
     @Override
     public Student update(Integer studentId, Student updatedStudent) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
-        Student student = studentOptional.orElseThrow(() -> new IllegalArgumentException(""));
+        Student student = studentOptional.orElseThrow(() -> new StudentNotFoundException());
 
         student.setFirstName(updatedStudent.getFirstName());
         student.setLastName(updatedStudent.getLastName());
@@ -66,7 +68,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.existsById(studentId)) {
             studentRepository.deleteById(studentId);
         } else {
-            throw new IllegalArgumentException("");
+            throw new StudentNotFoundException();
         }
     }
 
