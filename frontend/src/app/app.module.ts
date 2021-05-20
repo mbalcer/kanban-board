@@ -23,6 +23,7 @@ import {ProjectsComponent} from './home/projects/projects.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {DialogAddTask} from './tasks/dialogs/dialog-add-task/dialog-add-task';
 import {DialogTaskDetails} from './tasks/dialogs/dialog-task-details/dialog-task-details';
+import {ChatComponent} from './tasks/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {DialogTaskDetails} from './tasks/dialogs/dialog-task-details/dialog-task
     HomeComponent,
     HeaderComponent,
     ProjectsComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

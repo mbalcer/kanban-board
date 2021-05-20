@@ -102,4 +102,18 @@
   right: 2em;
   bottom: 2em;
   background-color: #2ecc71;
+  transition: all 0.5s ease-in-out;
+}
+
+.btn-chat {
+  position: fixed;
+  right: 2em;
+  bottom: 8em;
+  background-color: #3f51b5;
+  transition: all 0.5s ease-in-out;
+}
+
+.btn-after-open-chat {
+  right: calc(300px + 2em);
+  transition: all 0.3s ease-in-out;
 }

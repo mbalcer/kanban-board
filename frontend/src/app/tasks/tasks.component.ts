@@ -12,6 +12,7 @@ import {ProjectService} from '../home/projects/project.service';
 import {DialogAddTask} from './dialogs/dialog-add-task/dialog-add-task';
 import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-details';
 import {NotificationService} from '../notification.service';
+import {MatDrawer} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-tasks',
@@ -22,6 +23,7 @@ export class TasksComponent implements OnInit {
   user: Student;
   project: Project;
   boards: Board[] = [];
+  chatToggle = false;
 
   constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private notification: NotificationService) {
@@ -132,6 +134,11 @@ export class TasksComponent implements OnInit {
 
   editTask(task: Task): void {
     this.openAddTask('edit', task);
+  }
+
+  toggleChat(drawer: MatDrawer): void {
+    drawer.toggle();
+    this.chatToggle = !this.chatToggle;
   }
 }
 
