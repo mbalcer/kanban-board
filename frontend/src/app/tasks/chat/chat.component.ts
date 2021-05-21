@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {environment} from '../../../environments/environment';
@@ -21,6 +21,8 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() project: Project;
   @Input() user: Student;
+  @Input() openChat: boolean;
+  @Output() newMessage: EventEmitter<boolean> = new EventEmitter();
 
   constructor() {}
 
@@ -43,6 +45,9 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
     this.stompClient.debug = false;
     this.stompClient.connect({}, frame => {
       this.stompClient.subscribe('/project/' + projectId, message => {
+        if (!this.openChat) {
+          this.newMessage.emit(true);
+        }
         const newMessage = JSON.parse(message.body);
         this.messages.push(newMessage);
       });

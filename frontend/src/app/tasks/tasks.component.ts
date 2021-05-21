@@ -30,6 +30,7 @@ export class TasksComponent implements OnInit {
   project: Project;
   boards: Board[] = [];
   chatToggle = false;
+  newMessageNotification = 0;
 
   constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private notification: NotificationService) {
@@ -146,6 +147,15 @@ export class TasksComponent implements OnInit {
   toggleChat(drawer: MatDrawer): void {
     drawer.toggle();
     this.chatToggle = !this.chatToggle;
+    if (this.chatToggle) {
+      this.newMessageNotification = 0;
+    }
+  }
+
+  addNewMessageNotification(event: boolean): void {
+    if (event) {
+      this.newMessageNotification++;
+    }
   }
 
   taskObserver(tasks: Task[]): void {

@@ -27,6 +27,7 @@
     </div>
 
     <button mat-fab class="btn-chat" color="primary" matTooltip="Otwórz chat"
+            [matBadge]="newMessageNotification" [matBadgeHidden]="newMessageNotification == 0" matBadgeColor="accent"
             (click)="toggleChat(drawer)" [ngClass]="chatToggle ? 'btn-after-open-chat' : null">
       <mat-icon>chat</mat-icon>
     </button>
@@ -38,6 +39,6 @@
 
   </mat-drawer-content>
   <mat-drawer #drawer mode="side" position="end">
-    <app-chat [user]="user" [project]="project"></app-chat>
+    <app-chat [user]="user" [project]="project" [openChat]="chatToggle" (newMessage)="addNewMessageNotification($event)"></app-chat>
   </mat-drawer>
 </mat-drawer-container>
