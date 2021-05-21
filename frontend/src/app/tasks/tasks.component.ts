@@ -13,6 +13,9 @@ import {DialogAddTask} from './dialogs/dialog-add-task/dialog-add-task';
 import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-details';
 import {NotificationService} from '../notification.service';
 import {MatDrawer} from '@angular/material/sidenav';
+import {environment} from '../../environments/environment';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 
 @Component({
   selector: 'app-tasks',
@@ -20,6 +23,9 @@ import {MatDrawer} from '@angular/material/sidenav';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
+  private serverUrl = environment.backendUrl + '/chat';
+  private stompClient;
+
   user: Student;
   project: Project;
   boards: Board[] = [];
@@ -55,6 +61,7 @@ export class TasksComponent implements OnInit {
       this.boards.forEach(board => {
         board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);
       });
+      this.taskObserver(this.project.tasks);
     }, error => {
       if (error.status === 404) {
         this.router.navigate(['/not-found']);
@@ -139,6 +146,30 @@ export class TasksComponent implements OnInit {
   toggleChat(drawer: MatDrawer): void {
     drawer.toggle();
     this.chatToggle = !this.chatToggle;
+  }
+
+  taskObserver(tasks: Task[]): void {
+    const ws = new SockJS(this.serverUrl);
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = false;
+    const that = this;
+    this.stompClient.connect({}, frame => {
+      tasks.forEach(task => {
+        this.stompClient.subscribe('/task/' + task.taskId, payload => {
+          const receivedTask = JSON.parse(payload.body);
+          const indexNewBoard = that.boards.findIndex(board => board.name === receivedTask.state);
+          that.notification.success('Zadanie "' + receivedTask.name + '" zostało przesunięte do listy "'
+            + that.boards[indexNewBoard].value + '".');
+          that.boards.forEach((board, index) => {
+            const indexTask = board.tasks.findIndex(t => t.taskId === receivedTask.taskId);
+            if (indexTask !== -1) {
+              that.boards[indexNewBoard].tasks.push(receivedTask);
+              that.boards[index].tasks.splice(indexTask, 1);
+            }
+          });
+        });
+      });
+    });
   }
 }
 

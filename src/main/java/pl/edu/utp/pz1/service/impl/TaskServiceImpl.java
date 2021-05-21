@@ -2,6 +2,7 @@ package pl.edu.utp.pz1.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.exception.ProjectNotFoundException;
 import pl.edu.utp.pz1.exception.TaskNotFoundException;
@@ -18,10 +19,12 @@ public class TaskServiceImpl implements TaskService {
 
     private TaskRepository taskRepository;
     private ProjectRepository projectRepository;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
-    public TaskServiceImpl(TaskRepository taskRepository, ProjectRepository projectRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ProjectRepository projectRepository, SimpMessagingTemplate simpMessagingTemplate) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @Override
@@ -51,12 +54,20 @@ public class TaskServiceImpl implements TaskService {
     public Task update(Integer taskId, Task updatedTask) {
         Optional<Task> optionalTask = taskRepository.findById(taskId);
         Task task = optionalTask.orElseThrow(() -> new TaskNotFoundException());
+        boolean changeStatus = false;
+        if (!updatedTask.getState().equals(task.getState())) {
+            changeStatus = true;
+        }
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
         task.setState(updatedTask.getState());
         task.setSequence(updatedTask.getSequence());
         task.setStudent(updatedTask.getStudent());
-        return taskRepository.save(task);
+        Task saveTask = taskRepository.save(task);
+        if (changeStatus) {
+            simpMessagingTemplate.convertAndSend("/task/" + taskId, saveTask);
+        }
+        return saveTask;
     }
 
     @Override
