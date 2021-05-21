@@ -11,9 +11,9 @@
     </div>
   </div>
   <div class="send-message-container">
-    <form action="">
-      <input type="text" placeholder="Napisz wiadomość" name="message"/>
-      <button mat-icon-button color="accent" matTooltip="Wyślij">
+    <form>
+      <input type="text" placeholder="Napisz wiadomość" name="message" [(ngModel)]="message"/>
+      <button mat-icon-button color="accent" matTooltip="Wyślij" (click)="sendMessage()">
         <mat-icon>send</mat-icon>
       </button>
     </form>
