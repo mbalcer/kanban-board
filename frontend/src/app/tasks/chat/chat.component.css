@@ -1,3 +1,77 @@
 .chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   width: 300px
 }
+
+h2 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 16px 0;
+  margin: 0;
+  background-color: #3f51b5;
+  color: #FFFFFF;
+  font-size: 24px;
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  background-color: #f2f2f2;
+  padding-top: 16px;
+}
+
+.chat-box + .outgoing {
+  align-items: flex-end;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: row;
+  width: 75%;
+  padding: 0.3em;
+  border-radius: 10px;
+  color: #FFFFFF;
+  margin: 0.3em 0.5em;
+}
+
+.message {
+  width: calc(100% - 28px - 1em);
+  line-height: 28px;
+  padding: 0 0.3em;
+}
+
+.incoming {
+  background-color: #E2E6EB;
+  color: #000000;
+}
+
+.outgoing {
+  flex-direction: row-reverse;
+  background-color: #3f51b5;
+  align-self: flex-end;
+}
+
+.send-message-container {
+  flex: 0 1 auto;
+}
+
+.send-message-container > form {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.send-message-container > form > input {
+  border: 0;
+  outline: 0;
+  padding: 1em 0.5em;
+  width: 90%;
+}
+
+
+

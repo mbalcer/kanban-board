@@ -63,16 +63,6 @@
   margin: 0;
 }
 
-.assigned-student {
-  background-color: #dadada;
-  border-radius: 1em;
-  font-weight: bold;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  text-align: center;
-}
-
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
@@ -101,7 +91,6 @@
   position: fixed;
   right: 2em;
   bottom: 2em;
-  background-color: #2ecc71;
   transition: all 0.5s ease-in-out;
 }
 
@@ -109,7 +98,6 @@
   position: fixed;
   right: 2em;
   bottom: 8em;
-  background-color: #3f51b5;
   transition: all 0.5s ease-in-out;
 }
 

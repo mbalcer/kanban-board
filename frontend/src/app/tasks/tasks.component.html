@@ -15,7 +15,7 @@
             (cdkDropListDropped)="drop($event, board)">
             <div class="item-box" *ngFor="let item of board.tasks" cdkDrag (click)="openTaskDetails(item)">
               <p class="task-name">{{item.name}}</p>
-              <div class="assigned-student"
+              <div class="student-initial"
                    *ngIf="item.student !== null"
                    [matTooltip]="item.student | studentName">
                 {{item.student | initials}}
@@ -26,12 +26,12 @@
       </div>
     </div>
 
-    <button mat-fab class="btn-chat" matTooltip="Otwórz chat"
+    <button mat-fab class="btn-chat" color="primary" matTooltip="Otwórz chat"
             (click)="toggleChat(drawer)" [ngClass]="chatToggle ? 'btn-after-open-chat' : null">
       <mat-icon>chat</mat-icon>
     </button>
 
-    <button mat-fab class="btn-add-task" matTooltip="Dodaj nowe zadanie"
+    <button mat-fab class="btn-add-task" color="accent" matTooltip="Dodaj nowe zadanie"
             (click)="openAddTask('add')"  [ngClass]="chatToggle ? 'btn-after-open-chat' : null">
       <mat-icon>add</mat-icon>
     </button>
