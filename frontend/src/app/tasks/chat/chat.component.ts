@@ -4,6 +4,7 @@ import * as SockJS from 'sockjs-client';
 import {environment} from '../../../environments/environment';
 import {Project} from '../../home/projects/project';
 import {Student} from '../../auth/student/student.model';
+import {Message} from './message';
 
 @Component({
   selector: 'app-chat',
@@ -15,14 +16,13 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   private stompClient;
 
   message: string;
+  messages: Message[] = [];
   initWebSocket = false;
 
   @Input() project: Project;
   @Input() user: Student;
 
-  constructor() {
-
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 
@@ -40,9 +40,11 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   webSocketConnect(projectId): void {
     const ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = false;
     this.stompClient.connect({}, frame => {
       this.stompClient.subscribe('/project/' + projectId, message => {
-        console.log(message);
+        const newMessage = JSON.parse(message.body);
+        this.messages.push(newMessage);
       });
     });
   }

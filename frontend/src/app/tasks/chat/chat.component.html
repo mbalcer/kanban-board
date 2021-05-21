@@ -1,13 +1,10 @@
 <div class="chat-container">
   <h2>Chat</h2>
   <div class="chat-box">
-    <div class="message-container incoming">
-      <div class="student-initial">AB</div>
-      <div class="message">Hello</div>
-    </div>
-    <div class="message-container outgoing">
-      <div class="student-initial">AN</div>
-      <div class="message">Hey. How are you?</div>
+    <div class="message-container" *ngFor="let message of messages" [matTooltip]="message.student | studentName"
+         [ngClass]="message.student.email == user.email ? 'outgoing' : 'incoming'">
+      <div class="student-initial">{{message.student | initials}}</div>
+      <div class="message">{{message.message}}</div>
     </div>
   </div>
   <div class="send-message-container">
