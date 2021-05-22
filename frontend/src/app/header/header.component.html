@@ -4,7 +4,7 @@
   </button>
   <span class="app-title">Zaprojektowani</span>
   <span class="spacer"></span>
-  <button mat-mini-fab class="icon-user" [matTooltip]="user | studentName">
+  <button mat-mini-fab class="icon-user" [matTooltip]="user | studentName" routerLink="/profile">
     {{user | initials}}
   </button>
   <button mat-mini-fab color="warn" class="icon-sign-out" matTooltip="Wyloguj się" (click)="signOut()">

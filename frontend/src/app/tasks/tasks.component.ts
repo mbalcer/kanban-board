@@ -80,7 +80,6 @@ export class TasksComponent implements OnInit {
       const taskToEdit = event.container.data[event.currentIndex];
       taskToEdit.state = board.name;
       this.taskService.updateTask(taskToEdit).subscribe(result => {
-        event.container.data[event.currentIndex] = result;
         this.notification.success('Zadanie "' + result.name + '" zostało przesunięte do listy "' + board.value + '".');
       }, error => this.notification.error(error.error.message));
     }
