@@ -13,39 +13,57 @@
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Imię</mat-label>
-              <input matInput [(ngModel)]="user.firstName" name="firstName">
+              <input matInput [(ngModel)]="user.firstName" name="firstName" [formControl]="formControl.firstName">
+              <mat-error *ngIf="formControl.firstName.hasError('required') || formControl.firstName.hasError('min')">
+                Imię jest <strong>wymagane</strong> i musi mieć conajmniej 3 znaki.
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="standard">
               <mat-label>Nazwisko</mat-label>
-              <input matInput [(ngModel)]="user.lastName" name="lastName">
+              <input matInput [(ngModel)]="user.lastName" name="lastName" [formControl]="formControl.lastName">
+              <mat-error *ngIf="formControl.lastName.hasError('required') || formControl.lastName.hasError('min')">
+                Nazwisko jest <strong>wymagane</strong> i musi mieć conajmniej 3 znaki.
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Numer indeksu</mat-label>
-              <input matInput [(ngModel)]="user.indexNumber" name="indexNumber">
+              <input matInput [(ngModel)]="user.indexNumber" name="indexNumber" [formControl]="formControl.indexNumber">
+              <mat-error *ngIf="formControl.indexNumber.hasError('required')">
+                Numer indeksu jest <strong>wymagany</strong>.
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="standard">
               <mat-label>Tryb studiów</mat-label>
-              <mat-select [(ngModel)]="user.fullTime" name="fullTime">
+              <mat-select [(ngModel)]="user.fullTime" name="fullTime" [formControl]="formControl.fullTime">
                 <mat-option [value]="true">Stacjonarne</mat-option>
                 <mat-option [value]="false">Niestacjonarne</mat-option>
               </mat-select>
+              <mat-error *ngIf="formControl.fullTime.hasError('required')">
+                Tryb studiów jest <strong>wymagany</strong>.
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Email</mat-label>
-              <input matInput [(ngModel)]="user.email" name="email">
+              <input matInput [(ngModel)]="user.email" name="email" [formControl]="formControl.email">
+              <mat-error *ngIf="formControl.email.hasError('email') && !formControl.email.hasError('required')">
+                Wpisz <strong>poprawny</strong> adres email.
+              </mat-error>
+              <mat-error *ngIf="formControl.email.hasError('required')">
+                Email jest <strong>wymagany</strong>
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div class="action-row">
-            <button mat-raised-button color="primary">
+            <button mat-raised-button color="primary" (click)="changeProfile()">
               Zapisz zmiany
             </button>
           </div>

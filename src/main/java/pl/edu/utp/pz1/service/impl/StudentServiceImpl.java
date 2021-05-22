@@ -53,6 +53,9 @@ public class StudentServiceImpl implements StudentService {
     public Student update(Integer studentId, Student updatedStudent) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         Student student = studentOptional.orElseThrow(() -> new StudentNotFoundException());
+        if (studentRepository.findByEmail(updatedStudent.getEmail()).isPresent() && !student.getEmail().equals(updatedStudent.getEmail())) {
+            throw new EmailAlreadyUsedException();
+        }
 
         student.setFirstName(updatedStudent.getFirstName());
         student.setLastName(updatedStudent.getLastName());
