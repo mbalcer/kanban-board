@@ -1,0 +1,61 @@
+.profile-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  flex: 0 1 auto;
+}
+
+.profile-container {
+  flex: 1 1 auto;
+}
+
+.profile-box {
+  width: 60%;
+  margin: 3em auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.full-name {
+  margin-left: 1em;
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #949494;
+  padding-bottom: 16px;
+  margin: 16px 0;
+}
+
+.my-account > form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-row > * {
+  width: calc((100% - 1em) / 2)
+}
+
+.action-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

@@ -1,1 +1,86 @@
-<p>profile works!</p>
+<div class="profile-page">
+  <app-header class="header" [user]="user"></app-header>
+  <div class="profile-container">
+    <div class="profile-box">
+      <div class="user-info">
+        <div class="student-initial-big">{{user | initials}}</div>
+        <div class="full-name">{{user | studentName}}</div>
+      </div>
+
+      <div class="my-account">
+        <h2>Moje konto</h2>
+        <form>
+          <div class="form-row">
+            <mat-form-field appearance="standard">
+              <mat-label>Imię</mat-label>
+              <input matInput [(ngModel)]="user.firstName" name="firstName">
+            </mat-form-field>
+
+            <mat-form-field appearance="standard">
+              <mat-label>Nazwisko</mat-label>
+              <input matInput [(ngModel)]="user.lastName" name="lastName">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="standard">
+              <mat-label>Numer indeksu</mat-label>
+              <input matInput [(ngModel)]="user.indexNumber" name="indexNumber">
+            </mat-form-field>
+
+            <mat-form-field appearance="standard">
+              <mat-label>Tryb studiów</mat-label>
+              <mat-select [(ngModel)]="user.fullTime" name="fullTime">
+                <mat-option [value]="true">Stacjonarne</mat-option>
+                <mat-option [value]="false">Niestacjonarne</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="standard">
+              <mat-label>Email</mat-label>
+              <input matInput [(ngModel)]="user.email" name="email">
+            </mat-form-field>
+          </div>
+
+          <div class="action-row">
+            <button mat-raised-button color="primary">
+              Zapisz zmiany
+            </button>
+          </div>
+        </form>
+
+        <h2>Zmiana hasła</h2>
+        <form>
+          <div class="form-row">
+            <mat-form-field appearance="standard">
+              <mat-label>Aktualne hasło</mat-label>
+              <input type="password" matInput name="currentPassword">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="standard">
+              <mat-label>Nowe hasło</mat-label>
+              <input type="password" matInput name="newPassword">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="standard">
+              <mat-label>Potwierdź hasło</mat-label>
+              <input type="password" matInput name="confirmPassword">
+            </mat-form-field>
+          </div>
+
+          <div class="action-row">
+            <button mat-raised-button color="primary">
+              Zmień hasło
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
