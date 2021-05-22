@@ -20,7 +20,7 @@ import {CryptoJsService} from './auth/crypto-js-service/crypto-js.service';
 import {StudentService} from './auth/student/student.service';
 import {HeaderComponent} from './header/header.component';
 import {ProjectsComponent} from './home/projects/projects.component';
-import {NotFoundComponent} from './not-found/not-found.component';
+import {ErrorPageComponent} from './error-page/error-page.component';
 import {DialogAddTask} from './tasks/dialogs/dialog-add-task/dialog-add-task';
 import {DialogTaskDetails} from './tasks/dialogs/dialog-task-details/dialog-task-details';
 import {ChatComponent} from './tasks/chat/chat.component';
@@ -39,7 +39,7 @@ import {ProfileComponent} from './profile/profile.component';
     HomeComponent,
     HeaderComponent,
     ProjectsComponent,
-    NotFoundComponent,
+    ErrorPageComponent,
     ChatComponent,
     ProfileComponent
   ],

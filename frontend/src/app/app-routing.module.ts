@@ -5,8 +5,8 @@ import {RegistrationComponent} from './registration/registration.component';
 import {TasksComponent} from './tasks/tasks.component';
 import {AuthGuardService} from './auth/auth-guard/auth-guard.service';
 import {HomeComponent} from './home/home.component';
-import {NotFoundComponent} from './not-found/not-found.component';
 import {ProfileComponent} from './profile/profile.component';
+import {ErrorPageComponent} from './error-page/error-page.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -27,7 +27,8 @@ const routes: Routes = [
     component: ProfileComponent,
     canActivate: [AuthGuardService]
   },
-  {path: 'not-found', component: NotFoundComponent},
+  {path: 'not-found', component: ErrorPageComponent},
+  {path: 'forbidden', component: ErrorPageComponent},
   {path: '', pathMatch: 'full', redirectTo: 'login'},
   {path: '**', pathMatch: 'full', redirectTo: 'not-found'}
 ];

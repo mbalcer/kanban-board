@@ -34,9 +34,7 @@ export class TasksComponent implements OnInit {
 
   constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private notification: NotificationService) {
-    const projectId = this.route.snapshot.paramMap.get('projectId');
     this.initBoards();
-    this.getProject(Number(projectId));
     this.getUser();
   }
 
@@ -53,11 +51,16 @@ export class TasksComponent implements OnInit {
   getUser(): void {
     this.studentService.getLoggedUser().subscribe(result => {
       this.user = result;
+      this.getProject();
     }, error => this.notification.error(error.error.message));
   }
 
-  getProject(id: number): void {
-    this.projectService.getProjectById(id).subscribe(result => {
+  getProject(): void {
+    const projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    this.projectService.getProjectById(projectId).subscribe(result => {
+      if (result.students.find(student => student.email === this.user.email) === undefined) {
+        this.router.navigate(['/forbidden']);
+      }
       this.project = result;
       this.boards.forEach(board => {
         board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);

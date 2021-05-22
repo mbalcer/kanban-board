@@ -39,7 +39,9 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.webSocketDisconnect(this.project.projectId);
+    if (this.initWebSocket) {
+      this.webSocketDisconnect(this.project.projectId);
+    }
   }
 
   getHistoryOfMessages(): void {
