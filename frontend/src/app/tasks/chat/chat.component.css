@@ -20,7 +20,7 @@ h2 {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  background-color: #f2f2f2;
+  background-color: #e1e1e1;
   padding-top: 16px;
 }
 
@@ -45,7 +45,7 @@ h2 {
 }
 
 .incoming {
-  background-color: #E2E6EB;
+  background-color: #FFFFFF;
   color: #000000;
 }
 

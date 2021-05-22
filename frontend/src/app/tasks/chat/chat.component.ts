@@ -5,6 +5,7 @@ import {environment} from '../../../environments/environment';
 import {Project} from '../../home/projects/project';
 import {Student} from '../../auth/student/student.model';
 import {Message} from './message';
+import {NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-chat',
@@ -24,7 +25,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @Input() openChat: boolean;
   @Output() newMessage: EventEmitter<boolean> = new EventEmitter();
 
-  constructor() {}
+  constructor(private notificationService: NotificationService) {}
 
   ngOnInit(): void {}
 
@@ -59,11 +60,15 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sendMessage(): void {
-    const messageToSend = {
-      student: this.user,
-      message: this.message,
-    };
-    this.stompClient.send('/app/chat/' + this.project.projectId, {}, JSON.stringify(messageToSend));
-    this.message = '';
+    if (!this.message) {
+      this.notificationService.warn('Wpisz wiadomość');
+    } else {
+      const messageToSend = {
+        student: this.user,
+        message: this.message,
+      };
+      this.stompClient.send('/app/chat/' + this.project.projectId, {}, JSON.stringify(messageToSend));
+      this.message = '';
+    }
   }
 }

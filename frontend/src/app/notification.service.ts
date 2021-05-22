@@ -15,6 +15,13 @@ export class NotificationService {
       });
   }
 
+  warn(message: string): void {
+    this.snackBar.open(message, null, {
+      duration: 5000,
+      panelClass: ['warn-color']
+    });
+  }
+
   success(message: string): void {
     this.snackBar.open(message, null, {
       duration: 5000,
