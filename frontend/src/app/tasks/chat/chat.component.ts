@@ -6,6 +6,7 @@ import {Project} from '../../home/projects/project';
 import {Student} from '../../auth/student/student.model';
 import {Message} from './message';
 import {NotificationService} from '../../notification.service';
+import {ChatService} from './chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -25,19 +26,28 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @Input() openChat: boolean;
   @Output() newMessage: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService, private chatService: ChatService) {}
 
   ngOnInit(): void {}
 
   ngOnChanges(): void {
     if (this.project && !this.initWebSocket) {
       this.webSocketConnect(this.project.projectId);
+      this.getHistoryOfMessages();
       this.initWebSocket = true;
     }
   }
 
   ngOnDestroy(): void {
     this.webSocketDisconnect(this.project.projectId);
+  }
+
+  getHistoryOfMessages(): void {
+    this.chatService.getHistory(this.project.projectId).subscribe(result => {
+      if (result != null) {
+        this.messages = result;
+      }
+    });
   }
 
   webSocketConnect(projectId): void {
