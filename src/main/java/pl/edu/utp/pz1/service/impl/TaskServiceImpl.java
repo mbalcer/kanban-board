@@ -54,19 +54,14 @@ public class TaskServiceImpl implements TaskService {
     public Task update(Integer taskId, Task updatedTask) {
         Optional<Task> optionalTask = taskRepository.findById(taskId);
         Task task = optionalTask.orElseThrow(() -> new TaskNotFoundException());
-        boolean changeStatus = false;
-        if (!updatedTask.getState().equals(task.getState())) {
-            changeStatus = true;
-        }
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
         task.setState(updatedTask.getState());
         task.setSequence(updatedTask.getSequence());
         task.setStudent(updatedTask.getStudent());
         Task saveTask = taskRepository.save(task);
-        if (changeStatus) {
-            simpMessagingTemplate.convertAndSend("/task/" + taskId, saveTask);
-        }
+
+        simpMessagingTemplate.convertAndSend("/task/" + taskId, saveTask);
         return saveTask;
     }
 

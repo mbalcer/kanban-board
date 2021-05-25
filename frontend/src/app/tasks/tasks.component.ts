@@ -170,11 +170,16 @@ export class TasksComponent implements OnInit {
         this.stompClient.subscribe('/task/' + task.taskId, payload => {
           const receivedTask = JSON.parse(payload.body);
           const indexNewBoard = that.boards.findIndex(board => board.name === receivedTask.state);
-          that.notification.success('Zadanie "' + receivedTask.name + '" zostało przesunięte do listy "'
-            + that.boards[indexNewBoard].value + '".');
           that.boards.forEach((board, index) => {
             const indexTask = board.tasks.findIndex(t => t.taskId === receivedTask.taskId);
             if (indexTask !== -1) {
+              if (index === indexNewBoard) {
+                that.notification.success('Zadanie "' + receivedTask.name + '" zostało edytowane');
+              } else {
+                that.notification.success('Zadanie "' + receivedTask.name + '" zostało przesunięte do listy "'
+                  + that.boards[indexNewBoard].value + '".');
+              }
+
               that.boards[indexNewBoard].tasks.push(receivedTask);
               that.boards[index].tasks.splice(indexTask, 1);
             }
