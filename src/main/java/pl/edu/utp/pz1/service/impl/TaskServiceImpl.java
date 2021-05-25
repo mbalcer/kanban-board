@@ -69,6 +69,8 @@ public class TaskServiceImpl implements TaskService {
     public void delete(Integer taskId) {
         if (taskRepository.existsById(taskId)) {
             taskRepository.deleteById(taskId);
+
+            simpMessagingTemplate.convertAndSend("/task/" + taskId, "deleted");
         } else {
             throw new TaskNotFoundException();
         }

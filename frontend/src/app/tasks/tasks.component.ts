@@ -168,24 +168,41 @@ export class TasksComponent implements OnInit {
     this.stompClient.connect({}, frame => {
       tasks.forEach(task => {
         this.stompClient.subscribe('/task/' + task.taskId, payload => {
-          const receivedTask = JSON.parse(payload.body);
-          const indexNewBoard = that.boards.findIndex(board => board.name === receivedTask.state);
-          that.boards.forEach((board, index) => {
-            const indexTask = board.tasks.findIndex(t => t.taskId === receivedTask.taskId);
-            if (indexTask !== -1) {
-              if (index === indexNewBoard) {
-                that.notification.success('Zadanie "' + receivedTask.name + '" zostało edytowane');
-              } else {
-                that.notification.success('Zadanie "' + receivedTask.name + '" zostało przesunięte do listy "'
-                  + that.boards[indexNewBoard].value + '".');
-              }
-
-              that.boards[indexNewBoard].tasks.push(receivedTask);
-              that.boards[index].tasks.splice(indexTask, 1);
-            }
-          });
+          if (payload.body === 'deleted') {
+            that.websocketDeleteTask(task);
+          } else {
+            that.websocketEditTask(JSON.parse(payload.body));
+          }
         });
       });
+    });
+  }
+
+  websocketEditTask(receivedTask: Task): void {
+    const indexNewBoard = this.boards.findIndex(board => board.name === receivedTask.state);
+    this.boards.forEach((board, index) => {
+      const indexTask = board.tasks.findIndex(t => t.taskId === receivedTask.taskId);
+      if (indexTask !== -1) {
+        if (index === indexNewBoard) {
+          this.notification.success('Zadanie "' + receivedTask.name + '" zostało edytowane');
+        } else {
+          this.notification.success('Zadanie "' + receivedTask.name + '" zostało przesunięte do listy "'
+            + this.boards[indexNewBoard].value + '".');
+        }
+
+        this.boards[indexNewBoard].tasks.push(receivedTask);
+        this.boards[index].tasks.splice(indexTask, 1);
+      }
+    });
+  }
+
+  websocketDeleteTask(task: Task): void {
+    this.boards.forEach((board, index) => {
+      const indexTask = board.tasks.findIndex(t => t.taskId === task.taskId);
+      if (indexTask !== -1) {
+        this.boards[index].tasks.splice(indexTask, 1);
+        this.notification.success('Zadanie "' + task.name + '" zostało usunięte');
+      }
     });
   }
 }
