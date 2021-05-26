@@ -122,10 +122,6 @@ export class TasksComponent implements OnInit {
           }, error => this.notification.error(error.error.message));
         } else if (result.action === 'edit') {
           this.taskService.updateTask(result.data).subscribe(updateResult => {
-            this.boards.forEach(board => {
-              const indexTask = board.tasks.findIndex(t => t.taskId === updateResult.taskId);
-              board.tasks[indexTask] = updateResult;
-            });
             this.notification.success('Pomyślnie edytowano zadanie');
           }, error => this.notification.error(error.error.message));
         }
@@ -135,9 +131,6 @@ export class TasksComponent implements OnInit {
 
   deleteTask(task: Task): void {
     this.taskService.deleteTask(task).subscribe(result => {
-      const indexBoard = this.boards.findIndex(board => board.name === task.state);
-      const indexTask = this.boards[indexBoard].tasks.findIndex(t => t.taskId === task.taskId);
-      this.boards[indexBoard].tasks.splice(indexTask, 1);
       this.notification.success('Pomyślnie usunąłeś zadanie');
     }, error => this.notification.error(error.error.message));
   }
