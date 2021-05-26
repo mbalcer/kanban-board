@@ -36,6 +36,11 @@ public class ProjectController {
         return projectService.findAll();
     }
 
+    @GetMapping("/user/{email}")
+    public List<Project> findAllByUser(@PathVariable String email) {
+        return projectService.findAllByUser(email);
+    }
+
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody Project project) {
         Project newProject = projectService.create(project);

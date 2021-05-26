@@ -15,4 +15,5 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     List<Project> findByNameContainingIgnoreCase(String name);
 
+    List<Project> findAllByStudentsEmail(String email);
 }

@@ -12,6 +12,8 @@ public interface ProjectService {
 
     List<Project> findAll();
 
+    List<Project> findAllByUser(String email);
+
     Page<Project> getProjects(Pageable pageable);
 
     Project create(Project project);

@@ -30,6 +30,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> findAllByUser(String email) {
+        return projectRepository.findAllByStudentsEmail(email);
+    }
+
+    @Override
     public Page<Project> getProjects(Pageable pageable) {
         return projectRepository.findAll(pageable);
     }
