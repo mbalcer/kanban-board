@@ -1,3 +1,21 @@
 <div class="projects-container">
-  <p *ngFor="let project of projects">{{project.name}}</p>
+  <h2>Twoje projekty</h2>
+  <div class="cards">
+    <mat-card class="project-card" [routerLink]="['/board/' + project.projectId]" *ngFor="let project of projects">
+      <div class="card-header">
+        {{project.name}}
+      </div>
+
+      <mat-card-content>
+        {{project.description}}
+      </mat-card-content>
+
+      <div class="students">
+        <div class="student-initial" *ngFor="let student of project.students">{{student | initials}}</div>
+        <button mat-mini-fab color="accent" class="btn-add-student">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
 </div>
