@@ -25,7 +25,8 @@
   </div>
 </div>
 
-<div class="information-container" mat-dialog-content *ngIf="data.submitDateTime != null">
+<div class="information-container" mat-dialog-content
+     *ngIf="data.submitDateTime !== null && data.submitDateTime.length !== 0">
   <mat-icon aria-hidden="false" aria-label="Data zakończenia" class="icon-container">date_range</mat-icon>
   <div class="details-container">
     <h2>Data zakończenia projektu</h2>

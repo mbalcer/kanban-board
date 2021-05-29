@@ -94,8 +94,10 @@ export class ProjectsComponent implements OnInit, OnChanges {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
+        result.data.tasks = [];
+        result.data.students = [this.user];
+
         if (result.action === 'add') {
-          result.data.students = [this.user];
           this.projectService.createProject(result.data).subscribe(createResult => {
             this.projects.push(createResult);
             this.notification.success('Pomyślnie dodano projekt');
