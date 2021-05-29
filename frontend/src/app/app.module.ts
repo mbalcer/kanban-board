@@ -21,8 +21,8 @@ import {StudentService} from './auth/student/student.service';
 import {HeaderComponent} from './header/header.component';
 import {ProjectsComponent} from './home/projects/projects.component';
 import {ErrorPageComponent} from './error-page/error-page.component';
-import {DialogAddTask} from './tasks/dialogs/dialog-add-task/dialog-add-task';
-import {DialogTaskDetails} from './tasks/dialogs/dialog-task-details/dialog-task-details';
+import {DialogAddTask} from './dialogs/dialog-add-task/dialog-add-task';
+import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-details';
 import {ChatComponent} from './tasks/chat/chat.component';
 import {ProfileComponent} from './profile/profile.component';
 

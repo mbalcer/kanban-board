@@ -1,10 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Task} from '../../task';
 import {FormControl, Validators} from '@angular/forms';
-import {Student} from '../../../auth/student/student.model';
-import {AddEditAction} from '../../tasks.component';
 import {DialogAction} from '../dialog-action';
+import {Student} from '../../auth/student/student.model';
+import { Task } from 'src/app/tasks/task';
+import {AddEditAction} from '../../tasks/tasks.component';
 
 @Component({
   selector: 'app-dialog-task-details',

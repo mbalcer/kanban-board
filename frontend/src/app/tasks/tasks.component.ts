@@ -9,13 +9,13 @@ import {StudentService} from '../auth/student/student.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Project} from '../home/projects/project';
 import {ProjectService} from '../home/projects/project.service';
-import {DialogAddTask} from './dialogs/dialog-add-task/dialog-add-task';
-import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-details';
 import {NotificationService} from '../notification.service';
 import {MatDrawer} from '@angular/material/sidenav';
 import {environment} from '../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import {DialogTaskDetails} from '../dialogs/dialog-task-details/dialog-task-details';
+import {DialogAddTask} from '../dialogs/dialog-add-task/dialog-add-task';
 
 @Component({
   selector: 'app-tasks',
