@@ -10,6 +10,7 @@ import pl.edu.utp.pz1.repository.ProjectRepository;
 import pl.edu.utp.pz1.repository.TaskRepository;
 import pl.edu.utp.pz1.service.ProjectService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project create(Project project) {
+        LocalDateTime now = LocalDateTime.now();
+        project.setCreateDateTime(now);
+        project.setUpdateDateTime(now);
         return projectRepository.save(project);
     }
 
@@ -56,7 +60,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         project.setName(updatedProject.getName());
         project.setDescription(updatedProject.getDescription());
-        project.setCreateDateTime(updatedProject.getCreateDateTime());
         project.setSubmitDateTime(updatedProject.getSubmitDateTime());
 
         return projectRepository.save(project);

@@ -23,6 +23,10 @@ export class ProjectService {
     return this.httpClient.get<Project[]>(this.PROJECT_URL + '/user/' + user.email);
   }
 
+  createProject(project: Project): Observable<Project> {
+    return this.httpClient.post<Project>(this.PROJECT_URL, project);
+  }
+
   addStudentToProject(project: Project, user: Student): Observable<Project> {
     return this.httpClient.put<Project>(this.PROJECT_URL + '/student/' + project.projectId, user);
   }

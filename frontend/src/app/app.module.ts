@@ -27,6 +27,7 @@ import {ChatComponent} from './tasks/chat/chat.component';
 import {ProfileComponent} from './profile/profile.component';
 import {DialogAddProjectStudent} from './dialogs/dialog-add-project-student/dialog-add-project-student';
 import {DialogProjectDetails} from './dialogs/dialog-project-details/dialog-project-details';
+import {DialogAddProject} from './dialogs/dialog-add-project/dialog-add-project';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {DialogProjectDetails} from './dialogs/dialog-project-details/dialog-proj
     ChatComponent,
     ProfileComponent,
     DialogAddProjectStudent,
-    DialogProjectDetails
+    DialogProjectDetails,
+    DialogAddProject
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,8 @@ import {DialogProjectDetails} from './dialogs/dialog-project-details/dialog-proj
     DialogTaskDetails,
     DialogAddTask,
     DialogAddProjectStudent,
-    DialogProjectDetails
+    DialogProjectDetails,
+    DialogAddProject
   ]
 })
 export class AppModule {

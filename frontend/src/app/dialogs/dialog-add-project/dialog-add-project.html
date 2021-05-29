@@ -1,0 +1,29 @@
+<h1 mat-dialog-title *ngIf="formResult.action==='add'">Dodawanie nowego projektu</h1>
+<h1 mat-dialog-title *ngIf="formResult.action==='edit'">Edycja projektu</h1>
+
+<div class="form-add" mat-dialog-content>
+  <form>
+    <mat-form-field appearance="standard">
+      <mat-label>Nazwa</mat-label>
+      <input matInput [(ngModel)]="projectToAdd.name" name="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Opis</mat-label>
+      <textarea matInput [(ngModel)]="projectToAdd.description" name="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Data zakończenia</mat-label>
+      <input matInput type="datetime-local" [(ngModel)]="projectToAdd.submitDateTime" name="submitDateTime">
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <span class="spacer"></span>
+  <button mat-stroked-button color="warn" (click)="onNoClick()">Zamknij</button>
+  <button mat-stroked-button color="primary" (click)="closeForm()">
+    {{formResult.action === 'add' ? 'Dodaj' : 'Edytuj'}}
+  </button>
+</div>

@@ -7,6 +7,7 @@ import {DialogAddProjectStudent} from '../../dialogs/dialog-add-project-student/
 import {NotificationService} from '../../notification.service';
 import {StudentService} from '../../auth/student/student.service';
 import {DialogProjectDetails} from '../../dialogs/dialog-project-details/dialog-project-details';
+import {DialogAddProject} from '../../dialogs/dialog-add-project/dialog-add-project';
 
 @Component({
   selector: 'app-projects',
@@ -84,8 +85,29 @@ export class ProjectsComponent implements OnInit, OnChanges {
     });
   }
 
+  openAddProject(action, project?): void {
+    const addEditAction: AddEditAction = {action, project};
+    const dialogRef = this.dialog.open(DialogAddProject, {
+      width: '50%',
+      data: addEditAction
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        if (result.action === 'add') {
+          result.data.students = [this.user];
+          this.projectService.createProject(result.data).subscribe(createResult => {
+            this.projects.push(createResult);
+            this.notification.success('Pomyślnie dodano projekt');
+          }, error => this.notification.error(error.error.message));
+        }
+      }
+    });
+  }
+
   deleteProject(project: Project): void {
     this.projectService.deleteProject(project).subscribe(() => {
+      this.projects.splice(this.projects.indexOf(project));
       this.notification.success('Pomyślnie usunąłeś projekt');
     }, error => this.notification.error(error.error.message));
   }
@@ -94,4 +116,9 @@ export class ProjectsComponent implements OnInit, OnChanges {
 
 export interface AddStudentAction {
   students: Student[];
+}
+
+export interface AddEditAction {
+  action: string;
+  project: Project;
 }
