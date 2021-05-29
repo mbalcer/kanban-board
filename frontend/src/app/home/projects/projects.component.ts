@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {DialogAddProjectStudent} from '../../dialogs/dialog-add-project-student/dialog-add-project-student';
 import {NotificationService} from '../../notification.service';
 import {StudentService} from '../../auth/student/student.service';
+import {DialogProjectDetails} from '../../dialogs/dialog-project-details/dialog-project-details';
 
 @Component({
   selector: 'app-projects',
@@ -64,6 +65,21 @@ export class ProjectsComponent implements OnInit, OnChanges {
           this.notification.success('Pomyślnie dodano studenta');
           this.getProjects();
         }, error => this.notification.error(error.error.message));
+      }
+    });
+  }
+
+  openProjectDetails(project: Project): void {
+    const dialogRef = this.dialog.open(DialogProjectDetails, {
+      width: '50%',
+      data: project
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result.action === 'delete') {
+        // this.deleteProject(result.data);
+      } else if (result !== undefined && result.action === 'edit') {
+        // this.editProject(result.data);
       }
     });
   }

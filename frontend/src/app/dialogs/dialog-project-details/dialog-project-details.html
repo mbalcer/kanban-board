@@ -1,0 +1,62 @@
+<h1 mat-dialog-title>{{data.name}}</h1>
+
+<div class="information-container" mat-dialog-content
+     *ngIf="data.description !== null && data.description.length !== 0">
+  <mat-icon aria-hidden="false" aria-label="Opis" class="icon-container">description</mat-icon>
+  <div class="details-container">
+    <h2 class="title-container">Opis</h2>
+    <p>{{data.description}}</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Data utworzenia" class="icon-container">date_range</mat-icon>
+  <div class="details-container">
+    <h2>Data utworzenia projektu</h2>
+    <p>{{data.createDateTime | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Data ostatniej modyfikacji" class="icon-container">date_range</mat-icon>
+  <div class="details-container">
+    <h2>Data ostatniej modyfikacji</h2>
+    <p>{{data.updateDateTime | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content *ngIf="data.submitDateTime !== null">
+  <mat-icon aria-hidden="false" aria-label="Data zakończenia" class="icon-container">date_range</mat-icon>
+  <div class="details-container">
+    <h2>Data zakończenia projektu</h2>
+    <p>{{data.submitDateTime | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Liczba zadań" class="icon-container">hourglass_empty</mat-icon>
+  <div class="details-container">
+    <h2>Liczba zadań</h2>
+    <p>{{data.tasks.length}}</p>
+  </div>
+</div>
+
+<div class="information-container" mat-dialog-content>
+  <mat-icon aria-hidden="false" aria-label="Liczba studentów" class="icon-container">person_outline</mat-icon>
+  <div class="details-container">
+    <h2>Liczba studentów</h2>
+    <p>{{data.students.length}}</p>
+  </div>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <button mat-icon-button color="warn" (click)="delete()" matTooltip="Usuń">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <button mat-icon-button color="accent" (click)="closeDialog(editAction)" matTooltip="Edytuj">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button (click)="closeDialog()" matTooltip="Zamknij">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

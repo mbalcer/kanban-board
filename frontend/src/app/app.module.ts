@@ -26,6 +26,7 @@ import {DialogTaskDetails} from './dialogs/dialog-task-details/dialog-task-detai
 import {ChatComponent} from './tasks/chat/chat.component';
 import {ProfileComponent} from './profile/profile.component';
 import {DialogAddProjectStudent} from './dialogs/dialog-add-project-student/dialog-add-project-student';
+import {DialogProjectDetails} from './dialogs/dialog-project-details/dialog-project-details';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import {DialogAddProjectStudent} from './dialogs/dialog-add-project-student/dial
     ErrorPageComponent,
     ChatComponent,
     ProfileComponent,
-    DialogAddProjectStudent
+    DialogAddProjectStudent,
+    DialogProjectDetails
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,12 @@ import {DialogAddProjectStudent} from './dialogs/dialog-add-project-student/dial
     StudentService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogTaskDetails, DialogAddTask, DialogAddProjectStudent]
+  entryComponents: [
+    DialogTaskDetails,
+    DialogAddTask,
+    DialogAddProjectStudent,
+    DialogProjectDetails
+  ]
 })
 export class AppModule {
 }

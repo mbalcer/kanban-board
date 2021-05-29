@@ -45,8 +45,19 @@ h2 {
   width: 28px;
   height: 28px;
   line-height: 28px;
+  margin: 0 0.5em 0.5em 0;
 }
 
 .btn-add-student::ng-deep > .mat-button-wrapper {
+  padding: 0;
+}
+
+.btn-project-info {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.btn-project-info::ng-deep > .mat-button-wrapper {
   padding: 0;
 }
