@@ -1,5 +1,6 @@
 package pl.edu.utp.pz1.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,14 @@ public class StudentController {
     @PutMapping("/{studentId}")
     public ResponseEntity<Student> updateStudent(@PathVariable Integer studentId, @RequestBody Student student) {
         Student updatedStudent = studentService.update(studentId, student);
+        return ResponseEntity.ok(updatedStudent);
+    }
 
+    @PutMapping("/password/{studentId}")
+    public ResponseEntity<Student> updatePassword(@PathVariable Integer studentId, @RequestBody ObjectNode objectNode) {
+        String currentPassword = objectNode.get("currentPassword").asText();
+        String newPassword = objectNode.get("newPassword").asText();
+        Student updatedStudent = studentService.updatePassword(studentId, currentPassword, newPassword);
         return ResponseEntity.ok(updatedStudent);
     }
 

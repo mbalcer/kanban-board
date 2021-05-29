@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.exception.EmailAlreadyUsedException;
+import pl.edu.utp.pz1.exception.PasswordNotCorrectException;
 import pl.edu.utp.pz1.exception.StudentNotFoundException;
 import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.repository.StudentRepository;
@@ -52,7 +53,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student update(Integer studentId, Student updatedStudent) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
-        Student student = studentOptional.orElseThrow(() -> new StudentNotFoundException());
+        Student student = studentOptional.orElseThrow(StudentNotFoundException::new);
         if (studentRepository.findByEmail(updatedStudent.getEmail()).isPresent() && !student.getEmail().equals(updatedStudent.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
@@ -63,6 +64,17 @@ public class StudentServiceImpl implements StudentService {
         student.setFullTime(updatedStudent.getFullTime());
         student.setIndexNumber(updatedStudent.getIndexNumber());
 
+        return studentRepository.save(student);
+    }
+
+    @Override
+    public Student updatePassword(Integer studentId, String currentPassword, String newPassword) {
+        Optional<Student> studentOptional = studentRepository.findById(studentId);
+        Student student = studentOptional.orElseThrow(StudentNotFoundException::new);
+        if (!passwordEncoder.matches(currentPassword, student.getPassword())) {
+            throw new PasswordNotCorrectException();
+        }
+        student.setPassword(passwordEncoder.encode(newPassword));
         return studentRepository.save(student);
     }
 

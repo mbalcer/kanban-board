@@ -18,6 +18,8 @@ public interface StudentService {
 
     Student update(Integer studentId, Student updatedStudent);
 
+    Student updatePassword(Integer studentId, String currentPassword, String newPassword);
+
     void delete(Integer studentId);
 
     Optional<Student> findByEmail(String email);
