@@ -35,6 +35,11 @@ public class ExceptionHandlerAdvice {
         return handleError(ex, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IndexAlreadyUsedException.class)
+    public ResponseEntity handleIndexAlreadyUsed(IndexAlreadyUsedException ex) {
+        return handleError(ex, HttpStatus.BAD_REQUEST);
+    }
+
     private ResponseEntity handleError(RuntimeException ex, HttpStatus status) {
         log.error(ex.getMessage(), ex);
         return ResponseEntity.status(status).body(ex);

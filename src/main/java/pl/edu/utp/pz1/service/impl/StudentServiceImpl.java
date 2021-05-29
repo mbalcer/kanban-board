@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.exception.EmailAlreadyUsedException;
+import pl.edu.utp.pz1.exception.IndexAlreadyUsedException;
 import pl.edu.utp.pz1.exception.PasswordNotCorrectException;
 import pl.edu.utp.pz1.exception.StudentNotFoundException;
 import pl.edu.utp.pz1.model.Student;
@@ -42,11 +43,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(Student student) {
-        if (studentRepository.findByEmail(student.getEmail()).isEmpty()) {
+        if (studentRepository.findByEmail(student.getEmail()).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        } else if (studentRepository.findByIndexNumber(student.getIndexNumber()).isPresent()) {
+            throw new IndexAlreadyUsedException();
+        } else {
             student.setPassword(passwordEncoder.encode(student.getPassword()));
             return studentRepository.save(student);
-        } else {
-            throw new EmailAlreadyUsedException();
         }
     }
 
@@ -54,17 +57,21 @@ public class StudentServiceImpl implements StudentService {
     public Student update(Integer studentId, Student updatedStudent) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         Student student = studentOptional.orElseThrow(StudentNotFoundException::new);
-        if (studentRepository.findByEmail(updatedStudent.getEmail()).isPresent() && !student.getEmail().equals(updatedStudent.getEmail())) {
+        if (studentRepository.findByEmail(updatedStudent.getEmail()).isPresent()
+                && !student.getEmail().equals(updatedStudent.getEmail())) {
             throw new EmailAlreadyUsedException();
+        } else if (studentRepository.findByIndexNumber(student.getIndexNumber()).isPresent()
+                && !student.getIndexNumber().equals(updatedStudent.getIndexNumber())) {
+            throw new IndexAlreadyUsedException();
+        } else {
+            student.setFirstName(updatedStudent.getFirstName());
+            student.setLastName(updatedStudent.getLastName());
+            student.setEmail(updatedStudent.getEmail());
+            student.setFullTime(updatedStudent.getFullTime());
+            student.setIndexNumber(updatedStudent.getIndexNumber());
+
+            return studentRepository.save(student);
         }
-
-        student.setFirstName(updatedStudent.getFirstName());
-        student.setLastName(updatedStudent.getLastName());
-        student.setEmail(updatedStudent.getEmail());
-        student.setFullTime(updatedStudent.getFullTime());
-        student.setIndexNumber(updatedStudent.getIndexNumber());
-
-        return studentRepository.save(student);
     }
 
     @Override
