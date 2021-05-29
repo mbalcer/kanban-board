@@ -26,4 +26,8 @@ export class ProjectService {
   addStudentToProject(project: Project, user: Student): Observable<Project> {
     return this.httpClient.put<Project>(this.PROJECT_URL + '/student/' + project.projectId, user);
   }
+
+  deleteProject(project: Project): Observable<any> {
+    return this.httpClient.delete<any>(this.PROJECT_URL + '/' + project.projectId);
+  }
 }

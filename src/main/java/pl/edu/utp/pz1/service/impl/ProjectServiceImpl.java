@@ -7,6 +7,7 @@ import pl.edu.utp.pz1.exception.ProjectNotFoundException;
 import pl.edu.utp.pz1.model.Project;
 import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.repository.ProjectRepository;
+import pl.edu.utp.pz1.repository.TaskRepository;
 import pl.edu.utp.pz1.service.ProjectService;
 
 import java.util.List;
@@ -14,10 +15,13 @@ import java.util.Optional;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-    private final ProjectRepository projectRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
+
+    public ProjectServiceImpl(ProjectRepository projectRepository, TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -68,10 +72,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(Integer id) {
-        if (projectRepository.existsById(id)) {
-            projectRepository.deleteById(id);
-        } else {
-            throw new ProjectNotFoundException();
-        }
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        Project project = projectOptional.orElseThrow(ProjectNotFoundException::new);
+        project.getTasks().forEach(taskRepository::delete);
+        projectRepository.delete(project);
     }
 }

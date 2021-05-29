@@ -77,12 +77,19 @@ export class ProjectsComponent implements OnInit, OnChanges {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined && result.action === 'delete') {
-        // this.deleteProject(result.data);
+        this.deleteProject(result.data);
       } else if (result !== undefined && result.action === 'edit') {
         // this.editProject(result.data);
       }
     });
   }
+
+  deleteProject(project: Project): void {
+    this.projectService.deleteProject(project).subscribe(() => {
+      this.notification.success('Pomyślnie usunąłeś projekt');
+    }, error => this.notification.error(error.error.message));
+  }
+
 }
 
 export interface AddStudentAction {
