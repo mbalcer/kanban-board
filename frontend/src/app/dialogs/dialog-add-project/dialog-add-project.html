@@ -13,12 +13,14 @@
 
     <mat-form-field appearance="standard">
       <mat-label>Opis</mat-label>
-      <textarea matInput [(ngModel)]="projectToAdd.description" name="description"></textarea>
+      <textarea matInput [(ngModel)]="projectToAdd.description" name="description"
+                formControlName="description"></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="standard">
       <mat-label>Data zakończenia</mat-label>
-      <input matInput type="datetime-local" [(ngModel)]="projectToAdd.submitDateTime" name="submitDateTime">
+      <input matInput type="datetime-local" [(ngModel)]="projectToAdd.submitDateTime" name="submitDateTime"
+             formControlName="submitDateTime">
     </mat-form-field>
   </form>
 </div>

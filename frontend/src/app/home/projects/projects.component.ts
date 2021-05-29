@@ -80,7 +80,7 @@ export class ProjectsComponent implements OnInit, OnChanges {
       if (result !== undefined && result.action === 'delete') {
         this.deleteProject(result.data);
       } else if (result !== undefined && result.action === 'edit') {
-        // this.editProject(result.data);
+        this.editProject(result.data);
       }
     });
   }
@@ -100,9 +100,17 @@ export class ProjectsComponent implements OnInit, OnChanges {
             this.projects.push(createResult);
             this.notification.success('Pomyślnie dodano projekt');
           }, error => this.notification.error(error.error.message));
+        } else if (result.action === 'edit') {
+          this.projectService.updateProject(result.data).subscribe(() => {
+            this.notification.success('Pomyślnie edytowano projekt');
+          }, error => this.notification.error(error.error.message));
         }
       }
     });
+  }
+
+  editProject(project: Project): void {
+    this.openAddProject('edit', project);
   }
 
   deleteProject(project: Project): void {

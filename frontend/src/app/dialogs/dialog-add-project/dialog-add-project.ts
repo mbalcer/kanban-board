@@ -19,7 +19,9 @@ export class DialogAddProject {
   };
 
   formControl = this.fb.group({
-    name: new FormControl('', [Validators.required])
+    name: new FormControl('', [Validators.required]),
+    description: new FormControl('', []),
+    submitDateTime: new FormControl('', [])
   });
 
   projectToAdd: Project = {
@@ -32,8 +34,13 @@ export class DialogAddProject {
               @Inject(MAT_DIALOG_DATA) public data: AddEditAction, private fb: FormBuilder) {
     this.formResult.action = data.action;
     if (this.formResult.action === 'edit') {
+      data.project.submitDateTime = this.dateTimeFormatter(data.project.submitDateTime);
       this.projectToAdd = data.project;
     }
+  }
+
+  dateTimeFormatter(dateTime: string): string {
+    return dateTime === null ? dateTime : dateTime.slice(0, 16);
   }
 
   onNoClick(): void {

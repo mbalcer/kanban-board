@@ -31,6 +31,10 @@ export class ProjectService {
     return this.httpClient.put<Project>(this.PROJECT_URL + '/student/' + project.projectId, user);
   }
 
+  updateProject(project: Project): Observable<Project> {
+    return this.httpClient.put<Project>(this.PROJECT_URL + '/' + project.projectId, project);
+  }
+
   deleteProject(project: Project): Observable<any> {
     return this.httpClient.delete<any>(this.PROJECT_URL + '/' + project.projectId);
   }
