@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.pz1.exception.ProjectNotFoundException;
 import pl.edu.utp.pz1.model.Project;
+import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.repository.ProjectRepository;
 import pl.edu.utp.pz1.service.ProjectService;
 
@@ -47,13 +48,21 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project update(Integer id, Project updatedProject) {
         Optional<Project> projectOptional = projectRepository.findById(id);
-        Project project = projectOptional.orElseThrow(() -> new ProjectNotFoundException());
+        Project project = projectOptional.orElseThrow(ProjectNotFoundException::new);
 
         project.setName(updatedProject.getName());
         project.setDescription(updatedProject.getDescription());
         project.setCreateDateTime(updatedProject.getCreateDateTime());
         project.setSubmitDateTime(updatedProject.getSubmitDateTime());
 
+        return projectRepository.save(project);
+    }
+
+    @Override
+    public Project addStudent(Integer id, Student student) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+        Project project = projectOptional.orElseThrow(ProjectNotFoundException::new);
+        project.getStudents().add(student);
         return projectRepository.save(project);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.edu.utp.pz1.model.Project;
+import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.service.ProjectService;
 
 import java.net.URI;
@@ -52,6 +53,13 @@ public class ProjectController {
     @PutMapping("/{projectId}")
     public ResponseEntity<Project> updateProject(@PathVariable Integer projectId, @RequestBody Project project) {
         Project updatedProject = projectService.update(projectId, project);
+
+        return ResponseEntity.ok(updatedProject);
+    }
+
+    @PutMapping("/student/{projectId}")
+    public ResponseEntity<Project> addStudent(@PathVariable Integer projectId, @RequestBody Student student) {
+        Project updatedProject = projectService.addStudent(projectId, student);
 
         return ResponseEntity.ok(updatedProject);
     }

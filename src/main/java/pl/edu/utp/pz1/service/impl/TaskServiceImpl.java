@@ -53,7 +53,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task update(Integer taskId, Task updatedTask) {
         Optional<Task> optionalTask = taskRepository.findById(taskId);
-        Task task = optionalTask.orElseThrow(() -> new TaskNotFoundException());
+        Task task = optionalTask.orElseThrow(TaskNotFoundException::new);
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
         task.setState(updatedTask.getState());
