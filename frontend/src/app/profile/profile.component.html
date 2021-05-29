@@ -9,20 +9,20 @@
 
       <div class="my-account">
         <h2>Moje konto</h2>
-        <form>
+        <form [formGroup]="profileControls">
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Imię</mat-label>
-              <input matInput [(ngModel)]="user.firstName" name="firstName" [formControl]="formControl.firstName">
-              <mat-error *ngIf="formControl.firstName.hasError('required') || formControl.firstName.hasError('min')">
+              <input matInput [(ngModel)]="user.firstName" name="firstName" formControlName="firstName">
+              <mat-error>
                 Imię jest <strong>wymagane</strong> i musi mieć conajmniej 3 znaki.
               </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="standard">
               <mat-label>Nazwisko</mat-label>
-              <input matInput [(ngModel)]="user.lastName" name="lastName" [formControl]="formControl.lastName">
-              <mat-error *ngIf="formControl.lastName.hasError('required') || formControl.lastName.hasError('min')">
+              <input matInput [(ngModel)]="user.lastName" name="lastName" formControlName="lastName">
+              <mat-error>
                 Nazwisko jest <strong>wymagane</strong> i musi mieć conajmniej 3 znaki.
               </mat-error>
             </mat-form-field>
@@ -31,19 +31,19 @@
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Numer indeksu</mat-label>
-              <input matInput [(ngModel)]="user.indexNumber" name="indexNumber" [formControl]="formControl.indexNumber">
-              <mat-error *ngIf="formControl.indexNumber.hasError('required')">
-                Numer indeksu jest <strong>wymagany</strong>.
+              <input matInput [(ngModel)]="user.indexNumber" name="indexNumber" formControlName="indexNumber">
+              <mat-error>
+                Numer indeksu jest <strong>wymagany</strong> i musi składać się wyłącznie z cyfr.
               </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="standard">
               <mat-label>Tryb studiów</mat-label>
-              <mat-select [(ngModel)]="user.fullTime" name="fullTime" [formControl]="formControl.fullTime">
+              <mat-select [(ngModel)]="user.fullTime" name="fullTime" formControlName="fullTime">
                 <mat-option [value]="true">Stacjonarne</mat-option>
                 <mat-option [value]="false">Niestacjonarne</mat-option>
               </mat-select>
-              <mat-error *ngIf="formControl.fullTime.hasError('required')">
+              <mat-error>
                 Tryb studiów jest <strong>wymagany</strong>.
               </mat-error>
             </mat-form-field>
@@ -52,48 +52,64 @@
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Email</mat-label>
-              <input matInput [(ngModel)]="user.email" name="email" [formControl]="formControl.email">
-              <mat-error *ngIf="formControl.email.hasError('email') && !formControl.email.hasError('required')">
+              <input matInput [(ngModel)]="user.email" name="email" formControlName="email">
+              <mat-error
+                *ngIf="profileControls.get('email').hasError('email') && !profileControls.get('email').hasError('required')">
                 Wpisz <strong>poprawny</strong> adres email.
               </mat-error>
-              <mat-error *ngIf="formControl.email.hasError('required')">
+              <mat-error *ngIf="profileControls.get('email').hasError('required')">
                 Email jest <strong>wymagany</strong>
               </mat-error>
             </mat-form-field>
           </div>
 
           <div class="action-row">
-            <button mat-raised-button color="primary" (click)="changeProfile()">
+            <button mat-raised-button color="primary" (click)="changeProfile()" [disabled]="profileControls.invalid">
               Zapisz zmiany
             </button>
           </div>
         </form>
 
         <h2>Zmiana hasła</h2>
-        <form>
+        <form [formGroup]="passwordControls">
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Aktualne hasło</mat-label>
-              <input type="password" matInput name="currentPassword">
+              <input type="password" matInput name="currentPassword"
+                     [(ngModel)]="currentPassword" formControlName="currentPassword">
+              <mat-error>
+                Hasło jest <strong>wymagane</strong> i musi mieć min. 8 znaków
+                (w tym 1 dużą literę, 1 małą literę oraz cyfrę)
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Nowe hasło</mat-label>
-              <input type="password" matInput name="newPassword">
+              <input type="password" matInput name="newPassword"
+                     [(ngModel)]="newPassword" formControlName="newPassword">
+              <mat-error>
+                Hasło jest <strong>wymagane</strong> i musi mieć min. 8 znaków
+                (w tym 1 dużą literę, 1 małą literę oraz cyfrę)
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div class="form-row">
             <mat-form-field appearance="standard">
               <mat-label>Potwierdź hasło</mat-label>
-              <input type="password" matInput name="confirmPassword">
+              <input type="password" matInput name="confirmPassword"
+                     [(ngModel)]="confirmPassword" formControlName="confirmPassword">
+              <mat-error>
+                Hasło jest <strong>wymagane</strong> i musi mieć min. 8 znaków
+                (w tym 1 dużą literę, 1 małą literę oraz cyfrę)
+              </mat-error>
             </mat-form-field>
           </div>
 
           <div class="action-row">
-            <button mat-raised-button color="primary">
+            <button mat-raised-button color="primary" (click)="changePassword()" [disabled]="passwordControls.invalid">
               Zmień hasło
             </button>
           </div>

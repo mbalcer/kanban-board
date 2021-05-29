@@ -29,4 +29,9 @@ export class StudentService {
     return this.http.put<Student>(this.STUDENT_URL + '/' + updateStudent.studentId, updateStudent);
   }
 
+  public changePassword(updateStudent: Student, currentPassword: string, newPassword: string): Observable<Student> {
+    return this.http.put<Student>(this.STUDENT_URL + '/password/' + updateStudent.studentId,
+      {currentPassword, newPassword});
+  }
+
 }

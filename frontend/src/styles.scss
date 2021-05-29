@@ -43,3 +43,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   text-align: center;
 }
 
+.mat-simple-snackbar {
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+}
