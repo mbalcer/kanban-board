@@ -1,18 +1,19 @@
 <div class="projects-container">
   <h2>Twoje projekty</h2>
   <div class="cards">
-    <mat-card class="project-card" [routerLink]="['/board/' + project.projectId]" *ngFor="let project of projects">
-      <div class="card-header">
+    <mat-card class="project-card" *ngFor="let project of projects">
+
+      <div class="card-header" [routerLink]="['/board/' + project.projectId]">
         {{project.name}}
       </div>
-
-      <mat-card-content>
+      <mat-card-content [routerLink]="['/board/' + project.projectId]">
         {{project.description}}
       </mat-card-content>
 
       <div class="students">
         <div class="student-initial" *ngFor="let student of project.students">{{student | initials}}</div>
-        <button mat-mini-fab color="accent" class="btn-add-student">
+        <button mat-mini-fab class="btn-add-student" color="accent"
+                matTooltip="Dodaj studenta" (click)="addStudent(project)">
           <mat-icon>add</mat-icon>
         </button>
       </div>

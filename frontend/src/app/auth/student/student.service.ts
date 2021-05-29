@@ -25,6 +25,10 @@ export class StudentService {
     return this.http.get<Student>(this.STUDENT_URL + '/email/' + email);
   }
 
+  public getAll(): Observable<Student[]> {
+    return this.http.get<Student[]>(this.STUDENT_URL + '/all');
+  }
+
   public updateStudent(updateStudent: Student): Observable<Student> {
     return this.http.put<Student>(this.STUDENT_URL + '/' + updateStudent.studentId, updateStudent);
   }

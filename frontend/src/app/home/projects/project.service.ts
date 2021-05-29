@@ -9,9 +9,11 @@ import {Student} from '../../auth/student/student.model';
   providedIn: 'root'
 })
 export class ProjectService {
+
   private PROJECT_URL = environment.backendUrl + '/api/project';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   getProjectById(id: number): Observable<Project> {
     return this.httpClient.get<Project>(this.PROJECT_URL + '/' + id);
@@ -19,5 +21,9 @@ export class ProjectService {
 
   getAllProjectsByUser(user: Student): Observable<Project[]> {
     return this.httpClient.get<Project[]>(this.PROJECT_URL + '/user/' + user.email);
+  }
+
+  addStudentToProject(project: Project, user: Student): Observable<Project> {
+    return this.httpClient.put<Project>(this.PROJECT_URL + '/student/' + project.projectId, user);
   }
 }
