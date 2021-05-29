@@ -2,10 +2,13 @@
 <h1 mat-dialog-title *ngIf="formResult.action==='edit'">Edycja projektu</h1>
 
 <div class="form-add" mat-dialog-content>
-  <form>
+  <form [formGroup]="formControl">
     <mat-form-field appearance="standard">
       <mat-label>Nazwa</mat-label>
-      <input matInput [(ngModel)]="projectToAdd.name" name="name">
+      <input matInput [(ngModel)]="projectToAdd.name" name="name" formControlName="name">
+      <mat-error>
+        Nazwa jest <strong>wymagana</strong>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="standard">
@@ -23,7 +26,7 @@
 <div mat-dialog-actions class="actions">
   <span class="spacer"></span>
   <button mat-stroked-button color="warn" (click)="onNoClick()">Zamknij</button>
-  <button mat-stroked-button color="primary" (click)="closeForm()">
+  <button mat-stroked-button color="primary" (click)="closeForm()" [disabled]="formControl.invalid">
     {{formResult.action === 'add' ? 'Dodaj' : 'Edytuj'}}
   </button>
 </div>

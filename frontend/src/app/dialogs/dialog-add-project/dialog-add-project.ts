@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogAction} from '../dialog-action';
 import {Project} from '../../home/projects/project';
 import {AddEditAction} from '../../home/projects/projects.component';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-dialog-add-project',
@@ -17,6 +18,10 @@ export class DialogAddProject {
     data: null
   };
 
+  formControl = this.fb.group({
+    name: new FormControl('', [Validators.required])
+  });
+
   projectToAdd: Project = {
     name: '',
     description: '',
@@ -24,7 +29,7 @@ export class DialogAddProject {
   };
 
   constructor(public dialogRef: MatDialogRef<DialogAddProject>,
-              @Inject(MAT_DIALOG_DATA) public data: AddEditAction) {
+              @Inject(MAT_DIALOG_DATA) public data: AddEditAction, private fb: FormBuilder) {
     this.formResult.action = data.action;
     if (this.formResult.action === 'edit') {
       this.projectToAdd = data.project;
