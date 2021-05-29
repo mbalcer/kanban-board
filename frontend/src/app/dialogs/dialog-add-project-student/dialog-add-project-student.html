@@ -1,0 +1,31 @@
+<div *ngIf="options.length > 0; else other_content">
+  <h1 mat-dialog-title>Dodawanie studenta</h1>
+
+  <div class="form-add" mat-dialog-content>
+    <form [formGroup]="formControl">
+      <mat-form-field appearance="standard">
+        <mat-label>Student</mat-label>
+        <mat-select [(ngModel)]="studentToAdd" formControlName="student">
+          <mat-option *ngFor="let option of options" [value]="option">
+            {{option | studentName}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          To pole jest <strong>wymagane.</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="actions">
+    <span class="spacer"></span>
+    <button mat-stroked-button color="warn" (click)="onNoClick()">Zamknij</button>
+    <button mat-stroked-button color="primary" (click)="closeForm()"
+            [disabled]="formControl.invalid"> Dodaj
+    </button>
+  </div>
+</div>
+
+<ng-template #other_content>
+  <h1 mat-dialog-title *ngIf="options.length == 0">Brak studentów do dodania</h1>
+</ng-template>
