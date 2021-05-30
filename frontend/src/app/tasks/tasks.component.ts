@@ -113,7 +113,6 @@ export class TasksComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         result.data.project = this.project;
-        result.data.project.tasks = [];
 
         if (result.action === 'add') {
           this.taskService.createTask(result.data).subscribe(createResult => {
@@ -125,6 +124,8 @@ export class TasksComponent implements OnInit {
             this.notification.success('Pomyślnie edytowano zadanie');
           }, error => this.notification.error(error.error.message));
         }
+      } else {
+        this.getProject();
       }
     });
   }

@@ -94,7 +94,6 @@ export class ProjectsComponent implements OnInit, OnChanges {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        result.data.tasks = [];
         if (result.action === 'add') {
           result.data.students = [this.user];
           this.projectService.createProject(result.data).subscribe(createResult => {
@@ -106,6 +105,8 @@ export class ProjectsComponent implements OnInit, OnChanges {
             this.notification.success('Pomyślnie edytowano projekt');
           }, error => this.notification.error(error.error.message));
         }
+      } else {
+        this.getProjects();
       }
     });
   }

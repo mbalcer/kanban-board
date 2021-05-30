@@ -39,7 +39,7 @@ public class Task {
     @ManyToOne
     @ToString.Exclude
     @JoinColumn(name = "projectId")
-    @JsonIgnoreProperties({"task"})
+    @JsonIgnoreProperties({"tasks"})
     private Project project;
 
     @ManyToOne
