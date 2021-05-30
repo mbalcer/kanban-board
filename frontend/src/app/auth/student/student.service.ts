@@ -11,6 +11,7 @@ import {Observable} from 'rxjs';
 export class StudentService {
 
   private STUDENT_URL = environment.backendUrl + '/api/student';
+  private HEADERS = this.authService.getAuthHeaders();
 
   constructor(private http: HttpClient,
               private authService: AuthService) {
@@ -22,20 +23,23 @@ export class StudentService {
 
   public getLoggedUser(): Observable<Student> {
     const email = this.authService.getUserEmail();
-    return this.http.get<Student>(this.STUDENT_URL + '/email/' + email);
+    return this.http.get<Student>(this.STUDENT_URL + '/email/' + email,
+      {headers: this.HEADERS});
   }
 
   public getAll(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.STUDENT_URL + '/all');
+    return this.http.get<Student[]>(this.STUDENT_URL + '/all',
+      {headers: this.HEADERS});
   }
 
   public updateStudent(updateStudent: Student): Observable<Student> {
-    return this.http.put<Student>(this.STUDENT_URL + '/' + updateStudent.studentId, updateStudent);
+    return this.http.put<Student>(this.STUDENT_URL + '/' + updateStudent.studentId, updateStudent,
+      {headers: this.HEADERS});
   }
 
   public changePassword(updateStudent: Student, currentPassword: string, newPassword: string): Observable<Student> {
     return this.http.put<Student>(this.STUDENT_URL + '/password/' + updateStudent.studentId,
-      {currentPassword, newPassword});
+      {currentPassword, newPassword}, {headers: this.HEADERS});
   }
 
 }
