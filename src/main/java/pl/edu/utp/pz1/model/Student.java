@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,22 +24,28 @@ public class Student implements UserDetails {
     private Integer studentId;
 
     @Column(nullable = false, length = 50)
+    @NotNull
     private String firstName;
 
     @Column(nullable = false, length = 100)
+    @NotNull
     private String lastName;
 
     @Column(nullable = false, unique = true, length = 20)
+    @NotNull
     private String indexNumber;
 
     @Column(nullable = false)
+    @NotNull
     private Boolean fullTime;
 
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
+    @NotNull
     private String email;
 
     @Column(nullable = false)
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$")
+    @NotNull
     private String password;
 
     @ManyToMany(mappedBy = "students")

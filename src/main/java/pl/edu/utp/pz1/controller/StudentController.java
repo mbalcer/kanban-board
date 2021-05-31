@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.service.StudentService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -29,14 +30,14 @@ public class StudentController {
         return ResponseEntity.of(studentService.findById(studentId));
     }
 
-    @GetMapping
-    public Page<Student> getStudents(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return studentService.getStudents(PageRequest.of(page, size));
-    }
-
     @GetMapping("/email/{email}")
     public ResponseEntity<Student> getStudentByEmail(@PathVariable String email) {
         return ResponseEntity.of(studentService.findByEmail(email));
+    }
+
+    @GetMapping
+    public Page<Student> getStudents(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return studentService.getStudents(PageRequest.of(page, size));
     }
 
     @GetMapping("/all")
@@ -45,7 +46,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
         Student newStudent = studentService.create(student);
         if (newStudent != null) {
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()

@@ -32,13 +32,18 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findAll() {
-        return studentRepository.findAll();
+    public Optional<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email);
     }
 
     @Override
     public Page<Student> getStudents(Pageable pageable) {
         return studentRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Student> findAll() {
+        return studentRepository.findAll();
     }
 
     @Override
@@ -94,8 +99,4 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    @Override
-    public Optional<Student> findByEmail(String email) {
-        return studentRepository.findByEmail(email);
-    }
 }
