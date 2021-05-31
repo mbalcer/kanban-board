@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class Project {
     private Integer projectId;
 
     @Column(nullable = false, length = 50)
+    @NotNull
     private String name;
 
     @Column(length = 1000)
@@ -33,10 +35,12 @@ public class Project {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
+    @NotNull
     private LocalDateTime createDateTime;
 
     @UpdateTimestamp
     @Column(nullable = false)
+    @NotNull
     private LocalDateTime updateDateTime;
 
     private LocalDateTime submitDateTime;

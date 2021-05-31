@@ -9,6 +9,7 @@ import pl.edu.utp.pz1.model.Project;
 import pl.edu.utp.pz1.model.Student;
 import pl.edu.utp.pz1.service.ProjectService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+    public ResponseEntity<Project> createProject(@Valid @RequestBody Project project) {
         Project newProject = projectService.create(project);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/" + newProject.getProjectId()).build().toUri();
