@@ -7,6 +7,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.edu.utp.pz1.model.Task;
 import pl.edu.utp.pz1.service.TaskService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -33,10 +34,10 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
         Task createdTask = taskService.create(task);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .queryParam("taskId", createdTask.getTaskId()).build().toUri();
+                .path("/" + createdTask.getTaskId()).build().toUri();
         return ResponseEntity.created(location).body(createdTask);
     }
 
