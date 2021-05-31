@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +23,7 @@ public class Task {
     private Integer taskId;
 
     @Column(nullable = false, length = 50)
+    @NotNull
     private String name;
 
     @Column(length = 1000)
@@ -34,6 +36,7 @@ public class Task {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
+    @NotNull
     private LocalDateTime createDateTime;
 
     @ManyToOne

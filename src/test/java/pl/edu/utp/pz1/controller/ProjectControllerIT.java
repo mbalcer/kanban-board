@@ -70,6 +70,7 @@ public class ProjectControllerIT {
                 .andExpect(jsonPath("$.name").value(project.getName()));
 
         verify(mockProjectService, times(1)).findById(project.getProjectId());
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -82,6 +83,7 @@ public class ProjectControllerIT {
                 .andExpect(status().isNotFound());
 
         verify(mockProjectService, times(1)).findById(any());
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -96,6 +98,7 @@ public class ProjectControllerIT {
 
         ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
         verify(mockProjectService, times(1)).getProjects(pageableArgumentCaptor.capture());
+        verifyNoMoreInteractions(mockProjectService);
 
         PageRequest pageable = (PageRequest) pageableArgumentCaptor.getValue();
         assertEquals(page, pageable.getPageNumber());
@@ -126,6 +129,7 @@ public class ProjectControllerIT {
                 .andExpect(jsonPath("$.[1].name").value(project2.getName()));
 
         verify(mockProjectService, times(1)).findAll();
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -149,6 +153,7 @@ public class ProjectControllerIT {
                 .andExpect(jsonPath("$.[0].name").value(project.getName()));
 
         verify(mockProjectService, times(1)).findAllByUser(student.getEmail());
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -171,6 +176,7 @@ public class ProjectControllerIT {
                 .andExpect(jsonPath("$.name").value(project.getName()));
 
         verify(mockProjectService, times(1)).create(any(Project.class));
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -191,6 +197,8 @@ public class ProjectControllerIT {
                 .andReturn();
 
         verify(mockProjectService, times(0)).create(any(Project.class));
+        verifyNoMoreInteractions(mockProjectService);
+
         Exception exception = mvcResult.getResolvedException();
         assertNotNull(exception);
         assertTrue(exception instanceof MethodArgumentNotValidException);
@@ -215,6 +223,7 @@ public class ProjectControllerIT {
                 .andExpect(jsonPath("$.name").value(project.getName()));
 
         verify(mockProjectService, times(1)).update(project.getProjectId(), project);
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -242,6 +251,7 @@ public class ProjectControllerIT {
                 .andExpect(jsonPath("$.students[0].email").value(student.getEmail()));
 
         verify(mockProjectService, times(1)).addStudent(project.getProjectId(), student);
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @Test
@@ -253,6 +263,7 @@ public class ProjectControllerIT {
                 .andExpect(status().isNoContent());
 
         verify(mockProjectService, times(1)).delete(any());
+        verifyNoMoreInteractions(mockProjectService);
     }
 
     @BeforeEach
