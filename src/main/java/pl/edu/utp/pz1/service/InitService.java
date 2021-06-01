@@ -33,8 +33,16 @@ public class InitService {
         Project project2 = new Project("Programowanie obiektowe", "opis2");
         Project project3 = new Project("Programowanie współbieżne", "opis3");
 
+        project1.setCreateDateTime(LocalDateTime.now());
+        project1.setUpdateDateTime(LocalDateTime.now());
         project1.setSubmitDateTime(LocalDateTime.now());
+
+        project2.setCreateDateTime(LocalDateTime.now());
+        project2.setUpdateDateTime(LocalDateTime.now());
         project2.setSubmitDateTime(LocalDateTime.now());
+
+        project3.setCreateDateTime(LocalDateTime.now());
+        project3.setUpdateDateTime(LocalDateTime.now());
         project3.setSubmitDateTime(LocalDateTime.now());
 
         project1.addStudent(student1);
