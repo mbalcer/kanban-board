@@ -71,7 +71,7 @@ public class ProjectServiceTest {
         List<Project> actual = projectService.findAll();
 
         assertEquals(given.size(), actual.size());
-        assertThat(given, containsInAnyOrder(project1, project2));
+        assertThat(actual, containsInAnyOrder(project1, project2));
         verify(projectRepository, times(1)).findAll();
         verifyNoMoreInteractions(projectRepository);
     }

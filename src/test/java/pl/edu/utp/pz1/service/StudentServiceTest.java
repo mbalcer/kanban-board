@@ -103,7 +103,7 @@ public class StudentServiceTest {
         List<Student> actual = studentService.findAll();
 
         assertEquals(given.size(), actual.size());
-        assertThat(given, containsInAnyOrder(student1, student2));
+        assertThat(actual, containsInAnyOrder(student1, student2));
         verify(studentRepository, times(1)).findAll();
         verifyNoMoreInteractions(studentRepository);
     }
