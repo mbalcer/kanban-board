@@ -65,7 +65,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.findByEmail(updatedStudent.getEmail()).isPresent()
                 && !student.getEmail().equals(updatedStudent.getEmail())) {
             throw new EmailAlreadyUsedException();
-        } else if (studentRepository.findByIndexNumber(student.getIndexNumber()).isPresent()
+        } else if (studentRepository.findByIndexNumber(updatedStudent.getIndexNumber()).isPresent()
                 && !student.getIndexNumber().equals(updatedStudent.getIndexNumber())) {
             throw new IndexAlreadyUsedException();
         } else {
