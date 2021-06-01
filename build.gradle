@@ -38,9 +38,23 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform() {
+        exclude '**/*IT.class'
+    }
 
     testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform() {
+        include '**/*IT.class'
+    }
+
+    testLogging {
+        events "passed", "skipped", "failed"
         showStandardStreams = true
     }
 }

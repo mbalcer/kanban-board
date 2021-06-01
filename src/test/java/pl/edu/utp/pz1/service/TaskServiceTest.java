@@ -155,7 +155,7 @@ public class TaskServiceTest {
 
         when(taskRepository.findById(givenTask.getTaskId())).thenReturn(Optional.of(givenTask));
         when(taskRepository.save(givenTask)).thenReturn(givenTask);
-        doNothing().when(simpMessagingTemplate).convertAndSend(anyString(), anyString());
+        doNothing().when(simpMessagingTemplate).convertAndSend(any(), (Object) any());
 
         Task actual = taskService.update(givenTask.getTaskId(), newTask);
 
@@ -167,7 +167,7 @@ public class TaskServiceTest {
         assertNotEquals(newTask.getCreateDateTime(), actual.getCreateDateTime());
         verify(taskRepository, times(1)).findById(givenTask.getTaskId());
         verify(taskRepository, times(1)).save(givenTask);
-        verify(simpMessagingTemplate, times(1)).convertAndSend(anyString(), anyString());
+        verify(simpMessagingTemplate, times(1)).convertAndSend(any(), (Object) any());
         verifyNoMoreInteractions(taskRepository);
         verifyNoMoreInteractions(simpMessagingTemplate);
     }
@@ -205,7 +205,7 @@ public class TaskServiceTest {
         assertNotEquals(newTask.getCreateDateTime(), givenTask.getCreateDateTime());
         verify(taskRepository, times(1)).findById(givenTask.getTaskId());
         verify(taskRepository, times(0)).save(givenTask);
-        verify(simpMessagingTemplate, times(0)).convertAndSend(anyString(), anyString());
+        verify(simpMessagingTemplate, times(0)).convertAndSend(any(), (Object) any());
         verifyNoMoreInteractions(taskRepository);
         verifyNoMoreInteractions(simpMessagingTemplate);
     }
@@ -217,13 +217,13 @@ public class TaskServiceTest {
 
         when(taskRepository.existsById(given.getStudentId())).thenReturn(true);
         doNothing().when(taskRepository).deleteById(given.getStudentId());
-        doNothing().when(simpMessagingTemplate).convertAndSend(anyString(), anyString());
+        doNothing().when(simpMessagingTemplate).convertAndSend(any(), (Object) any());
 
         taskService.delete(given.getStudentId());
 
         verify(taskRepository, times(1)).existsById(given.getStudentId());
         verify(taskRepository, times(1)).deleteById(given.getStudentId());
-        verify(simpMessagingTemplate, times(1)).convertAndSend(anyString(), anyString());
+        verify(simpMessagingTemplate, times(1)).convertAndSend(any(), (Object) any());
         verifyNoMoreInteractions(taskRepository);
         verifyNoMoreInteractions(simpMessagingTemplate);
     }
@@ -233,12 +233,12 @@ public class TaskServiceTest {
         Student given = new Student();
         given.setStudentId(2);
 
-        when(taskRepository.existsById(given.getStudentId())).thenReturn(true);
+        when(taskRepository.existsById(given.getStudentId())).thenReturn(false);
         assertThrows(TaskNotFoundException.class, () -> taskService.delete(given.getStudentId()));
 
         verify(taskRepository, times(1)).existsById(given.getStudentId());
         verify(taskRepository, times(0)).deleteById(given.getStudentId());
-        verify(simpMessagingTemplate, times(0)).convertAndSend(anyString(), anyString());
+        verify(simpMessagingTemplate, times(0)).convertAndSend(any(), (Object) any());
         verifyNoMoreInteractions(taskRepository);
         verifyNoMoreInteractions(simpMessagingTemplate);
     }
