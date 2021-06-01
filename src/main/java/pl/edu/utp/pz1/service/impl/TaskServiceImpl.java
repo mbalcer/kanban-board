@@ -47,7 +47,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task create(Task task) {
-        return taskRepository.save(task);
+        Task saveTask = taskRepository.save(task);
+        simpMessagingTemplate.convertAndSend("/newTask/" + task.getProject().getProjectId(), saveTask);
+        return saveTask;
     }
 
     @Override

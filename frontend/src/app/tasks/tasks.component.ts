@@ -65,7 +65,7 @@ export class TasksComponent implements OnInit {
       this.boards.forEach(board => {
         board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);
       });
-      this.taskObserver(this.project.tasks);
+      this.taskObserver(this.project);
     }, error => {
       if (error.status === 404) {
         this.router.navigate(['/not-found']);
@@ -116,7 +116,6 @@ export class TasksComponent implements OnInit {
 
         if (result.action === 'add') {
           this.taskService.createTask(result.data).subscribe(createResult => {
-            this.boards[0].tasks.push(createResult);
             this.notification.success('Pomyślnie dodano zadanie');
           }, error => this.notification.error(error.error.message));
         } else if (result.action === 'edit') {
@@ -154,26 +153,37 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  taskObserver(tasks: Task[]): void {
+  taskObserver(project: Project): void {
     const ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     this.stompClient.debug = false;
-    const that = this;
     this.stompClient.connect({}, frame => {
-      tasks.forEach(task => {
-        this.stompClient.subscribe('/task/' + task.taskId, payload => {
-          if (payload.body === 'deleted') {
-            that.websocketDeleteTask(task);
-          } else {
-            that.websocketEditTask(JSON.parse(payload.body));
-          }
-        });
+      project.tasks.forEach(task => {
+        this.subscribeTask(task);
       });
+
+      this.stompClient.subscribe('/newTask/' + project.projectId, payload => {
+          const newTask = JSON.parse(payload.body);
+          this.boards[0].tasks.push(newTask);
+          this.notification.success('Dodano nowe zadanie');
+          this.subscribeTask(newTask);
+      });
+    });
+  }
+
+  subscribeTask(task: Task): void {
+    this.stompClient.subscribe('/task/' + task.taskId, payload => {
+      if (payload.body === 'deleted') {
+        this.websocketDeleteTask(task);
+      } else {
+        this.websocketEditTask(JSON.parse(payload.body));
+      }
     });
   }
 
   websocketEditTask(receivedTask: Task): void {
     const indexNewBoard = this.boards.findIndex(board => board.name === receivedTask.state);
+    let newTask = true;
     this.boards.forEach((board, index) => {
       const indexTask = board.tasks.findIndex(t => t.taskId === receivedTask.taskId);
       if (indexTask !== -1) {
@@ -184,10 +194,15 @@ export class TasksComponent implements OnInit {
             + this.boards[indexNewBoard].value + '".');
         }
 
+        newTask = false;
         this.boards[indexNewBoard].tasks.push(receivedTask);
         this.boards[index].tasks.splice(indexTask, 1);
       }
     });
+
+    if (newTask) {
+      this.boards[indexNewBoard].tasks.push(receivedTask);
+    }
   }
 
   websocketDeleteTask(task: Task): void {

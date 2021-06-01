@@ -36,7 +36,6 @@ public class Task {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    @NotNull
     private LocalDateTime createDateTime;
 
     @ManyToOne
