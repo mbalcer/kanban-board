@@ -26,7 +26,7 @@
 - Angular 11.2
 
 ## Usage
-To run the application you will need <a href="https://git-scm.com/">Git</a>, <a href="https://nodejs.org/en/download/">Node.js</a>, <a href="https://www.oracle.com/java/technologies/javase-downloads.html">Java</a> and <a href="https://gradle.org/">Gradle</a> installed on your computer.
+To run the application you will need <a href="https://git-scm.com/">Git</a>, <a href="https://nodejs.org/en/download/">Node.js</a>, <a href="https://www.oracle.com/java/technologies/javase-downloads.html">Java</a> installed on your computer.
 Firstly clone this repo and go to the project directory.
 ```shell
 $ git clone https://github.com/mbalcer/kanban-board.git
@@ -34,7 +34,8 @@ $ cd kanban-board
 ```
 
 ### Backend
-Run the application using maven plugin in your IDE using the command:
+Open the project in your IDE (e.g. IntelliJ IDEA) and run the application.
+You can also run the application with Gradle using the command:
 ```shell
 $ gradle bootRun
 ```
