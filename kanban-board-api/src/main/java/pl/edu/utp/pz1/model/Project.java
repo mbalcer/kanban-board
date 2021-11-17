@@ -35,12 +35,10 @@ public class Project {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    @NotNull
     private LocalDateTime createDateTime;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    @NotNull
     private LocalDateTime updateDateTime;
 
     private LocalDateTime submitDateTime;
