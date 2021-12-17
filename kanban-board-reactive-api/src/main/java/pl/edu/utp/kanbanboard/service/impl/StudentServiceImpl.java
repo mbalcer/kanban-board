@@ -1,8 +1,6 @@
 package pl.edu.utp.kanbanboard.service.impl;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import pl.edu.utp.kanbanboard.event.StudentCreatedEvent;
 import pl.edu.utp.kanbanboard.model.Student;
 import pl.edu.utp.kanbanboard.repository.StudentRepository;
 import pl.edu.utp.kanbanboard.service.StudentService;
@@ -13,11 +11,9 @@ import java.util.UUID;
 
 @Service
 public class StudentServiceImpl implements StudentService {
-    private final ApplicationEventPublisher publisher;
     private final StudentRepository studentRepository;
 
-    public StudentServiceImpl(ApplicationEventPublisher publisher, StudentRepository studentRepository) {
-        this.publisher = publisher;
+    public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -38,10 +34,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Mono<Student> create(Student newStudent) {
-        newStudent.setStudentId(UUID.randomUUID().toString());
-        return this.studentRepository
-                .save(newStudent)
-                .doOnSuccess(student -> this.publisher.publishEvent(new StudentCreatedEvent(student)));
+        return Mono.just(newStudent)
+                .map(student -> {
+                    student.setStudentId(UUID.randomUUID().toString());
+                    return student;
+                })
+                .flatMap(studentRepository::save);
     }
 
     @Override
