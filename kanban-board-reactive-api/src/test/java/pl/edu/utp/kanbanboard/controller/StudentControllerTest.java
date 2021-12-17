@@ -101,6 +101,19 @@ public class StudentControllerTest {
     }
 
     @Test
+    void testGetStudentByEmail_notFound() {
+        String email = "newUser@o2.pl";
+
+        Mockito.when(repository.getByEmail(email))
+                .thenReturn(Mono.empty());
+
+        webClient.get()
+                .uri(API_STUDENT + "/email/{email}", email)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testCreateStudent() {
         Student student3 = StudentTestUtil.getStudent3();
         Mono<Student> studentMono = Mono.just(student3);
@@ -149,6 +162,22 @@ public class StudentControllerTest {
     }
 
     @Test
+    void testUpdateStudent_badRequest() {
+        Student student = StudentTestUtil.getStudent1();
+        Student updateStudent = StudentTestUtil.getStudent2();
+
+        Mockito.when(repository.findById(student.getStudentId()))
+                .thenReturn(Mono.empty());
+
+        webClient.put()
+                .uri(API_STUDENT + "/{id}", student.getStudentId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(updateStudent))
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     void testDeleteStudent() {
         Student studentToDelete = StudentTestUtil.getStudent3();
 
@@ -162,5 +191,17 @@ public class StudentControllerTest {
                 .uri(API_STUDENT + "/{id}", studentToDelete.getStudentId())
                 .exchange()
                 .expectStatus().isNoContent();
+    }
+
+    @Test
+    void testDeleteStudent_badRequest() {
+        Student studentToDelete = StudentTestUtil.getStudent1();
+        Mockito.when(repository.findById(studentToDelete.getStudentId()))
+                .thenReturn(Mono.empty());
+
+        webClient.delete()
+                .uri(API_STUDENT + "/{id}", studentToDelete.getStudentId())
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 }
