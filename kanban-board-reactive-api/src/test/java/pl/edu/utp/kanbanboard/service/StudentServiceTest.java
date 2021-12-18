@@ -14,6 +14,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(SpringExtension.class)
 public class StudentServiceTest {
     @InjectMocks
@@ -55,6 +57,43 @@ public class StudentServiceTest {
         StepVerifier
                 .create(result)
                 .expectNext(student)
+                .verifyComplete();
+    }
+
+    @Test
+    public void testCreate() {
+        Student student = StudentTestUtil.getStudent2();
+
+        Mockito.when(studentRepository.save(student))
+                .thenReturn(Mono.just(student));
+
+        Mono<Student> result = studentService.create(student);
+
+        StepVerifier
+                .create(result)
+                .consumeNextWith(next -> {
+                    student.setStudentId(next.getStudentId());
+                    assertEquals(student, next);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    public void testUpdate() {
+        Student student = StudentTestUtil.getStudent3();
+        Student updateStudent = StudentTestUtil.getStudent2();
+
+        Mockito.when(studentRepository.findById(student.getStudentId()))
+                .thenReturn(Mono.just(student));
+
+        Mockito.when(studentRepository.save(Mockito.any(Student.class)))
+                .thenReturn(Mono.just(updateStudent));
+
+        Mono<Student> result = studentService.update(student.getStudentId(), updateStudent);
+
+        StepVerifier
+                .create(result)
+                .expectNext(updateStudent)
                 .verifyComplete();
     }
 
