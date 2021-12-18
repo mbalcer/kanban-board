@@ -17,11 +17,18 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-        String username = jwtTokenUtil.getUsernameFromToken(authToken);
-        return Mono.just(jwtTokenUtil.validateToken(authToken))
-                .filter(valid -> valid)
-                .switchIfEmpty(Mono.empty())
-                .map(valid -> new UsernamePasswordAuthenticationToken(
-                        username, null, null));
+        String username;
+        try {
+            username = jwtTokenUtil.getUsernameFromToken(authToken);
+            if (username != null && jwtTokenUtil.validateToken(authToken)) {
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(username, null, null);
+                return Mono.just(auth);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Mono.empty();
     }
+
 }
