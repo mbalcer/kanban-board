@@ -1,7 +1,6 @@
 package pl.edu.utp.kanbanboard.util;
 
 import pl.edu.utp.kanbanboard.model.Student;
-import reactor.core.publisher.Flux;
 
 import java.util.UUID;
 
@@ -34,9 +33,5 @@ public class StudentTestUtil {
                 false,
                 "micdan@wp.pl",
                 "michal123!");
-    }
-
-    public static Flux<Student> getStudentsFlux() {
-        return Flux.just(getStudent1(), getStudent2(), getStudent3());
     }
 }
