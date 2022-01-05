@@ -7,6 +7,7 @@ import pl.edu.utp.kanbanboard.service.ProjectService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Repository
@@ -26,6 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
         return Mono.just(newProject)
                 .map(project -> {
                     project.setProjectId(UUID.randomUUID().toString());
+                    project.setCreateDateTime(LocalDateTime.now());
+                    project.setUpdateDateTime(LocalDateTime.now());
                     return project;
                 })
                 .flatMap(projectRepository::save);
@@ -38,9 +41,8 @@ public class ProjectServiceImpl implements ProjectService {
                 .doOnNext(project -> {
                     project.setName(updateProject.getName());
                     project.setDescription(updateProject.getDescription());
-                    project.setCreateDateTime(updateProject.getCreateDateTime());
-                    project.setUpdateDateTime(updateProject.getUpdateDateTime());
                     project.setSubmitDateTime(updateProject.getSubmitDateTime());
+                    project.setUpdateDateTime(LocalDateTime.now());
                 })
                 .flatMap(this.projectRepository::save);
     }
