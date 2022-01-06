@@ -1,6 +1,6 @@
 package pl.edu.utp.kanbanboard.service.impl;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.repository.ProjectRepository;
 import pl.edu.utp.kanbanboard.service.ProjectService;
@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Repository
+@Service
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
 
