@@ -2,11 +2,9 @@ package pl.edu.utp.kanbanboard.util;
 
 import pl.edu.utp.kanbanboard.model.Student;
 
-import java.util.UUID;
-
 public class StudentTestUtil {
     public static Student getStudent1() {
-        return new Student(UUID.randomUUID().toString(),
+        return new Student("00001111-2222-3333-4444-555566667777",
                 "Jan",
                 "Kowalski",
                 "111000",
@@ -16,7 +14,7 @@ public class StudentTestUtil {
     }
 
     public static Student getStudent2() {
-        return new Student(UUID.randomUUID().toString(),
+        return new Student("00000000-2222-3333-4444-555555555555",
                 "Andrzej",
                 "Nowak",
                 "123321",
@@ -26,7 +24,7 @@ public class StudentTestUtil {
     }
 
     public static Student getStudent3() {
-        return new Student(UUID.randomUUID().toString(),
+        return new Student("00000000-1111-2222-8888-555555555555",
                 "Michał",
                 "Daniel",
                 "122000",
