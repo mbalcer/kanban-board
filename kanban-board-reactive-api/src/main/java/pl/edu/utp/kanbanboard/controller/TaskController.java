@@ -18,35 +18,35 @@ public class TaskController {
     public TaskController(TaskService projectService) {this.taskService = projectService;}
 
     @GetMapping("/all")
-    public Flux<Task> getAllProjects() {
+    public Flux<Task> getAllTasks() {
         return taskService.all();
     }
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<Task>> getProjectById(@PathVariable String id) {
+    public Mono<ResponseEntity<Task>> getTaskById(@PathVariable String id) {
         return taskService.get(id)
                 .map(task -> ResponseEntity.ok(task))
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
     @PostMapping
-    public Mono<ResponseEntity<Task>> createProject(@RequestBody Task task) {
+    public Mono<ResponseEntity<Task>> createTask(@RequestBody Task task) {
         return taskService.create(task)
                 .map(s -> {
-                    URI location = URI.create("/api/project/" + s.getTaskId());
+                    URI location = URI.create("/api/task/" + s.getTaskId());
                     return ResponseEntity.created(location).body(task);
                 });
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<Task>> updateProject(@PathVariable String id, @RequestBody Task task) {
+    public Mono<ResponseEntity<Task>> updateTask(@PathVariable String id, @RequestBody Task task) {
         return taskService.update(id, task)
                 .map(s -> ResponseEntity.ok(s))
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
     }
 
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Object>> deleteProject(@PathVariable String id) {
+    public Mono<ResponseEntity<Object>> deleteTask(@PathVariable String id) {
         return taskService.delete(id)
                 .map(task -> ResponseEntity.noContent().build())
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));

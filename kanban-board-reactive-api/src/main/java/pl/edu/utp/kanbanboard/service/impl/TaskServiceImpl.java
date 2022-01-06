@@ -7,6 +7,7 @@ import pl.edu.utp.kanbanboard.service.TaskService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Repository
@@ -26,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
         return Mono.just(newTask)
                 .map(task -> {
                     task.setTaskId(UUID.randomUUID().toString());
+                    task.setCreateDateTime(LocalDateTime.now());
                     return task;
                 })
                 .flatMap(taskRepository::save);
@@ -38,8 +40,8 @@ public class TaskServiceImpl implements TaskService {
                 .doOnNext(task -> {
                     task.setName(updateTask.getName());
                     task.setDescription(updateTask.getDescription());
-                    task.setOrder(updateTask.getOrder());
-                    task.setDeliveryDateTime(updateTask.getDeliveryDateTime());
+                    task.setState(updateTask.getState());
+                    task.setSequence(updateTask.getSequence());
                 })
                 .flatMap(this.taskRepository::save);
     }

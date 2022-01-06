@@ -20,7 +20,15 @@ public class Task {
 
     private String description;
 
-    private Integer order;
+    private Integer sequence;
 
-    private LocalDateTime deliveryDateTime;
+    private TaskState state = TaskState.TODO;
+
+    private LocalDateTime createDateTime;
+
+    public Task(String name, String description, Integer sequence) {
+        this.name = name;
+        this.description = description;
+        this.sequence = sequence;
+    }
 }
