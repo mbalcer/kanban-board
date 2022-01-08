@@ -42,6 +42,7 @@ public class WebSecurityConfig {
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/api/login").permitAll()
                 .pathMatchers("/app/chat/*").permitAll()
+                .pathMatchers("/app/newTask").permitAll()
                 .anyExchange().authenticated()
                 .and().build();
     }

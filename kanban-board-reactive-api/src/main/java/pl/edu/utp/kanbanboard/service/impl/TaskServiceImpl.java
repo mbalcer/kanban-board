@@ -1,6 +1,8 @@
 package pl.edu.utp.kanbanboard.service.impl;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import pl.edu.utp.kanbanboard.event.TaskCreatedEvent;
 import pl.edu.utp.kanbanboard.model.Task;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import pl.edu.utp.kanbanboard.service.TaskService;
@@ -13,8 +15,12 @@ import java.util.UUID;
 @Service
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final ApplicationEventPublisher publisher;
 
-    public TaskServiceImpl(TaskRepository projectRepository) { this.taskRepository = projectRepository; }
+    public TaskServiceImpl(TaskRepository taskRepository, ApplicationEventPublisher applicationEventPublisher) {
+        this.taskRepository = taskRepository;
+        this.publisher = applicationEventPublisher;
+    }
 
     @Override
     public Flux<Task> all() { return this.taskRepository.findAll(); }
@@ -30,7 +36,8 @@ public class TaskServiceImpl implements TaskService {
                     task.setCreateDateTime(LocalDateTime.now());
                     return task;
                 })
-                .flatMap(taskRepository::save);
+                .flatMap(taskRepository::save)
+                .doOnSuccess(task -> publisher.publishEvent(new TaskCreatedEvent(task)));
     }
 
     @Override

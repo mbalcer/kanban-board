@@ -15,15 +15,18 @@ import java.util.Map;
 public class WebSocketConfig {
 
     private final ChatWebSocketHandler chatWebSocketHandler;
+    private final TaskCreatedWebSocketHandler taskCreatedWebSocketHandler;
 
-    public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler) {
+    public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler, TaskCreatedWebSocketHandler taskCreatedWebSocketHandler) {
         this.chatWebSocketHandler = chatWebSocketHandler;
+        this.taskCreatedWebSocketHandler = taskCreatedWebSocketHandler;
     }
 
     @Bean
     public HandlerMapping handlerMapping() {
         Map<String, Object> handlerMap = new HashMap<>();
-        handlerMap.put("/app/chat/{roomId}", chatWebSocketHandler);
+        handlerMap.put("/app/chat/{projectId}", chatWebSocketHandler);
+        handlerMap.put("/app/newTask", taskCreatedWebSocketHandler);
 
         return new SimpleUrlHandlerMapping(handlerMap, 1);
     }
