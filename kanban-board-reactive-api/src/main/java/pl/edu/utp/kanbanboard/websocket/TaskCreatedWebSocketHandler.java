@@ -24,13 +24,16 @@ public class TaskCreatedWebSocketHandler implements WebSocketHandler {
     public Mono<Void> handle(WebSocketSession session) {
         Flux<WebSocketMessage> messages = Flux.create(eventPublisher)
                 .share()
-                .map(o -> {
-                    try {
-                        return objectMapper.writeValueAsString(o);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).map(session::textMessage);
+                .map(this::toString)
+                .map(session::textMessage);
         return session.send(messages);
+    }
+
+    public String toString(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
