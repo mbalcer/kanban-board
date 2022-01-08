@@ -26,7 +26,7 @@ public class WebSocketConfig {
     public HandlerMapping handlerMapping() {
         Map<String, Object> handlerMap = new HashMap<>();
         handlerMap.put("/app/chat/{projectId}", chatWebSocketHandler);
-        handlerMap.put("/app/newTask", taskCreatedWebSocketHandler);
+        handlerMap.put("/app/newTask/{projectId}", taskCreatedWebSocketHandler);
 
         return new SimpleUrlHandlerMapping(handlerMap, 1);
     }
