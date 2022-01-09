@@ -9,6 +9,7 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import org.springframework.web.reactive.socket.adapter.ReactorNettyWebSocketSession;
 import org.springframework.web.util.UriTemplate;
 import pl.edu.utp.kanbanboard.event.TaskEditedEventPublisher;
+import pl.edu.utp.kanbanboard.model.Task;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -29,12 +30,13 @@ public class TaskEditedWebSocketHandler implements WebSocketHandler {
     public Mono<Void> handle(WebSocketSession session) {
         Flux<WebSocketMessage> messages = Flux.create(taskEditedEventPublisher)
                 .share()
-                .filter(task -> {
+                .filter(event -> {
                     UriTemplate template = new UriTemplate("/app/task/{taskId}");
                     Map<String, String> parameters = template.match(getConnectionUri(session).getPath());
                     String taskId = parameters.get("taskId");
 
-                    return task.getTaskId().equals(taskId);
+                    Task source = (Task) event.getSource();
+                    return source.getTaskId().equals(taskId);
                 })
                 .map(this::toString)
                 .map(session::textMessage);

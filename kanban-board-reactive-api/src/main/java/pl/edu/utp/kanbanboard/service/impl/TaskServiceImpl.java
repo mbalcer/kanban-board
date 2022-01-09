@@ -52,7 +52,7 @@ public class TaskServiceImpl implements TaskService {
                     task.setSequence(updateTask.getSequence());
                 })
                 .flatMap(this.taskRepository::save)
-                .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task)));
+                .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task, "updated")));
     }
 
     @Override
@@ -60,6 +60,6 @@ public class TaskServiceImpl implements TaskService {
         return this.taskRepository
                 .findById(id)
                 .flatMap(s -> this.taskRepository.deleteById(s.getTaskId()).thenReturn(s))
-                .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task)));
+                .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task, "deleted")));
     }
 }

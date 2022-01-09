@@ -3,7 +3,6 @@ package pl.edu.utp.kanbanboard.event;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
-import pl.edu.utp.kanbanboard.model.Task;
 import reactor.core.publisher.FluxSink;
 
 import java.util.concurrent.BlockingQueue;
@@ -12,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 @Component
-public class TaskEditedEventPublisher implements ApplicationListener<TaskEditedEvent>, Consumer<FluxSink<Task>> {
+public class TaskEditedEventPublisher implements ApplicationListener<TaskEditedEvent>, Consumer<FluxSink<TaskEditedEvent>> {
     private final Executor executor;
     private final BlockingQueue<TaskEditedEvent> queue = new LinkedBlockingQueue<>();
 
@@ -21,12 +20,12 @@ public class TaskEditedEventPublisher implements ApplicationListener<TaskEditedE
     }
 
     @Override
-    public void accept(FluxSink<Task> sink) {
+    public void accept(FluxSink<TaskEditedEvent> sink) {
         this.executor.execute(() -> {
             while (true)
                 try {
                     TaskEditedEvent event = queue.take();
-                    sink.next((Task) event.getSource());
+                    sink.next(event);
                 } catch (InterruptedException e) {
                     ReflectionUtils.rethrowRuntimeException(e);
                 }
