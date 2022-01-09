@@ -3,6 +3,7 @@ package pl.edu.utp.kanbanboard.service.impl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.event.TaskCreatedEvent;
+import pl.edu.utp.kanbanboard.event.TaskEditedEvent;
 import pl.edu.utp.kanbanboard.model.Task;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import pl.edu.utp.kanbanboard.service.TaskService;
@@ -50,13 +51,15 @@ public class TaskServiceImpl implements TaskService {
                     task.setState(updateTask.getState());
                     task.setSequence(updateTask.getSequence());
                 })
-                .flatMap(this.taskRepository::save);
+                .flatMap(this.taskRepository::save)
+                .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task)));
     }
 
     @Override
     public Mono<Task> delete(String id) {
         return this.taskRepository
                 .findById(id)
-                .flatMap(s -> this.taskRepository.deleteById(s.getTaskId()).thenReturn(s));
+                .flatMap(s -> this.taskRepository.deleteById(s.getTaskId()).thenReturn(s))
+                .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task)));
     }
 }
