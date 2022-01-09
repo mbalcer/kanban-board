@@ -1,6 +1,6 @@
 package pl.edu.utp.kanbanboard.util;
 
-import pl.edu.utp.kanbanboard.websocket.Message;
+import pl.edu.utp.kanbanboard.websocket.model.Message;
 
 public class MessageUtil {
     public static Message getMessage1() {

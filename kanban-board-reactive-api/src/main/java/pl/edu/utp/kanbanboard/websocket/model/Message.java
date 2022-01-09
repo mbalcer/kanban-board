@@ -1,4 +1,4 @@
-package pl.edu.utp.kanbanboard.websocket;
+package pl.edu.utp.kanbanboard.websocket.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import pl.edu.utp.kanbanboard.util.MessageUtil;
+import pl.edu.utp.kanbanboard.websocket.model.Message;
+import pl.edu.utp.kanbanboard.websocket.service.impl.ChatServiceImpl;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -20,7 +22,7 @@ public class ChatServiceTest {
     public static final String PROJECT_3 = "987";
 
     @InjectMocks
-    private ChatService chatService;
+    private ChatServiceImpl chatService;
 
     private Map<String, Flux<Message>> historyOfMessages = new HashMap<>();
 

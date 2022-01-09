@@ -1,4 +1,4 @@
-package pl.edu.utp.kanbanboard.websocket;
+package pl.edu.utp.kanbanboard.websocket.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +8,7 @@ import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import org.springframework.web.reactive.socket.adapter.ReactorNettyWebSocketSession;
 import org.springframework.web.util.UriTemplate;
+import pl.edu.utp.kanbanboard.event.TaskCreatedEventPublisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,45 +16,36 @@ import java.net.URI;
 import java.util.Map;
 
 @Service
-public class ChatWebSocketHandler implements WebSocketHandler {
+public class TaskCreatedWebSocketHandler implements WebSocketHandler {
     private ObjectMapper objectMapper;
-    private ChatService chatService;
+    private TaskCreatedEventPublisher eventPublisher;
 
-    public ChatWebSocketHandler(ObjectMapper objectMapper, ChatService chatService) {
+    public TaskCreatedWebSocketHandler(ObjectMapper objectMapper, TaskCreatedEventPublisher taskCreatedEventPublisher) {
         this.objectMapper = objectMapper;
-        this.chatService = chatService;
+        this.eventPublisher = taskCreatedEventPublisher;
     }
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        Flux<WebSocketMessage> messages = session.receive()
-                .map(WebSocketMessage::getPayloadAsText)
-                .map(this::toMessage)
-                .doOnNext(message -> {
-                    UriTemplate template = new UriTemplate("/app/chat/{projectId}");
+        Flux<WebSocketMessage> messages = Flux.create(eventPublisher)
+                .share()
+                .filter(task -> {
+                    UriTemplate template = new UriTemplate("/app/newTask/{projectId}");
                     Map<String, String> parameters = template.match(getConnectionUri(session).getPath());
                     String projectId = parameters.get("projectId");
 
-                    chatService.addMessageToHistory(projectId, message);
+                    return task.getDescription().equals(projectId); // TODO: change to task.getProject().getId().equals(projectId) when a project relationship is added to the task class
                 })
-                .flatMap(this::toString)
+                .map(this::toString)
                 .map(session::textMessage);
         return session.send(messages);
     }
 
-    private Message toMessage(String json) {
+    public String toString(Object object) {
         try {
-            return objectMapper.readValue(json, Message.class);
+            return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Invalid JSON:" + json, e);
-        }
-    }
-
-    private Mono<String> toString(Message message) {
-        try {
-            return Mono.just(objectMapper.writeValueAsString(message));
-        } catch (JsonProcessingException e) {
-            return Mono.error(e);
+            throw new RuntimeException(e);
         }
     }
 

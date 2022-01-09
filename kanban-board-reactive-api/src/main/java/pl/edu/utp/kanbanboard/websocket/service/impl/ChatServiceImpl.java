@@ -1,6 +1,8 @@
-package pl.edu.utp.kanbanboard.websocket;
+package pl.edu.utp.kanbanboard.websocket.service.impl;
 
 import org.springframework.stereotype.Service;
+import pl.edu.utp.kanbanboard.websocket.model.Message;
+import pl.edu.utp.kanbanboard.websocket.service.ChatService;
 import reactor.core.publisher.Flux;
 
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class ChatService {
+public class ChatServiceImpl implements ChatService {
     private Map<String, Flux<Message>> historyOfMessages = new HashMap<>();
 
     public Flux<Message> getHistory(String projectId) {

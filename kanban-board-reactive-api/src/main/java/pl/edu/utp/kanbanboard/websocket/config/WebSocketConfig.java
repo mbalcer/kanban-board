@@ -1,4 +1,4 @@
-package pl.edu.utp.kanbanboard.websocket;
+package pl.edu.utp.kanbanboard.websocket.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
+import pl.edu.utp.kanbanboard.websocket.handler.ChatWebSocketHandler;
+import pl.edu.utp.kanbanboard.websocket.handler.TaskCreatedWebSocketHandler;
 
 import java.util.HashMap;
 import java.util.Map;
