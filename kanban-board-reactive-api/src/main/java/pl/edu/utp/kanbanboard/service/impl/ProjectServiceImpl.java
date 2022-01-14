@@ -3,6 +3,7 @@ package pl.edu.utp.kanbanboard.service.impl;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.repository.ProjectRepository;
+import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import pl.edu.utp.kanbanboard.service.ProjectService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,14 +14,23 @@ import java.util.UUID;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final TaskRepository taskRepository;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository) { this.projectRepository = projectRepository; }
+    public ProjectServiceImpl(ProjectRepository projectRepository,
+                              TaskRepository taskRepository) {
+        this.projectRepository = projectRepository;
+        this.taskRepository = taskRepository;
+    }
 
     @Override
-    public Flux<Project> all() { return this.projectRepository.findAll(); }
+    public Flux<Project> all() {
+        return this.projectRepository.findAll();
+    }
 
     @Override
-    public Mono<Project> get(String id) { return this.projectRepository.findById(id); }
+    public Mono<Project> get(String id) {
+        return this.projectRepository.findById(id);
+    }
 
     @Override
     public Mono<Project> create(Project newProject) {
@@ -51,6 +61,8 @@ public class ProjectServiceImpl implements ProjectService {
     public Mono<Project> delete(String id) {
         return this.projectRepository
                 .findById(id)
-                .flatMap(s -> this.projectRepository.deleteById(s.getProjectId()).thenReturn(s));
+                .flatMap(s -> this.taskRepository.deleteByProjectId(id)
+                        .then(this.projectRepository.deleteById(s.getProjectId()))
+                        .thenReturn(s));
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document
 @NoArgsConstructor
@@ -26,6 +28,10 @@ public class Project {
     private LocalDateTime updateDateTime;
 
     private LocalDateTime submitDateTime;
+
+    private Set<String> taskIds = new HashSet<>();
+
+    private Set<String> studentIds = new HashSet<>();
 
     public Project(String projectId, String name, String description) {
         this.projectId = projectId;

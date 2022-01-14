@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.Map;
 
 @Service
-public class TaskCreatedWebSocketHandler implements WebSocketHandler {
+public class  TaskCreatedWebSocketHandler implements WebSocketHandler {
     private ObjectMapper objectMapper;
     private TaskCreatedEventPublisher eventPublisher;
 
@@ -34,7 +34,7 @@ public class TaskCreatedWebSocketHandler implements WebSocketHandler {
                     Map<String, String> parameters = template.match(getConnectionUri(session).getPath());
                     String projectId = parameters.get("projectId");
 
-                    return task.getDescription().equals(projectId); // TODO: change to task.getProject().getId().equals(projectId) when a project relationship is added to the task class
+                    return task.getProjectId().equals(projectId);
                 })
                 .map(this::toString)
                 .map(session::textMessage);
