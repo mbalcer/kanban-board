@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -20,7 +21,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(controllers = StudentController.class)
+@WebFluxTest(controllers = StudentController.class,
+        excludeAutoConfiguration = {ReactiveSecurityAutoConfiguration.class})
 @Import(StudentServiceImpl.class)
 public class StudentControllerTest {
     @MockBean

@@ -1,6 +1,8 @@
 package pl.edu.utp.kanbanboard.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,8 +42,9 @@ public class Student implements UserDetails {
         this.indexNumber = indexNumber;
     }
 
-    public Student(String firstName, String lastName, String indexNumber,
+    public Student(String id, String firstName, String lastName, String indexNumber,
                    Boolean fullTime, String email, String password) {
+        this.studentId = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.indexNumber = indexNumber;
