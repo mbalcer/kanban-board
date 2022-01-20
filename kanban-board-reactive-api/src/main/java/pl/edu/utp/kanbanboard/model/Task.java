@@ -33,4 +33,13 @@ public class Task {
         this.description = description;
         this.sequence = sequence;
     }
+
+    public Task(String taskId, String name, String description, Integer sequence, TaskState state, LocalDateTime createDateTime) {
+        this.taskId = taskId;
+        this.name = name;
+        this.description = description;
+        this.sequence = sequence;
+        this.state = state;
+        this.createDateTime = createDateTime;
+    }
 }
