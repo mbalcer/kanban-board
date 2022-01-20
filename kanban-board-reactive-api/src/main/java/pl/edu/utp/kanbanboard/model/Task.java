@@ -28,6 +28,8 @@ public class Task {
 
     private String projectId;
 
+    private String studentId;
+
     public Task(String name, String description, Integer sequence) {
         this.name = name;
         this.description = description;

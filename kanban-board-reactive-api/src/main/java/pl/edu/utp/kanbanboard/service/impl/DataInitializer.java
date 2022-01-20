@@ -16,6 +16,7 @@ import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -40,27 +41,22 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-
-        taskRepository.deleteAll()
-                .thenMany(Flux.just(5, 6, 7)
-                        .map(number -> new Task(UUID.randomUUID().toString(), "Task " + number,
-                                "Description " + number, number, TaskState.TODO,
-                                LocalDateTime.now(), null))
-                        .flatMap(taskRepository::save))
+        Flux.just(5, 6, 7)
+                .doOnNext(i -> taskRepository.deleteAll())
+                .doOnNext(i -> projectRepository.deleteAll())
+                .map(number -> new Task(UUID.randomUUID().toString(), "Task " + number,
+                        "Description " + number, number, TaskState.TODO,
+                        LocalDateTime.now(), null, null))
+                .flatMap(taskRepository::save)
                 .thenMany(taskRepository.findAll())
-                .subscribe(task -> log.info("saving " + task.toString()));
-
-        // TODO:  naprawa błędów...
-        projectRepository.deleteAll()
-                .thenMany(Flux.just(5, 6, 7)
-                        .map(number -> new Project(UUID.randomUUID().toString(), "Project " + number,
-                                "Description " + number, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusDays(number),
-//                                new HashSet<String>(Collections.singleton(taskRepository.findByName("Task " + number).blockFirst().getTaskId())),
-                                new HashSet<>(),
-                                new HashSet<>()))
-                        .flatMap(projectRepository::save))
+                .doOnNext(task -> System.out.println("saving " + task))
+                .map(task -> new Project(UUID.randomUUID().toString(), "Project " + task.getSequence(),
+                        "Description " + task.getSequence(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusDays(task.getSequence()),
+                        new HashSet<>(Collections.singleton(task.getTaskId())),
+                        new HashSet<>()))
+                .flatMap(projectRepository::save)
                 .thenMany(projectRepository.findAll())
-                .subscribe(project -> log.info("saving " + project.toString()));
+                .subscribe(project -> System.out.println("saving " + project));
 
         // TODO: naprawa błędów...
         studentRepository.deleteAll()

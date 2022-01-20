@@ -29,6 +29,8 @@ public class TaskController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
+    // TODO: Add GET /project/{projectId} endpoint to find all tasks by project id
+
     @PostMapping
     public Mono<ResponseEntity<Task>> createTask(@RequestBody Task task) {
         return taskService.create(task)

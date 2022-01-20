@@ -29,6 +29,8 @@ public class ProjectController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
+    // TODO: Add GET /user/{email} endpoint to find all project by user
+
     @PostMapping
     public Mono<ResponseEntity<Project>> createProject(@RequestBody Project project) {
         return projectService.create(project)
@@ -44,6 +46,8 @@ public class ProjectController {
                 .map(s -> ResponseEntity.ok(s))
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
     }
+
+    // TODO: Add PUT /student/{projectId} endpoint to add student to the project
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Object>> deleteProject(@PathVariable String id) {
