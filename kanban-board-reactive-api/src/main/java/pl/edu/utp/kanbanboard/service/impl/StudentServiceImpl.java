@@ -3,6 +3,7 @@ package pl.edu.utp.kanbanboard.service.impl;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.model.Student;
 import pl.edu.utp.kanbanboard.repository.StudentRepository;
+import pl.edu.utp.kanbanboard.service.RelationshipService;
 import pl.edu.utp.kanbanboard.service.StudentService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,9 +13,11 @@ import java.util.UUID;
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final RelationshipService relationshipService;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, RelationshipService relationshipService) {
         this.studentRepository = studentRepository;
+        this.relationshipService = relationshipService;
     }
 
     @Override
@@ -35,11 +38,25 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Mono<Student> create(Student newStudent) {
         return Mono.just(newStudent)
+                .filterWhen(student -> {
+                    if (!student.getProjectIds().isEmpty()) {
+                        return Flux.fromIterable(student.getProjectIds())
+                                .flatMap(relationshipService::isExistProject)
+                                .all(isExist -> isExist);
+                    } else {
+                        return Mono.just(true);
+                    }
+                })
                 .map(student -> {
                     student.setStudentId(UUID.randomUUID().toString());
                     return student;
                 })
-                .flatMap(studentRepository::save);
+                .flatMap(studentRepository::save)
+                .doOnSuccess(student -> {
+                    if (student == null) {
+                        throw new IllegalArgumentException("The project ids that you entered does not exist");
+                    }
+                });
     }
 
     @Override
