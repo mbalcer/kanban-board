@@ -33,6 +33,11 @@ public class TaskServiceImpl implements TaskService {
     public Mono<Task> get(String id) { return this.taskRepository.findById(id); }
 
     @Override
+    public Flux<Task> allByProjectId(String projectId) {
+        return this.taskRepository.findAllByProjectId(projectId);
+    }
+
+    @Override
     public Mono<Task> create(Task newTask) {
         return Mono.just(newTask)
                 .filterWhen(task -> task.getProjectId()!=null ? relationshipService.isExistProject(task.getProjectId()) : Mono.just(true))

@@ -15,7 +15,9 @@ import java.net.URI;
 public class TaskController {
     private final TaskService taskService;
 
-    public TaskController(TaskService projectService) {this.taskService = projectService;}
+    public TaskController(TaskService projectService) {
+        this.taskService = projectService;
+    }
 
     @GetMapping("/all")
     public Flux<Task> getAllTasks() {
@@ -29,7 +31,10 @@ public class TaskController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
-    // TODO: Add GET /project/{projectId} endpoint to find all tasks by project id
+    @GetMapping("/project/{projectId")
+    public Flux<Task> getAllTasksByProjectId(String projectId) {
+        return taskService.allByProjectId(projectId);
+    }
 
     @PostMapping
     public Mono<ResponseEntity<Task>> createTask(@RequestBody Task task) {

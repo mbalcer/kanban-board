@@ -9,6 +9,8 @@ public interface TaskService {
 
     Mono<Task> get(String id);
 
+    Flux<Task> allByProjectId(String projectId);
+
     Mono<Task> create(Task newTask);
 
     Mono<Task> update(String id, Task updateTask);
