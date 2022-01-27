@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.utp.kanbanboard.model.Project;
+import pl.edu.utp.kanbanboard.model.Student;
 import pl.edu.utp.kanbanboard.service.ProjectService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,7 +16,9 @@ import java.net.URI;
 public class ProjectController {
     private final ProjectService projectService;
 
-    public ProjectController(ProjectService projectService) {this.projectService = projectService;}
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @GetMapping("/all")
     public Flux<Project> getAllProjects() {
@@ -50,7 +53,12 @@ public class ProjectController {
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
     }
 
-    // TODO: Add PUT /student/{projectId} endpoint to add student to the project
+    @PutMapping("/student/{projectId}")
+    public Mono<ResponseEntity<Project>> addStudent(@PathVariable String projectId, @RequestBody Student student) {
+        return projectService.addStudent(projectId, student.getStudentId())
+                .map(s -> ResponseEntity.ok(s))
+                .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
+    }
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Object>> deleteProject(@PathVariable String id) {

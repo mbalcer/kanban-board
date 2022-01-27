@@ -6,6 +6,7 @@ import pl.edu.utp.kanbanboard.repository.ProjectRepository;
 import pl.edu.utp.kanbanboard.repository.StudentRepository;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import pl.edu.utp.kanbanboard.service.ProjectService;
+import pl.edu.utp.kanbanboard.service.RelationshipService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,13 +18,16 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final StudentRepository studentRepository;
     private final TaskRepository taskRepository;
+    private final RelationshipService relationshipService;
 
     public ProjectServiceImpl(ProjectRepository projectRepository,
                               StudentRepository studentRepository,
-                              TaskRepository taskRepository) {
+                              TaskRepository taskRepository,
+                              RelationshipService relationshipService) {
         this.projectRepository = projectRepository;
         this.studentRepository = studentRepository;
         this.taskRepository = taskRepository;
+        this.relationshipService = relationshipService;
     }
 
     @Override
@@ -66,6 +70,15 @@ public class ProjectServiceImpl implements ProjectService {
                     project.setUpdateDateTime(LocalDateTime.now());
                 })
                 .flatMap(this.projectRepository::save);
+    }
+
+    @Override
+    public Mono<Project> addStudent(String projectId, String studentId) {
+        return this.studentRepository
+                .findById(studentId)
+                .flatMap(student -> this.projectRepository.findById(projectId)
+                        .doOnNext(project -> project.getStudentIds().add(studentId))
+                        .flatMap(this.projectRepository::save));
     }
 
     @Override
