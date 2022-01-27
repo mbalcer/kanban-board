@@ -6,4 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface ProjectRepository extends ReactiveMongoRepository<Project, String> {
     Flux<Project> findByName(String name);
+    Flux<Project> findAllByStudentIdsContains(String id);
 }

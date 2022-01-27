@@ -3,6 +3,7 @@ package pl.edu.utp.kanbanboard.service.impl;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.repository.ProjectRepository;
+import pl.edu.utp.kanbanboard.repository.StudentRepository;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import pl.edu.utp.kanbanboard.service.ProjectService;
 import reactor.core.publisher.Flux;
@@ -14,11 +15,14 @@ import java.util.UUID;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final StudentRepository studentRepository;
     private final TaskRepository taskRepository;
 
     public ProjectServiceImpl(ProjectRepository projectRepository,
+                              StudentRepository studentRepository,
                               TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
+        this.studentRepository = studentRepository;
         this.taskRepository = taskRepository;
     }
 
@@ -30,6 +34,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Mono<Project> get(String id) {
         return this.projectRepository.findById(id);
+    }
+
+    @Override
+    public Flux<Project> allByUser(String email) {
+        return this.studentRepository
+                .getByEmail(email)
+                .flatMapMany(student -> this.projectRepository.findAllByStudentIdsContains(student.getStudentId()));
     }
 
     @Override

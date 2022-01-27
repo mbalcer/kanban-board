@@ -9,6 +9,8 @@ public interface ProjectService {
 
     Mono<Project> get(String id);
 
+    Flux<Project> allByUser(String email);
+
     Mono<Project> create(Project newProject);
 
     Mono<Project> update(String id, Project updateProject);

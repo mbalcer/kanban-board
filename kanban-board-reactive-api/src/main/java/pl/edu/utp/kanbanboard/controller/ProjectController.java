@@ -29,7 +29,10 @@ public class ProjectController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
-    // TODO: Add GET /user/{email} endpoint to find all project by user
+    @GetMapping("/user/{email}")
+    public Flux<Project> getAllProjectsByUser(@PathVariable String email) {
+        return projectService.allByUser(email);
+    }
 
     @PostMapping
     public Mono<ResponseEntity<Project>> createProject(@RequestBody Project project) {
