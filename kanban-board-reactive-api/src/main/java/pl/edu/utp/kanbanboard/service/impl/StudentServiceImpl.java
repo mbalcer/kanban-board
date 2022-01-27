@@ -1,5 +1,6 @@
 package pl.edu.utp.kanbanboard.service.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.model.Student;
 import pl.edu.utp.kanbanboard.repository.StudentRepository;
@@ -12,9 +13,12 @@ import java.util.UUID;
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository,
+                              PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class StudentServiceImpl implements StudentService {
         return Mono.just(newStudent)
                 .map(student -> {
                     student.setStudentId(UUID.randomUUID().toString());
+                    student.setPassword(passwordEncoder.encode(newStudent.getPassword()));
                     return student;
                 })
                 .flatMap(studentRepository::save);
@@ -53,6 +58,15 @@ public class StudentServiceImpl implements StudentService {
                     student.setIndexNumber(updateStudent.getIndexNumber());
                     student.setFullTime(updateStudent.getFullTime());
                 })
+                .flatMap(this.studentRepository::save);
+    }
+
+    @Override
+    public Mono<Student> updatePassword(String studentId, String currentPassword, String newPassword) {
+        return this.studentRepository
+                .findById(studentId)
+                .filter(student -> student.getPassword() != null && passwordEncoder.matches(currentPassword, student.getPassword()))
+                .doOnNext(student -> student.setPassword(passwordEncoder.encode(newPassword)))
                 .flatMap(this.studentRepository::save);
     }
 

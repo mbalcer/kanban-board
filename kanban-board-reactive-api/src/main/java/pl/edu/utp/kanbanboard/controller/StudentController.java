@@ -54,7 +54,13 @@ public class StudentController {
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
     }
 
-    // TODO: Add PUT /password/{studentId} endpoint to update password
+    @PutMapping("/password/{studentId}")
+    public Mono<ResponseEntity<Student>> updatePassword(@PathVariable String studentId,
+                                                        @RequestBody String currentPassword, @RequestBody String newPassword) {
+        return studentService.updatePassword(studentId, currentPassword, newPassword)
+                .map(s -> ResponseEntity.ok(s))
+                .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
+    }
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Object>> deleteStudent(@PathVariable String id) {
