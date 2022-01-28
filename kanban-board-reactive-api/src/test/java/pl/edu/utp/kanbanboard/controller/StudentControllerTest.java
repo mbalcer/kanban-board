@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -20,6 +21,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = StudentController.class,
         excludeAutoConfiguration = {ReactiveSecurityAutoConfiguration.class})
@@ -27,6 +34,9 @@ import reactor.test.StepVerifier;
 public class StudentControllerTest {
     @MockBean
     StudentRepository repository;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private WebTestClient webClient;
@@ -51,6 +61,7 @@ public class StudentControllerTest {
                 .expectBodyList(Student.class)
                 .hasSize(3)
                 .consumeWith(response -> {
+                    assertNotNull(response.getResponseBody());
                     Flux<Student> result = Flux.fromIterable(response.getResponseBody());
                     StepVerifier.create(result.log())
                             .expectNext(student1)
@@ -74,6 +85,7 @@ public class StudentControllerTest {
                 .expectStatus().isOk()
                 .expectBody(Student.class)
                 .consumeWith(response -> {
+                    assertNotNull(response.getResponseBody());
                     Mono<Student> result = Mono.just(response.getResponseBody());
                     StepVerifier.create(result.log())
                             .expectNext(student1)
@@ -95,6 +107,7 @@ public class StudentControllerTest {
                 .expectStatus().isOk()
                 .expectBody(Student.class)
                 .consumeWith(response -> {
+                    assertNotNull(response.getResponseBody());
                     Mono<Student> result = Mono.just(response.getResponseBody());
                     StepVerifier.create(result.log())
                             .expectNext(student2)
@@ -117,22 +130,28 @@ public class StudentControllerTest {
 
     @Test
     void testCreateStudent() {
-        Student student3 = StudentTestUtil.getStudent3();
-        Mono<Student> studentMono = Mono.just(student3);
+        Student student = StudentTestUtil.getEmptyStudent();
+        Mono<Student> studentMono = Mono.just(student);
+        String newPassword = "newPa$$word1!";
 
         Mockito.when(repository.save(Mockito.any(Student.class)))
                 .thenReturn(studentMono);
 
+        Mockito.when(passwordEncoder.encode(student.getPassword()))
+                .thenReturn(newPassword);
+
         webClient.post()
                 .uri(API_STUDENT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(student3))
+                .body(BodyInserters.fromValue(student))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(Student.class)
                 .consumeWith(response -> {
-                    student3.setStudentId(response.getResponseBody().getStudentId());
-                    Mockito.verify(repository, Mockito.times(1)).save(student3);
+                    assertNotNull(response.getResponseBody());
+                    assertNotNull(response.getResponseBody().getStudentId());
+                    assertEquals(response.getResponseBody().getPassword(), newPassword);
+                    Mockito.verify(repository, Mockito.times(1)).save(response.getResponseBody());
                 });
     }
 
@@ -158,9 +177,7 @@ public class StudentControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Student.class)
-                .consumeWith(response -> {
-                    Mockito.verify(repository, Mockito.times(1)).save(expectedStudent);
-                });
+                .consumeWith(response -> Mockito.verify(repository, Mockito.times(1)).save(expectedStudent));
     }
 
     @Test
@@ -177,6 +194,93 @@ public class StudentControllerTest {
                 .body(BodyInserters.fromValue(updateStudent))
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void testUpdatePassword() {
+        Student student = StudentTestUtil.getStudent3();
+        String currentPassword = student.getPassword();
+        String newPassword = "newPa$$word1!";
+
+        Mockito.when(repository.findById(student.getStudentId()))
+                .thenReturn(Mono.just(student));
+
+        Mockito.when(passwordEncoder.matches(currentPassword, currentPassword))
+                .thenReturn(true);
+
+        Mockito.when(passwordEncoder.encode(newPassword))
+                .thenReturn(newPassword);
+
+        Mockito.when(repository.save(student))
+                .thenReturn(Mono.just(student));
+
+        Map<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("currentPassword", currentPassword);
+        bodyMap.put("newPassword", newPassword);
+
+        webClient.put()
+                .uri(API_STUDENT + "/password/{studentId}", student.getStudentId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(bodyMap))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Student.class)
+                .consumeWith(response -> {
+                    assertNotNull(response.getResponseBody());
+                    assertEquals(response.getResponseBody().getPassword(), newPassword);
+                    Mockito.verify(repository, Mockito.times(1)).save(response.getResponseBody());
+                    Mockito.verify(passwordEncoder, Mockito.times(1)).matches(currentPassword, currentPassword);
+                    Mockito.verify(passwordEncoder, Mockito.times(1)).encode(newPassword);
+                });
+    }
+
+    @Test
+    void testUpdatePassword_notFound() {
+        Student student = StudentTestUtil.getStudent3();
+        String currentPassword = student.getPassword();
+        String newPassword = "newPa$$word1!";
+
+        Mockito.when(repository.findById(student.getStudentId()))
+                .thenReturn(Mono.empty());
+
+        Map<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("currentPassword", currentPassword);
+        bodyMap.put("newPassword", newPassword);
+
+        webClient.put()
+                .uri(API_STUDENT + "/password/{studentId}", student.getStudentId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(bodyMap))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .consumeWith(response -> Mockito.verify(repository, Mockito.times(1)).findById(student.getStudentId()));
+    }
+
+    @Test
+    void testUpdatePassword_incorrectPassword() {
+        Student student = StudentTestUtil.getStudent3();
+        String currentPassword = student.getPassword();
+        String newPassword = "newPa$$word1!";
+
+        Mockito.when(repository.findById(student.getStudentId()))
+                .thenReturn(Mono.just(student));
+
+        Mockito.when(passwordEncoder.matches(currentPassword, currentPassword))
+                .thenReturn(false);
+
+        Map<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("currentPassword", currentPassword);
+        bodyMap.put("newPassword", newPassword);
+
+        webClient.put()
+                .uri(API_STUDENT + "/password/{studentId}", student.getStudentId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(bodyMap))
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .consumeWith(response -> Mockito.verify(passwordEncoder, Mockito.times(1)).matches(currentPassword, currentPassword));
     }
 
     @Test
