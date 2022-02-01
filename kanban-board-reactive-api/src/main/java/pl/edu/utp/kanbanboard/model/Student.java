@@ -33,7 +33,7 @@ public class Student implements UserDetails {
 
     private String password;
 
-    private Set<String> projectIds = new HashSet<>();
+    private Set<String> projects = new HashSet<>();
 
     public Student(String studentId, String firstName, String lastName, String indexNumber) {
         this.studentId = studentId;

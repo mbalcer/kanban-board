@@ -26,9 +26,9 @@ public class Task {
 
     private LocalDateTime createDateTime;
 
-    private String projectId;
+    private String project;
 
-    private String studentId;
+    private String student;
 
     public Task(String name, String description, Integer sequence) {
         this.name = name;

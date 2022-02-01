@@ -34,7 +34,7 @@ public class  TaskCreatedWebSocketHandler implements WebSocketHandler {
                     Map<String, String> parameters = template.match(getConnectionUri(session).getPath());
                     String projectId = parameters.get("projectId");
 
-                    return task.getProjectId().equals(projectId);
+                    return task.getProject().equals(projectId);
                 })
                 .map(this::toString)
                 .map(session::textMessage);

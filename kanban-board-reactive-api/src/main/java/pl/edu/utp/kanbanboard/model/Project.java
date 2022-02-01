@@ -29,9 +29,9 @@ public class Project {
 
     private LocalDateTime submitDateTime;
 
-    private Set<String> taskIds = new HashSet<>();
+    private Set<String> tasks = new HashSet<>();
 
-    private Set<String> studentIds = new HashSet<>();
+    private Set<String> students = new HashSet<>();
 
     public Project(String projectId, String name, String description) {
         this.projectId = projectId;
