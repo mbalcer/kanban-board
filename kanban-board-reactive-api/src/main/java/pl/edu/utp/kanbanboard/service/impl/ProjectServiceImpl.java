@@ -44,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Flux<Project> allByUser(String email) {
         return this.studentRepository
                 .getByEmail(email)
-                .flatMapMany(student -> this.projectRepository.findAllByStudentIdsContains(student.getStudentId()));
+                .flatMapMany(student -> this.projectRepository.findAllByStudentsContains(student.getStudentId()));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Mono<Project> delete(String id) {
         return this.projectRepository
                 .findById(id)
-                .flatMap(s -> this.taskRepository.deleteByProjectId(id)
+                .flatMap(s -> this.taskRepository.deleteByProject(id)
                         .then(this.projectRepository.deleteById(s.getProjectId()))
                         .thenReturn(s));
     }

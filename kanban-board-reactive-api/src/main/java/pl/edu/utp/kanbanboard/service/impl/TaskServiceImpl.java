@@ -34,7 +34,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Flux<Task> allByProjectId(String projectId) {
-        return this.taskRepository.findAllByProjectId(projectId);
+        return this.taskRepository.findAllByProject(projectId);
     }
 
     @Override
