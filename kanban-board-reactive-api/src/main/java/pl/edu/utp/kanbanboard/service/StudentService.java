@@ -15,5 +15,7 @@ public interface StudentService {
 
     Mono<Student> update(String id, Student updateStudent);
 
+    Mono<Student> updatePassword(String studentId, String currentPassword, String newPassword);
+
     Mono<Student> delete(String id);
 }

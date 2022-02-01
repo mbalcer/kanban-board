@@ -3,6 +3,7 @@ package pl.edu.utp.kanbanboard.service.impl;
 import org.springframework.stereotype.Service;
 import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.repository.ProjectRepository;
+import pl.edu.utp.kanbanboard.repository.StudentRepository;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
 import pl.edu.utp.kanbanboard.service.ProjectService;
 import pl.edu.utp.kanbanboard.service.RelationshipService;
@@ -15,11 +16,16 @@ import java.util.UUID;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+    private final StudentRepository studentRepository;
     private final TaskRepository taskRepository;
     private final RelationshipService relationshipService;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, TaskRepository taskRepository, RelationshipService relationshipService) {
+    public ProjectServiceImpl(ProjectRepository projectRepository,
+                              StudentRepository studentRepository,
+                              TaskRepository taskRepository,
+                              RelationshipService relationshipService) {
         this.projectRepository = projectRepository;
+        this.studentRepository = studentRepository;
         this.taskRepository = taskRepository;
         this.relationshipService = relationshipService;
     }
@@ -32,6 +38,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Mono<Project> get(String id) {
         return this.projectRepository.findById(id);
+    }
+
+    @Override
+    public Flux<Project> allByUser(String email) {
+        return this.studentRepository
+                .getByEmail(email)
+                .flatMapMany(student -> this.projectRepository.findAllByStudentIdsContains(student.getStudentId()));
     }
 
     @Override
@@ -80,6 +93,15 @@ public class ProjectServiceImpl implements ProjectService {
                     project.setUpdateDateTime(LocalDateTime.now());
                 })
                 .flatMap(this.projectRepository::save);
+    }
+
+    @Override
+    public Mono<Project> addStudent(String projectId, String studentId) {
+        return this.studentRepository
+                .findById(studentId)
+                .flatMap(student -> this.projectRepository.findById(projectId)
+                        .doOnNext(project -> project.getStudentIds().add(studentId))
+                        .flatMap(this.projectRepository::save));
     }
 
     @Override

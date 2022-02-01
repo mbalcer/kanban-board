@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface TaskRepository extends ReactiveMongoRepository<Task, String> {
     Flux<Task> findByName(String name);
+    Flux<Task> findAllByProjectId(String projectId);
     Mono<Void> deleteByProjectId(String projectId);
 }

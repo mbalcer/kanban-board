@@ -3,6 +3,11 @@ package pl.edu.utp.kanbanboard.util;
 import pl.edu.utp.kanbanboard.model.Student;
 
 public class StudentTestUtil {
+
+    public static Student getEmptyStudent() {
+        return new Student();
+    }
+
     public static Student getStudent1() {
         return new Student("00001111-2222-3333-4444-555566667777",
                 "Jan",

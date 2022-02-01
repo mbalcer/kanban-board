@@ -1,5 +1,6 @@
 package pl.edu.utp.kanbanboard.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +28,14 @@ public class StudentController {
     @GetMapping("/{id}")
     public Mono<ResponseEntity<Student>> getStudentById(@PathVariable String id) {
         return studentService.get(id)
-                .map(student -> ResponseEntity.ok(student))
+                .map(ResponseEntity::ok)
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
     @GetMapping("/email/{email}")
     public Mono<ResponseEntity<Student>> getStudentByEmail(@PathVariable String email) {
         return studentService.getByEmail(email)
-                .map(student -> ResponseEntity.ok(student))
+                .map(ResponseEntity::ok)
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
@@ -50,11 +51,18 @@ public class StudentController {
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Student>> updateStudent(@PathVariable String id, @RequestBody Student student) {
         return studentService.update(id, student)
-                .map(s -> ResponseEntity.ok(s))
+                .map(ResponseEntity::ok)
                 .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
     }
 
-    // TODO: Add PUT /password/{studentId} endpoint to update password
+    @PutMapping("/password/{studentId}")
+    public Mono<ResponseEntity<Student>> updatePassword(@PathVariable String studentId, @RequestBody ObjectNode objectNode) {
+        String currentPassword = objectNode.get("currentPassword").asText();
+        String newPassword = objectNode.get("newPassword").asText();
+        return studentService.updatePassword(studentId, currentPassword, newPassword)
+                .map(ResponseEntity::ok)
+                .switchIfEmpty(Mono.just(ResponseEntity.badRequest().build()));
+    }
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Object>> deleteStudent(@PathVariable String id) {
