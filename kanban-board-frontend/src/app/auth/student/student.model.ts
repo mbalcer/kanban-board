@@ -1,6 +1,6 @@
 export class Student {
 
-  studentId: number;
+  studentId: string;
   firstName: string;
   lastName: string;
   indexNumber: string;
@@ -8,7 +8,7 @@ export class Student {
   email: string;
   password: string;
 
-  constructor(studentId: number, firstName: string, lastName: string, indexNumber: string,
+  constructor(studentId: string, firstName: string, lastName: string, indexNumber: string,
               fullTime: boolean, email: string, password: string) {
     this.studentId = studentId;
     this.firstName = firstName;

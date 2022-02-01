@@ -51,30 +51,31 @@ export class TasksComponent implements OnInit {
   getUser(): void {
     this.studentService.getLoggedUser().subscribe(result => {
       this.user = result;
-      this.getProject();
+      // this.getProject();
     }, error => this.notification.error(error.error.message));
   }
 
-  getProject(): void {
-    const projectId = Number(this.route.snapshot.paramMap.get('projectId'));
-    this.projectService.getProjectById(projectId).subscribe(result => {
-      if (result.students.find(student => student.email === this.user.email) === undefined) {
-        this.router.navigate(['/forbidden']);
-      }
-      this.project = result;
-      this.boards.forEach(board => {
-        board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);
-      });
-      this.taskObserver(this.project);
-    }, error => {
-      if (error.status === 404) {
-        this.router.navigate(['/not-found']);
-      } else {
-        console.log(error);
-      }
-    });
-  }
-
+  // TODO: fix
+  //  getProject(): void {
+  //   const projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+  //   this.projectService.getProjectById(projectId).subscribe(result => {
+  //     if (result.students.find(student => student.email === this.user.email) === undefined) {
+  //       this.router.navigate(['/forbidden']);
+  //     }
+  //     this.project = result;
+  //     this.boards.forEach(board => {
+  //       board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);
+  //     });
+  //     this.taskObserver(this.project);
+  //   }, error => {
+  //     if (error.status === 404) {
+  //       this.router.navigate(['/not-found']);
+  //     } else {
+  //       console.log(error);
+  //     }
+  //   });
+  // }
+  //
   drop(event: CdkDragDrop<Task[], any>, board: Board): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -124,7 +125,7 @@ export class TasksComponent implements OnInit {
           }, error => this.notification.error(error.error.message));
         }
       } else {
-        this.getProject();
+        // this.getProject();
       }
     });
   }
@@ -159,7 +160,8 @@ export class TasksComponent implements OnInit {
     this.stompClient.debug = false;
     this.stompClient.connect({}, frame => {
       project.tasks.forEach(task => {
-        this.subscribeTask(task);
+        // TODO fix
+        //  this.subscribeTask(task);
       });
 
       this.stompClient.subscribe('/newTask/' + project.projectId, payload => {
@@ -219,5 +221,5 @@ export class TasksComponent implements OnInit {
 export interface AddEditAction {
   action: string;
   task: Task;
-  students: Student[];
+  students: string[];
 }
