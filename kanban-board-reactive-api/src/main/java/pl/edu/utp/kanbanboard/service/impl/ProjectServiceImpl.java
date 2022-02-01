@@ -51,8 +51,8 @@ public class ProjectServiceImpl implements ProjectService {
     public Mono<Project> create(Project newProject) {
         return Mono.just(newProject)
                 .filterWhen(project -> {
-                    if (!project.getStudentIds().isEmpty()) {
-                        return Flux.fromIterable(project.getStudentIds())
+                    if (!project.getStudents().isEmpty()) {
+                        return Flux.fromIterable(project.getStudents())
                                 .flatMap(relationshipService::isExistStudent)
                                 .all(isExist -> isExist);
                     } else {
@@ -60,8 +60,8 @@ public class ProjectServiceImpl implements ProjectService {
                     }
                 })
                 .filterWhen(project -> {
-                    if (!project.getTaskIds().isEmpty()) {
-                        return Flux.fromIterable(project.getTaskIds())
+                    if (!project.getTasks().isEmpty()) {
+                        return Flux.fromIterable(project.getTasks())
                                 .flatMap(relationshipService::isExistTask)
                                 .all(isExist -> isExist);
                     } else {
@@ -100,7 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
         return this.studentRepository
                 .findById(studentId)
                 .flatMap(student -> this.projectRepository.findById(projectId)
-                        .doOnNext(project -> project.getStudentIds().add(studentId))
+                        .doOnNext(project -> project.getStudents().add(studentId))
                         .flatMap(this.projectRepository::save));
     }
 

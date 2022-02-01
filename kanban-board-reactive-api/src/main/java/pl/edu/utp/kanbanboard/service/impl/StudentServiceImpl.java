@@ -43,8 +43,8 @@ public class StudentServiceImpl implements StudentService {
     public Mono<Student> create(Student newStudent) {
         return Mono.just(newStudent)
                 .filterWhen(student -> {
-                    if (!student.getProjectIds().isEmpty()) {
-                        return Flux.fromIterable(student.getProjectIds())
+                    if (!student.getProjects().isEmpty()) {
+                        return Flux.fromIterable(student.getProjects())
                                 .flatMap(relationshipService::isExistProject)
                                 .all(isExist -> isExist);
                     } else {

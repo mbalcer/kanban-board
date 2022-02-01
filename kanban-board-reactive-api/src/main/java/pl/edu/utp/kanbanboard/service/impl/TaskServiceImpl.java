@@ -40,8 +40,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Mono<Task> create(Task newTask) {
         return Mono.just(newTask)
-                .filterWhen(task -> task.getProjectId()!=null ? relationshipService.isExistProject(task.getProjectId()) : Mono.just(true))
-                .filterWhen(task -> task.getStudentId()!=null ? relationshipService.isExistStudent(task.getStudentId()) : Mono.just(true))
+                .filterWhen(task -> task.getProject()!=null ? relationshipService.isExistProject(task.getProject()) : Mono.just(true))
+                .filterWhen(task -> task.getStudent()!=null ? relationshipService.isExistStudent(task.getStudent()) : Mono.just(true))
                 .map(task -> {
                     task.setTaskId(UUID.randomUUID().toString());
                     task.setCreateDateTime(LocalDateTime.now());
@@ -58,13 +58,13 @@ public class TaskServiceImpl implements TaskService {
     public Mono<Task> update(String id, Task updateTask) {
         return this.taskRepository
                 .findById(id)
-                .filterWhen(task -> task.getStudentId()!=null ? relationshipService.isExistStudent(task.getStudentId()) : Mono.just(true))
+                .filterWhen(task -> task.getStudent()!=null ? relationshipService.isExistStudent(task.getStudent()) : Mono.just(true))
                 .doOnNext(task -> {
                     task.setName(updateTask.getName());
                     task.setDescription(updateTask.getDescription());
                     task.setState(updateTask.getState());
                     task.setSequence(updateTask.getSequence());
-                    task.setStudentId(updateTask.getStudentId());
+                    task.setStudent(updateTask.getStudent());
                 })
                 .flatMap(this.taskRepository::save)
                 .doOnSuccess(task -> publisher.publishEvent(new TaskEditedEvent(task, "updated")))
