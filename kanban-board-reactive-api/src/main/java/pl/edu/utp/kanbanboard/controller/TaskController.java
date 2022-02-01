@@ -12,6 +12,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/api/task", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin
 public class TaskController {
     private final TaskService taskService;
 
@@ -31,7 +32,7 @@ public class TaskController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
-    @GetMapping("/project/{projectId")
+    @GetMapping("/project/{projectId}")
     public Flux<Task> getAllTasksByProjectId(String projectId) {
         return taskService.allByProjectId(projectId);
     }

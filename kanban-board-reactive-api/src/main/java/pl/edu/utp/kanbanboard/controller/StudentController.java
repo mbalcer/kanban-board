@@ -13,6 +13,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/api/student", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin
 public class StudentController {
     private final StudentService studentService;
 

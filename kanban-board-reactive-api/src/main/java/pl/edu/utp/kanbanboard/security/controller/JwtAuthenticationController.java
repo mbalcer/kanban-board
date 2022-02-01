@@ -15,13 +15,14 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@CrossOrigin
 public class JwtAuthenticationController {
 
     private JwtTokenUtil jwtTokenUtil;
     private PasswordEncoder passwordEncoder;
     private StudentService studentService;
 
-    @PostMapping("/login")
+    @PostMapping("/authenticate")
     public Mono<ResponseEntity<JwtResponse>> login(@RequestBody JwtRequest request) {
         return studentService.getByEmail(request.getUsername())
                 .filter(userDetails ->
@@ -31,4 +32,7 @@ public class JwtAuthenticationController {
                 .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
+    @GetMapping(value = "/activate")
+    public void canActivate() {
+    }
 }

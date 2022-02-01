@@ -40,7 +40,7 @@ public class WebSecurityConfig {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers("/api/login").permitAll()
+                .pathMatchers("/api/authenticate").permitAll()
                 .pathMatchers("/app/chat/*").permitAll()
                 .pathMatchers("/app/newTask/*").permitAll()
                 .pathMatchers("/app/task/*").permitAll()
