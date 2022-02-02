@@ -28,7 +28,7 @@ export class DialogTaskDetails {
   }
 
   delete(): void {
-    if (confirm('Jesteś pewien że chcesz usunąć zadanie "' + this.deleteAction.data.name + '"?')) {
+    if (confirm('Jesteś pewien że chcesz usunąć zadanie "' + this.task.name + '"?')) {
       this.closeDialog(this.deleteAction);
     }
   }

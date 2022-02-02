@@ -69,7 +69,7 @@ export class TasksComponent implements OnInit {
           board.tasks = tasksResult.filter(t => t.state === board.name).sort((a, b) => a.sequence - b.sequence);
         });
         tasksResult.forEach(task => {
-          this.studentService.getStudentById(task.taskId).subscribe(studentResult => {
+          this.studentService.getStudentById(task.student).subscribe(studentResult => {
             this.studentInTask.set(task, studentResult);
           }, error => {
             this.studentInTask.set(task, null);
@@ -146,8 +146,8 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  deleteTask(task: Task): void {
-    this.taskService.deleteTask(task).subscribe(result => {
+  deleteTask(task: Map<Task, Student>): void {
+    this.taskService.deleteTask(task.keys().next().value).subscribe(result => {
       this.notification.success('Pomyślnie usunąłeś zadanie');
     }, error => this.notification.error(error.error.message));
   }
