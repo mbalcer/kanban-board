@@ -17,8 +17,8 @@
               <p class="task-name">{{item.name}}</p>
               <div class="student-initial"
                    *ngIf="item.student !== null"
-                   [matTooltip]="item.student | studentName">
-                {{item.student | initials}}
+                   [matTooltip]="studentInTask.get(item) | studentName">
+                {{studentInTask.get(item) | initials}}
               </div>
             </div>
           </div>

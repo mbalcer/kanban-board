@@ -31,6 +31,7 @@ export class TasksComponent implements OnInit {
   boards: Board[] = [];
   chatToggle = false;
   newMessageNotification = 0;
+  studentInTask: Map<Task, Student> = new Map<Task, Student>();
 
   constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private notification: NotificationService) {
@@ -51,31 +52,40 @@ export class TasksComponent implements OnInit {
   getUser(): void {
     this.studentService.getLoggedUser().subscribe(result => {
       this.user = result;
-      // this.getProject();
+      this.getProject();
     }, error => this.notification.error(error.error.message));
   }
 
-  // TODO: fix
-  //  getProject(): void {
-  //   const projectId = Number(this.route.snapshot.paramMap.get('projectId'));
-  //   this.projectService.getProjectById(projectId).subscribe(result => {
-  //     if (result.students.find(student => student.email === this.user.email) === undefined) {
-  //       this.router.navigate(['/forbidden']);
-  //     }
-  //     this.project = result;
-  //     this.boards.forEach(board => {
-  //       board.tasks = result.tasks.filter(r => r.state === board.name).sort((a, b) => a.sequence - b.sequence);
-  //     });
-  //     this.taskObserver(this.project);
-  //   }, error => {
-  //     if (error.status === 404) {
-  //       this.router.navigate(['/not-found']);
-  //     } else {
-  //       console.log(error);
-  //     }
-  //   });
-  // }
-  //
+  getProject(): void {
+    const projectId = this.route.snapshot.paramMap.get('projectId');
+    this.projectService.getProjectById(projectId).subscribe(result => {
+      if (result.students.find(studentId => studentId === this.user.studentId) === undefined) {
+        this.router.navigate(['/forbidden']);
+      }
+      this.project = result;
+      this.taskService.getTasksByProject(this.project.projectId).subscribe(tasksResult => {
+        this.boards.forEach(board => {
+          board.tasks = tasksResult.filter(t => t.state === board.name).sort((a, b) => a.sequence - b.sequence);
+        });
+        tasksResult.forEach(task => {
+          this.studentService.getStudentById(task.taskId).subscribe(studentResult => {
+            this.studentInTask.set(task, studentResult);
+          }, error => {
+            this.studentInTask.set(task, null);
+          });
+        });
+      });
+
+      this.taskObserver(this.project);
+    }, error => {
+      if (error.status === 404) {
+        this.router.navigate(['/not-found']);
+      } else {
+        console.log(error);
+      }
+    });
+  }
+
   drop(event: CdkDragDrop<Task[], any>, board: Board): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -92,7 +102,7 @@ export class TasksComponent implements OnInit {
   openTaskDetails(task: Task): void {
     const dialogRef = this.dialog.open(DialogTaskDetails, {
       width: '50%',
-      data: task
+      data: new Map<Task, Student>().set(task, this.studentInTask.get(task))
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -125,7 +135,7 @@ export class TasksComponent implements OnInit {
           }, error => this.notification.error(error.error.message));
         }
       } else {
-        // this.getProject();
+        this.getProject();
       }
     });
   }

@@ -32,6 +32,11 @@ export class StudentService {
       {headers: this.HEADERS});
   }
 
+  public getStudentById(studentId: string): Observable<Student> {
+    return this.http.get<Student>(this.STUDENT_URL + '/' + studentId,
+      {headers: this.HEADERS});
+  }
+
   public updateStudent(updateStudent: Student): Observable<Student> {
     return this.http.put<Student>(this.STUDENT_URL + '/' + updateStudent.studentId, updateStudent,
       {headers: this.HEADERS});

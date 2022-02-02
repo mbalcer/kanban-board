@@ -17,7 +17,7 @@ export class TaskService {
               private authService: AuthService) {
   }
 
-  getTasksByProject(projectId: number): Observable<Task[]> {
+  getTasksByProject(projectId: string): Observable<Task[]> {
     return this.httpClient.get<Task[]>(this.TASK_URL + '/project/' + projectId,
       {headers: this.HEADERS});
   }
