@@ -32,6 +32,7 @@ export class TasksComponent implements OnInit {
   chatToggle = false;
   newMessageNotification = 0;
   studentInTask: Map<Task, Student> = new Map<Task, Student>();
+  studentsInProject: Student[] = [];
 
   constructor(private studentService: StudentService, private taskService: TaskService, private projectService: ProjectService,
               private dialog: MatDialog, private route: ActivatedRoute, private router: Router, private notification: NotificationService) {
@@ -63,7 +64,7 @@ export class TasksComponent implements OnInit {
         this.router.navigate(['/forbidden']);
       }
       this.project = result;
-      this.taskService.getTasksByProject(this.project.projectId).subscribe(tasksResult => {
+      this.taskService.getTasksByProject(result.projectId).subscribe(tasksResult => {
         this.boards.forEach(board => {
           board.tasks = tasksResult.filter(t => t.state === board.name).sort((a, b) => a.sequence - b.sequence);
         });
@@ -76,6 +77,11 @@ export class TasksComponent implements OnInit {
         });
       });
 
+      this.project.students.forEach(studentId => {
+        this.studentService.getStudentById(studentId).subscribe(studentResult => {
+          this.studentsInProject.push(studentResult);
+        });
+      });
       this.taskObserver(this.project);
     }, error => {
       if (error.status === 404) {
@@ -114,8 +120,8 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  openAddTask(action, task?): void {
-    const addEditAction: AddEditAction = {action, students: this.project.students, task};
+  openAddTask(action, taskMap?: Map<Task, Student>): void {
+    const addEditAction: AddEditAction = {action, students: this.studentsInProject, task: taskMap};
     const dialogRef = this.dialog.open(DialogAddTask, {
       width: '50%',
       data: addEditAction
@@ -123,7 +129,7 @@ export class TasksComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        result.data.project = this.project;
+        result.data.project = this.project.projectId;
 
         if (result.action === 'add') {
           this.taskService.createTask(result.data).subscribe(createResult => {
@@ -146,7 +152,7 @@ export class TasksComponent implements OnInit {
     }, error => this.notification.error(error.error.message));
   }
 
-  editTask(task: Task): void {
+  editTask(task: Map<Task, Student>): void {
     this.openAddTask('edit', task);
   }
 
@@ -230,6 +236,6 @@ export class TasksComponent implements OnInit {
 
 export interface AddEditAction {
   action: string;
-  task: Task;
-  students: string[];
+  task: Map<Task, Student>;
+  students: Student[];
 }

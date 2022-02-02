@@ -34,10 +34,9 @@ export class DialogAddTask {
   constructor(public dialogRef: MatDialogRef<DialogAddTask>,
               @Inject(MAT_DIALOG_DATA) public data: AddEditAction) {
     this.formResult.action = data.action;
-    // TODO fix
-    //  this.options = data.students;
+    this.options = data.students;
     if (this.formResult.action === 'edit') {
-      this.taskToAdd = data.task;
+      this.taskToAdd = data.task.keys().next().value;
     }
   }
 
