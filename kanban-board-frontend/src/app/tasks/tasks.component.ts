@@ -12,10 +12,9 @@ import {ProjectService} from '../home/projects/project.service';
 import {NotificationService} from '../notification.service';
 import {MatDrawer} from '@angular/material/sidenav';
 import {environment} from '../../environments/environment';
-import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
 import {DialogTaskDetails} from '../dialogs/dialog-task-details/dialog-task-details';
 import {DialogAddTask} from '../dialogs/dialog-add-task/dialog-add-task';
+import {webSocket} from 'rxjs/webSocket';
 
 @Component({
   selector: 'app-tasks',
@@ -23,9 +22,6 @@ import {DialogAddTask} from '../dialogs/dialog-add-task/dialog-add-task';
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
-  private serverUrl = environment.backendUrl + '/chat';
-  private stompClient;
-
   user: Student;
   project: Project;
   boards: Board[] = [];
@@ -171,30 +167,32 @@ export class TasksComponent implements OnInit {
   }
 
   taskObserver(project: Project): void {
-    const ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-    this.stompClient.debug = false;
-    this.stompClient.connect({}, frame => {
-      project.tasks.forEach(task => {
-        // TODO fix
-        //  this.subscribeTask(task);
-      });
+    project.tasks.forEach(taskId => {
+      this.subscribeTask(taskId);
+    });
 
-      this.stompClient.subscribe('/newTask/' + project.projectId, payload => {
-          const newTask = JSON.parse(payload.body);
-          this.boards[0].tasks.push(newTask);
-          this.notification.success('Dodano nowe zadanie');
-          this.subscribeTask(newTask);
+    const ws = webSocket(environment.webSocketUrl + '/newTask/' + project.projectId);
+    ws.subscribe(payload => {
+      const newTask = payload as Task;
+      this.boards[0].tasks.push(newTask);
+      this.studentService.getStudentById(newTask.student).subscribe(result => {
+        this.studentInTask.set(newTask, result);
+      }, error => {
+        this.studentInTask.set(newTask, null);
       });
+      this.notification.success('Dodano nowe zadanie');
+      this.subscribeTask(newTask.taskId);
     });
   }
 
-  subscribeTask(task: Task): void {
-    this.stompClient.subscribe('/task/' + task.taskId, payload => {
-      if (payload.body === 'deleted') {
-        this.websocketDeleteTask(task);
+  subscribeTask(taskId: string): void {
+    const ws = webSocket(environment.webSocketUrl + '/task/' + taskId);
+    ws.subscribe(payload => {
+      const taskEvent = payload as TaskEditedEvent;
+      if (taskEvent.action === 'deleted') {
+        this.websocketDeleteTask(taskId);
       } else {
-        this.websocketEditTask(JSON.parse(payload.body));
+        this.websocketEditTask(taskEvent.source);
       }
     });
   }
@@ -223,12 +221,12 @@ export class TasksComponent implements OnInit {
     }
   }
 
-  websocketDeleteTask(task: Task): void {
+  websocketDeleteTask(taskId: string): void {
     this.boards.forEach((board, index) => {
-      const indexTask = board.tasks.findIndex(t => t.taskId === task.taskId);
+      const indexTask = board.tasks.findIndex(t => t.taskId === taskId);
       if (indexTask !== -1) {
         this.boards[index].tasks.splice(indexTask, 1);
-        this.notification.success('Zadanie "' + task.name + '" zostało usunięte');
+        this.notification.success('Zadanie "' + taskId + '" zostało usunięte');
       }
     });
   }
@@ -238,4 +236,10 @@ export interface AddEditAction {
   action: string;
   task: Map<Task, Student>;
   students: Student[];
+}
+
+export interface TaskEditedEvent {
+  source: Task;
+  timestamp: number;
+  action: string;
 }
