@@ -33,7 +33,7 @@ public class TaskController {
     }
 
     @GetMapping("/project/{projectId}")
-    public Flux<Task> getAllTasksByProjectId(String projectId) {
+    public Flux<Task> getAllTasksByProjectId(@PathVariable String projectId) {
         return taskService.allByProjectId(projectId);
     }
 
