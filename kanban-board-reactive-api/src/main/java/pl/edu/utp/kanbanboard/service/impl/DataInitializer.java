@@ -53,7 +53,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                 .map(task -> new Project(UUID.randomUUID().toString(), "Project " + task.getSequence(),
                         "Description " + task.getSequence(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusDays(task.getSequence()),
                         new HashSet<>(Collections.singleton(task.getTaskId())),
-                        new HashSet<>()))
+                        new HashSet<>(), new HashSet<>()))
                 .flatMap(projectRepository::save)
                 .thenMany(projectRepository.findAll())
                 .subscribe(project -> System.out.println("saving " + project));
