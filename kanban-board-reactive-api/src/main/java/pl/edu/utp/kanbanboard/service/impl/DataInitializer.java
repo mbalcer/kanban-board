@@ -44,6 +44,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         Flux.just(5, 6, 7)
                 .doOnNext(i -> taskRepository.deleteAll())
                 .doOnNext(i -> projectRepository.deleteAll())
+                .doOnNext(i -> studentRepository.deleteAll())
                 .map(number -> new Task(UUID.randomUUID().toString(), "Task " + number,
                         "Description " + number, number, TaskState.TODO,
                         LocalDateTime.now(), null, null))
@@ -56,14 +57,19 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                         new HashSet<>()))
                 .flatMap(projectRepository::save)
                 .thenMany(projectRepository.findAll())
-                .subscribe(project -> System.out.println("saving " + project));
+                .doOnNext(project -> System.out.println("saving " + project))
+                .map(project -> new Student(UUID.randomUUID().toString(), "Jan", "Kowalski", "11133",
+                        true, "jankow@wp.pl", passwordEncoder.encode("Qwerty.1"),
+                                new HashSet<>(Collections.singleton(project.getProjectId()))))
+                .last()
+                .flatMap(studentRepository::save)
+                .thenMany(studentRepository.findAll())
+                .subscribe(student -> System.out.println("saving " + student));
 
-        // TODO: naprawa błędów...
         studentRepository.deleteAll()
                 .thenMany(Flux.just("Mateusz", "Szymon", "Kacper", "Karol")
                         .map(name -> new Student(UUID.randomUUID().toString(), name, name, "11133" + name.length(),
                                 true, name + "@gmail.com", passwordEncoder.encode("123456789"),
-//                                new HashSet<String>(Collections.singleton(projectRepository.findByName("Project " + name.length()).blockFirst().getProjectId())),
                                 new HashSet<>()))
                         .flatMap(studentRepository::save))
                 .thenMany(studentRepository.findAll())
