@@ -13,8 +13,10 @@ import pl.edu.utp.kanbanboard.model.TaskState;
 import pl.edu.utp.kanbanboard.repository.ProjectRepository;
 import pl.edu.utp.kanbanboard.repository.StudentRepository;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
+import pl.edu.utp.kanbanboard.service.RegisterService;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,15 +29,18 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     private final StudentRepository studentRepository;
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
+    private final RegisterService registerService;
     private PasswordEncoder passwordEncoder;
 
     public DataInitializer(StudentRepository studentRepository,
                            ProjectRepository projectRepository,
                            TaskRepository taskRepository,
+                           RegisterService registerService,
                            PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
+        this.registerService = registerService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -54,7 +59,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                 .map(task -> new Project(UUID.randomUUID().toString(), "Project " + task.getSequence(),
                         "Description " + task.getSequence(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusDays(task.getSequence()),
                         new HashSet<>(Collections.singleton(task.getTaskId())),
-                        new HashSet<>()))
+                        new HashSet<>(), new HashSet<>()))
                 .flatMap(projectRepository::save)
                 .thenMany(projectRepository.findAll())
                 .doOnNext(project -> System.out.println("saving " + project))
@@ -74,5 +79,10 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                         .flatMap(studentRepository::save))
                 .thenMany(studentRepository.findAll())
                 .subscribe(student -> log.info("saving " + student.toString()));
+
+        // TODO: intervally invoking update
+//        Flux.interval(Duration.ofSeconds(10))
+//                .doOnNext(next -> registerService.updateAll())
+//                .subscribe(next -> System.out.println("Flow register update..."));
     }
 }
