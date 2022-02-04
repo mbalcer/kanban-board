@@ -1,5 +1,6 @@
 package pl.edu.utp.kanbanboard.service;
 
+import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.model.RegisterEntry;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,6 +18,9 @@ public interface RegisterService {
 
     Mono<RegisterEntry> getByProjectIdAndDate(String projectId, LocalDate date);
 
-    Flux<RegisterEntry> updateAll();
+    Mono<Project> update(String projectId);
+
+    // TODO:
+    // Flux<RegisterEntry> updateAll();
 
 }

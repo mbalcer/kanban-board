@@ -3,6 +3,7 @@ package pl.edu.utp.kanbanboard.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.model.RegisterEntry;
 import pl.edu.utp.kanbanboard.service.RegisterService;
 import reactor.core.publisher.Flux;
@@ -50,9 +51,17 @@ public class RegisterController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
-    @GetMapping("/update")
-    public Flux<RegisterEntry> updateAll() {
-        return registerService.updateAll();
+    @GetMapping("/update/{projectId}")
+    public Mono<ResponseEntity<Project>> updateByProjectId(@PathVariable String projectId) {
+        return registerService.update(projectId)
+                .map(ResponseEntity::ok)
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
+
+    // TODO:
+//    @GetMapping("/update")
+//    public Flux<RegisterEntry> updateAll() {
+//        return registerService.updateAll();
+//    }
 
 }

@@ -1,7 +1,7 @@
 package pl.edu.utp.kanbanboard.service.impl;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pl.edu.utp.kanbanboard.model.Project;
 import pl.edu.utp.kanbanboard.model.RegisterEntry;
 import pl.edu.utp.kanbanboard.model.Task;
 import pl.edu.utp.kanbanboard.model.TaskState;
@@ -57,39 +57,45 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 * * ?") // automatically invoked every day at midnight UTC
-    public Flux<RegisterEntry> updateAll() {
-        return this.projectRepository.findAll()
-                .flatMap(project -> {
-                    LocalDate now = LocalDate.now();
+    public Mono<Project> update(String projectId) {
+        LocalDate now = LocalDate.now();
+        return this.projectRepository.findById(projectId)
+                .doOnNext(project -> {
                     // delete entry with the same date if exists
-                    project.getFlowRegister().forEach(entryId ->
-                            registerRepository.findById(entryId)
-                                    .filter(entry -> entry.getDate().isEqual(now))
-                                    .doOnNext(this.registerRepository::delete)
-                                    .doOnSuccess(entry -> project.getFlowRegister().remove(entry.getEntryId())));
+                    this.registerRepository.findAllByProject(projectId)
+                            .filter(entry -> entry.getDate().isEqual(now))
+                            .doOnNext(entry -> {
+                                project.getFlowRegister().remove(entry.getEntryId());
+                                this.registerRepository.delete(entry).subscribe();
+                            }).doOnComplete(() -> this.projectRepository.save(project))
+                            .subscribe();
+                })
+                .doOnNext(project -> {
                     // initialize map for each task state with 0 values
                     Map<TaskState, Integer> registerFlow = new HashMap<>();
                     for (TaskState taskState : TaskState.values()) {
                         registerFlow.put(taskState, 0);
                     }
-                    // update map when task with given state found
-                    project.getTasks().forEach(taskId ->
-                            taskRepository.findById(taskId)
-                                    .map(Task::getState)
-                                    .doOnNext(state -> registerFlow.put(state, registerFlow.get(state) + 1)));
-                    // create register entry and save it
-                    RegisterEntry entry = new RegisterEntry();
-                    entry.setEntryId(UUID.randomUUID().toString());
-                    entry.setDate(now);
-                    entry.setFlow(registerFlow);
-                    entry.setProject(project.getProjectId());
-                    return this.registerRepository.save(entry)
-                            .doOnSuccess(next -> {
-                                project.getFlowRegister().add(entry.getEntryId());
-                                this.projectRepository.save(project);
-                            });
+                    this.taskRepository.findAllByProject(projectId)
+                            // update map when task with given state found
+                            .map(Task::getState)
+                            .doOnNext(state -> registerFlow.put(state, registerFlow.get(state) + 1))
+                            .doOnComplete(() -> {
+                                // create register entry and save it
+                                RegisterEntry entry = new RegisterEntry();
+                                entry.setEntryId(UUID.randomUUID().toString());
+                                entry.setDate(now);
+                                entry.setFlow(registerFlow);
+                                entry.setProject(project.getProjectId());
+                                this.registerRepository.save(entry)
+                                        .doOnSuccess(next -> {
+                                            project.getFlowRegister().add(entry.getEntryId());
+                                            this.projectRepository.save(project).subscribe();
+                                        }).subscribe();
+                            }).subscribe();
                 });
     }
+
+    // TODO: update all projects
 
 }
