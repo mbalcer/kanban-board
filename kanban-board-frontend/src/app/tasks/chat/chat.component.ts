@@ -29,27 +29,26 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {}
 
   ngOnChanges(): void {
-    // TODO: fix chat
-    // if (this.project && !this.initWebSocket) {
-    //   this.webSocketConnect(this.project.projectId);
-      // this.getHistoryOfMessages();
-      // this.initWebSocket = true;
-    // }
+    if (this.project && !this.initWebSocket) {
+      this.webSocketConnect(this.project.projectId);
+      this.getHistoryOfMessages();
+      this.initWebSocket = true;
+    }
   }
 
   ngOnDestroy(): void {
-    // if (this.initWebSocket) {
-    //   this.webSocketDisconnect(this.project.projectId);
-    // }
+    if (this.initWebSocket) {
+      this.webSocketDisconnect();
+    }
   }
 
-  // getHistoryOfMessages(): void {
-  //   this.chatService.getHistory(this.project.projectId).subscribe(result => {
-  //     if (result != null) {
-  //       this.messages = result;
-  //     }
-  //   });
-  // }
+  getHistoryOfMessages(): void {
+    this.chatService.getHistory(this.project.projectId).subscribe(result => {
+      if (result != null) {
+        this.messages = result;
+      }
+    });
+  }
 
   webSocketConnect(projectId): void {
     this.webSocketSubject = webSocket(environment.webSocketUrl + '/chat/' + projectId);
@@ -62,7 +61,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  webSocketDisconnect(projectId): void {
+  webSocketDisconnect(): void {
     this.webSocketSubject.unsubscribe();
   }
 
@@ -74,7 +73,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
         student: this.user,
         message: this.message,
       };
-      this.webSocketSubject.next(JSON.stringify(messageToSend));
+      this.webSocketSubject.next(messageToSend);
       this.message = '';
     }
   }

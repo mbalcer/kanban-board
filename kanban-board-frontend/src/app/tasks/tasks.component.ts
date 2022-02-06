@@ -127,13 +127,22 @@ export class TasksComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         result.data.project = this.project.projectId;
+        const selectedStudent = result.data.student;
+        result.data.student = selectedStudent.studentId;
 
         if (result.action === 'add') {
           this.taskService.createTask(result.data).subscribe(createResult => {
+            this.boards[0].tasks.push(createResult);
+            this.studentInTask.set(createResult, selectedStudent);
             this.notification.success('Pomyślnie dodano zadanie');
           }, error => this.notification.error(error.error.message));
         } else if (result.action === 'edit') {
           this.taskService.updateTask(result.data).subscribe(updateResult => {
+            this.boards.forEach(board => {
+              const indexTask = board.tasks.findIndex(t => t.taskId === updateResult.taskId);
+              board.tasks[indexTask] = updateResult;
+            });
+            this.studentInTask.set(result.data, selectedStudent);
             this.notification.success('Pomyślnie edytowano zadanie');
           }, error => this.notification.error(error.error.message));
         }
@@ -150,8 +159,13 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  deleteTask(task: Map<Task, Student>): void {
-    this.taskService.deleteTask(task.keys().next().value).subscribe(result => {
+  deleteTask(taskMap: Map<Task, Student>): void {
+    const task = taskMap.keys().next().value;
+    this.taskService.deleteTask(task).subscribe(result => {
+      const indexBoard = this.boards.findIndex(board => board.name === task.state);
+      const indexTask = this.boards[indexBoard].tasks.findIndex(t => t.taskId === task.taskId);
+      this.boards[indexBoard].tasks.splice(indexTask, 1);
+      this.studentInTask.delete(task);
       this.notification.success('Pomyślnie usunąłeś zadanie');
     }, error => this.notification.error(error.error.message));
   }

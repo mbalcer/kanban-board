@@ -33,6 +33,8 @@ public class Project {
 
     private Set<String> students = new HashSet<>();
 
+    private Set<String> flowRegister = new HashSet<>();
+
     public Project(String projectId, String name, String description) {
         this.projectId = projectId;
         this.name = name;

@@ -27,7 +27,7 @@
     <mat-form-field appearance="standard">
       <mat-label>Student</mat-label>
       <mat-select [(ngModel)]="taskToAdd.student" name="student" [compareWith]="objectComparisonFunction">
-        <mat-option *ngFor="let option of options" [value]="option.studentId">
+        <mat-option *ngFor="let option of options" [value]="option">
           {{option | studentName}}
         </mat-option>
       </mat-select>

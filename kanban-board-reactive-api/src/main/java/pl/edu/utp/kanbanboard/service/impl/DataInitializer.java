@@ -13,8 +13,10 @@ import pl.edu.utp.kanbanboard.model.TaskState;
 import pl.edu.utp.kanbanboard.repository.ProjectRepository;
 import pl.edu.utp.kanbanboard.repository.StudentRepository;
 import pl.edu.utp.kanbanboard.repository.TaskRepository;
+import pl.edu.utp.kanbanboard.service.RegisterService;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,15 +29,18 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     private final StudentRepository studentRepository;
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
+    private final RegisterService registerService;
     private PasswordEncoder passwordEncoder;
 
     public DataInitializer(StudentRepository studentRepository,
                            ProjectRepository projectRepository,
                            TaskRepository taskRepository,
+                           RegisterService registerService,
                            PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
+        this.registerService = registerService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,6 +49,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         Flux.just(5, 6, 7)
                 .doOnNext(i -> taskRepository.deleteAll())
                 .doOnNext(i -> projectRepository.deleteAll())
+                .doOnNext(i -> studentRepository.deleteAll())
                 .map(number -> new Task(UUID.randomUUID().toString(), "Task " + number,
                         "Description " + number, number, TaskState.TODO,
                         LocalDateTime.now(), null, null))
@@ -53,20 +59,30 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                 .map(task -> new Project(UUID.randomUUID().toString(), "Project " + task.getSequence(),
                         "Description " + task.getSequence(), LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now().plusDays(task.getSequence()),
                         new HashSet<>(Collections.singleton(task.getTaskId())),
-                        new HashSet<>()))
+                        new HashSet<>(), new HashSet<>()))
                 .flatMap(projectRepository::save)
                 .thenMany(projectRepository.findAll())
-                .subscribe(project -> System.out.println("saving " + project));
+                .doOnNext(project -> System.out.println("saving " + project))
+                .map(project -> new Student(UUID.randomUUID().toString(), "Jan", "Kowalski", "11133",
+                        true, "jankow@wp.pl", passwordEncoder.encode("Qwerty.1"),
+                                new HashSet<>(Collections.singleton(project.getProjectId()))))
+                .last()
+                .flatMap(studentRepository::save)
+                .thenMany(studentRepository.findAll())
+                .subscribe(student -> System.out.println("saving " + student));
 
-        // TODO: naprawa błędów...
         studentRepository.deleteAll()
                 .thenMany(Flux.just("Mateusz", "Szymon", "Kacper", "Karol")
                         .map(name -> new Student(UUID.randomUUID().toString(), name, name, "11133" + name.length(),
                                 true, name + "@gmail.com", passwordEncoder.encode("123456789"),
-//                                new HashSet<String>(Collections.singleton(projectRepository.findByName("Project " + name.length()).blockFirst().getProjectId())),
                                 new HashSet<>()))
                         .flatMap(studentRepository::save))
                 .thenMany(studentRepository.findAll())
                 .subscribe(student -> log.info("saving " + student.toString()));
+
+        // TODO: intervally invoking update
+//        Flux.interval(Duration.ofSeconds(10))
+//                .doOnNext(next -> registerService.updateAll())
+//                .subscribe(next -> System.out.println("Flow register update..."));
     }
 }
