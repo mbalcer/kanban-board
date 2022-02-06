@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Skumulowany diagram przepływu</h1>
+
+<div class="information-container" mat-dialog-content>
+  <ngx-charts-area-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="results"
+    [gradient]=true
+    [xAxis]=true
+    [showXAxisLabel]=false
+    [yAxis]=true
+    [showYAxisLabel]=true
+    [yAxisLabel]="'Liczba zadań'"
+    [legend]=true
+    [legendTitle]="'Legenda'"
+    [autoScale]=false>
+  </ngx-charts-area-chart>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <button mat-icon-button color="primary" (click)="refresh()" matTooltip="Odśwież">
+    <mat-icon>refresh</mat-icon>
+  </button>
+  <button mat-icon-button (click)="closeDialog()" matTooltip="Zamknij">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

@@ -15,6 +15,7 @@ import {environment} from '../../environments/environment';
 import {DialogTaskDetails} from '../dialogs/dialog-task-details/dialog-task-details';
 import {DialogAddTask} from '../dialogs/dialog-add-task/dialog-add-task';
 import {webSocket} from 'rxjs/webSocket';
+import {DialogFlowChart} from "../dialogs/dialog-flow-chart/dialog-flow-chart";
 
 @Component({
   selector: 'app-tasks',
@@ -139,6 +140,13 @@ export class TasksComponent implements OnInit {
       } else {
         this.getProject();
       }
+    });
+  }
+
+  displayFlowChart(): void {
+    this.dialog.open(DialogFlowChart, {
+      width: '70%',
+      data: this.project
     });
   }
 

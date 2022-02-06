@@ -28,6 +28,8 @@ import {ProfileComponent} from './profile/profile.component';
 import {DialogAddProjectStudent} from './dialogs/dialog-add-project-student/dialog-add-project-student';
 import {DialogProjectDetails} from './dialogs/dialog-project-details/dialog-project-details';
 import {DialogAddProject} from './dialogs/dialog-add-project/dialog-add-project';
+import {DialogFlowChart} from "./dialogs/dialog-flow-chart/dialog-flow-chart";
+import {NgxChartsModule} from "@swimlane/ngx-charts";
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import {DialogAddProject} from './dialogs/dialog-add-project/dialog-add-project'
     ProfileComponent,
     DialogAddProjectStudent,
     DialogProjectDetails,
-    DialogAddProject
+    DialogAddProject,
+    DialogFlowChart
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import {DialogAddProject} from './dialogs/dialog-add-project/dialog-add-project'
     FormsModule,
     AppRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxChartsModule
   ],
   providers: [
     AuthService,
@@ -71,7 +75,8 @@ import {DialogAddProject} from './dialogs/dialog-add-project/dialog-add-project'
     DialogAddTask,
     DialogAddProjectStudent,
     DialogProjectDetails,
-    DialogAddProject
+    DialogAddProject,
+    DialogFlowChart
   ]
 })
 export class AppModule {
