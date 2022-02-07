@@ -30,6 +30,7 @@ import {DialogProjectDetails} from './dialogs/dialog-project-details/dialog-proj
 import {DialogAddProject} from './dialogs/dialog-add-project/dialog-add-project';
 import {DialogFlowChart} from "./dialogs/dialog-flow-chart/dialog-flow-chart";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import {RegisterService} from "./flow-register/register.service";
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     AuthService,
     AuthGuardService,
     CryptoJsService,
-    StudentService
+    StudentService,
+    RegisterService
   ],
   bootstrap: [AppComponent],
   entryComponents: [

@@ -27,12 +27,12 @@ public class RegisterController {
     }
 
     @GetMapping("/project/{projectId}")
-    public Flux<RegisterEntry> getAllTasksByProjectId(@PathVariable String projectId) {
+    public Flux<RegisterEntry> getAllByProjectId(@PathVariable String projectId) {
         return registerService.allByProjectId(projectId);
     }
 
     @GetMapping("/date/{date}")
-    public Flux<RegisterEntry> getAllTasksByProjectId(@PathVariable LocalDate date) {
+    public Flux<RegisterEntry> getAllByDate(@PathVariable LocalDate date) {
         return registerService.allByDate(date);
     }
 
@@ -44,8 +44,8 @@ public class RegisterController {
     }
 
     @GetMapping("/project-date/{projectId}/{date}")
-    public Mono<ResponseEntity<RegisterEntry>> getByProjectIdAndDate(@PathVariable String projectId,
-                                                                     @PathVariable LocalDate date) {
+    public Mono<ResponseEntity<RegisterEntry>> getRegisterByProjectIdAndDate(@PathVariable String projectId,
+                                                                             @PathVariable LocalDate date) {
         return registerService.getByProjectIdAndDate(projectId, date)
                 .map(ResponseEntity::ok)
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
