@@ -1,12 +1,11 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
-import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
 import {environment} from '../../../environments/environment';
 import {Project} from '../../home/projects/project';
 import {Student} from '../../auth/student/student.model';
 import {Message} from './message';
 import {NotificationService} from '../../notification.service';
 import {ChatService} from './chat.service';
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 
 @Component({
   selector: 'app-chat',
@@ -14,9 +13,8 @@ import {ChatService} from './chat.service';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnChanges, OnDestroy {
-  private serverUrl = environment.backendUrl + '/chat';
-  private stompClient;
 
+  webSocketSubject: WebSocketSubject<any> = null;
   message: string;
   messages: Message[] = [];
   initWebSocket = false;
@@ -40,7 +38,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.initWebSocket) {
-      this.webSocketDisconnect(this.project.projectId);
+      this.webSocketDisconnect();
     }
   }
 
@@ -53,22 +51,18 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   webSocketConnect(projectId): void {
-    const ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-    this.stompClient.debug = false;
-    this.stompClient.connect({}, frame => {
-      this.stompClient.subscribe('/project/' + projectId, message => {
-        if (!this.openChat) {
-          this.newMessage.emit(true);
-        }
-        const newMessage = JSON.parse(message.body);
-        this.messages.push(newMessage);
-      });
+    this.webSocketSubject = webSocket(environment.webSocketUrl + '/chat/' + projectId);
+    this.webSocketSubject.subscribe(payload => {
+      if (!this.openChat) {
+        this.newMessage.emit(true);
+      }
+      const newMessage = payload as Message;
+      this.messages.push(newMessage);
     });
   }
 
-  webSocketDisconnect(projectId): void {
-    this.stompClient.disconnect('/project/' + projectId);
+  webSocketDisconnect(): void {
+    this.webSocketSubject.unsubscribe();
   }
 
   sendMessage(): void {
@@ -79,7 +73,7 @@ export class ChatComponent implements OnInit, OnChanges, OnDestroy {
         student: this.user,
         message: this.message,
       };
-      this.stompClient.send('/app/chat/' + this.project.projectId, {}, JSON.stringify(messageToSend));
+      this.webSocketSubject.next(messageToSend);
       this.message = '';
     }
   }

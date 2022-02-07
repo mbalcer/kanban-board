@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormControl, Validators} from '@angular/forms';
 import {DialogAction} from '../dialog-action';
 import {Student} from '../../auth/student/student.model';
-import { Task } from 'src/app/tasks/task';
+import {Task} from 'src/app/tasks/task';
 import {AddEditAction} from '../../tasks/tasks.component';
 
 @Component({
@@ -36,7 +36,7 @@ export class DialogAddTask {
     this.formResult.action = data.action;
     this.options = data.students;
     if (this.formResult.action === 'edit') {
-      this.taskToAdd = data.task;
+      this.taskToAdd = data.task.keys().next().value;
     }
   }
 

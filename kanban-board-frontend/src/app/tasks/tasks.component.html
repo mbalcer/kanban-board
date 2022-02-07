@@ -17,8 +17,8 @@
               <p class="task-name">{{item.name}}</p>
               <div class="student-initial"
                    *ngIf="item.student !== null"
-                   [matTooltip]="item.student | studentName">
-                {{item.student | initials}}
+                   [matTooltip]="studentInTask.get(item) | studentName">
+                {{studentInTask.get(item) | initials}}
               </div>
             </div>
           </div>
@@ -32,9 +32,14 @@
       <mat-icon>chat</mat-icon>
     </button>
 
-    <button mat-fab class="btn-add-task" color="accent" matTooltip="Dodaj nowe zadanie"
+    <button mat-fab class="btn-add-task" color="warn" matTooltip="Dodaj nowe zadanie"
             (click)="openAddTask('add')"  [ngClass]="chatToggle ? 'btn-after-open-chat' : null">
       <mat-icon>add</mat-icon>
+    </button>
+
+    <button mat-fab class="btn-diagram" color="accent" matTooltip="Wyświetl diagram"
+            (click)="displayFlowChart()"  [ngClass]="chatToggle ? 'btn-after-open-chat' : null">
+      <mat-icon>bar_chart</mat-icon>
     </button>
 
   </mat-drawer-content>

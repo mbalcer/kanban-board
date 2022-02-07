@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/api/authenticate").permitAll()
+                .pathMatchers(HttpMethod.POST, "/api/student").permitAll()
                 .pathMatchers("/app/chat/*").permitAll()
                 .pathMatchers("/app/newTask/*").permitAll()
                 .pathMatchers("/app/task/*").permitAll()

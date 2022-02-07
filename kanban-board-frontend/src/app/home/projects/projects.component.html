@@ -11,7 +11,7 @@
       </mat-card-content>
 
       <div class="students">
-        <div class="student-initial" *ngFor="let student of project.students">{{student | initials}}</div>
+        <div class="student-initial" *ngFor="let student of projectsStudents.get(project)">{{student | initials}}</div>
         <button mat-mini-fab class="btn-add-student" color="accent"
                 matTooltip="Dodaj studenta" (click)="addStudent(project)">
           <mat-icon>add</mat-icon>

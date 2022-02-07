@@ -18,7 +18,7 @@ export class ProjectService {
               private authService: AuthService) {
   }
 
-  getProjectById(id: number): Observable<Project> {
+  getProjectById(id: string): Observable<Project> {
     return this.httpClient.get<Project>(this.PROJECT_URL + '/' + id,
       {headers: this.HEADERS});
   }

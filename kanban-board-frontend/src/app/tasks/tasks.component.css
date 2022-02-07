@@ -87,17 +87,24 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.btn-add-task {
+.btn-chat {
   position: fixed;
   right: 2em;
   bottom: 2em;
   transition: all 0.5s ease-in-out;
 }
 
-.btn-chat {
+.btn-diagram {
   position: fixed;
   right: 2em;
   bottom: 8em;
+  transition: all 0.5s ease-in-out;
+}
+
+.btn-add-task {
+  position: fixed;
+  right: 2em;
+  bottom: 14em;
   transition: all 0.5s ease-in-out;
 }
 

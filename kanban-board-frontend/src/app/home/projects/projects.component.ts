@@ -17,6 +17,7 @@ import {DialogAddProject} from '../../dialogs/dialog-add-project/dialog-add-proj
 export class ProjectsComponent implements OnInit, OnChanges {
 
   projects: Project[];
+  projectsStudents: Map<Project, Student[]> = new Map<Project, Student[]>();
   students: Student[];
   initProject = false;
 
@@ -32,7 +33,6 @@ export class ProjectsComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.user && !this.initProject) {
       this.getProjects();
-      this.getStudents();
       this.initProject = true;
     }
   }
@@ -40,19 +40,33 @@ export class ProjectsComponent implements OnInit, OnChanges {
   getProjects(): void {
     this.projectService.getAllProjectsByUser(this.user).subscribe(result => {
       this.projects = result;
+      this.getStudents();
     });
   }
 
   getStudents(): void {
     this.studentService.getAll().subscribe(result => {
       this.students = result;
+      this.groupProjectsStudents();
+    });
+  }
+
+  groupProjectsStudents(): void {
+    this.projects.forEach(project => {
+      const studentsToAdd = [];
+      project.students.forEach(studentId => {
+        const retrievedStudent = this.students.find(findStudent => findStudent.studentId === studentId);
+        studentsToAdd.push(retrievedStudent);
+      });
+
+      this.projectsStudents.set(project, studentsToAdd);
     });
   }
 
   addStudent(project: Project): void {
     const possibleStudents = this.students.filter(
       student => project.students.find(
-        wanted => wanted.studentId === student.studentId) === undefined);
+        wanted => wanted === student.studentId) === undefined);
 
     const addStudentAction: AddStudentAction = {students: possibleStudents};
     const dialogRef = this.dialog.open(DialogAddProjectStudent, {
@@ -95,9 +109,10 @@ export class ProjectsComponent implements OnInit, OnChanges {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         if (result.action === 'add') {
-          result.data.students = [this.user];
+          result.data.students = [this.user.studentId];
           this.projectService.createProject(result.data).subscribe(createResult => {
             this.projects.push(createResult);
+            this.projectsStudents.set(createResult, [this.user]);
             this.notification.success('Pomyślnie dodano projekt');
           }, error => this.notification.error(error.error.message));
         } else if (result.action === 'edit') {

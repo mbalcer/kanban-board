@@ -1,11 +1,11 @@
-<h1 mat-dialog-title>{{data.name}}</h1>
-<p class="list-details">jest na liście {{data.state}}</p>
+<h1 mat-dialog-title>{{task.name}}</h1>
+<p class="list-details">jest na liście {{task.state}}</p>
 
-<div class="information-container" mat-dialog-content *ngIf="data.description !== null && data.description.length !== 0">
+<div class="information-container" mat-dialog-content *ngIf="task.description !== null && task.description.length !== 0">
   <mat-icon aria-hidden="false" aria-label="Opis" class="icon-container">description</mat-icon>
   <div class="details-container">
     <h2 class="title-container">Opis</h2>
-    <p>{{data.description}}</p>
+    <p>{{task.description}}</p>
   </div>
 </div>
 
@@ -13,8 +13,8 @@
   <mat-icon aria-hidden="false" aria-label="Student" class="icon-container">person_outline</mat-icon>
   <div class="details-container">
     <h2>Student</h2>
-    <p *ngIf="data.student !== null">{{data.student | studentName}}</p>
-    <p *ngIf="data.student === null">Nie przypisano żadnego studenta</p>
+    <p *ngIf="data.get(task) !== null">{{data.get(task) | studentName}}</p>
+    <p *ngIf="data.get(task) === null">Nie przypisano żadnego studenta</p>
   </div>
 </div>
 
@@ -22,7 +22,7 @@
   <mat-icon aria-hidden="false" aria-label="Data utworzenia" class="icon-container">date_range</mat-icon>
   <div class="details-container">
     <h2>Data utworzenia zadania</h2>
-    <p>{{data.createDateTime | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+    <p>{{task.createDateTime | date:'dd/MM/yyyy HH:mm:ss'}}</p>
   </div>
 </div>
 
@@ -30,7 +30,7 @@
   <mat-icon aria-hidden="false" aria-label="Priorytet" class="icon-container">hourglass_empty</mat-icon>
   <div class="details-container">
     <h2>Priorytet</h2>
-    <p>{{data.sequence}}</p>
+    <p>{{task.sequence}}</p>
   </div>
 </div>
 
