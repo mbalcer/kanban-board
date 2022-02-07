@@ -74,9 +74,8 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                 .thenMany(studentRepository.findAll())
                 .subscribe(student -> log.info("saving " + student.toString()));
 
-        // TODO: intervally invoking update
-//        Flux.interval(Duration.ofSeconds(10))
-//                .doOnNext(next -> registerService.updateAll())
-//                .subscribe(next -> System.out.println("Flow register update..."));
+        Flux.interval(Duration.ofHours(1))
+                .doOnNext(next -> registerService.updateAll())
+                .subscribe(next -> System.out.println("Flow register update..."));
     }
 }
