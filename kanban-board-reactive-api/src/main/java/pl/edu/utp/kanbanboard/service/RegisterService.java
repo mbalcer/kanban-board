@@ -20,7 +20,6 @@ public interface RegisterService {
 
     Mono<Project> update(String projectId);
 
-    // TODO:
-    // Flux<RegisterEntry> updateAll();
+    Flux<Project> updateAll();
 
 }

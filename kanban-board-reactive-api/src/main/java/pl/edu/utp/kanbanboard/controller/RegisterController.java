@@ -58,10 +58,9 @@ public class RegisterController {
                 .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
     }
 
-    // TODO:
-//    @GetMapping("/update")
-//    public Flux<RegisterEntry> updateAll() {
-//        return registerService.updateAll();
-//    }
+    @GetMapping("/update/all")
+    public Flux<Project> updateAll() {
+        return registerService.updateAll();
+    }
 
 }

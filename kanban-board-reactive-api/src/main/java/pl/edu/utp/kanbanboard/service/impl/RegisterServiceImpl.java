@@ -96,6 +96,10 @@ public class RegisterServiceImpl implements RegisterService {
                 });
     }
 
-    // TODO: update all projects
+    @Override
+    public Flux<Project> updateAll() {
+        return this.projectRepository.findAll()
+                .flatMap(project -> this.update(project.getProjectId()));
+    }
 
 }
