@@ -39,7 +39,7 @@ export class ProjectsComponent implements OnInit, OnChanges {
 
   getProjects(): void {
     this.projectService.getAllProjectsByUser(this.user).subscribe(result => {
-      this.projects = result;
+      this.projects = result.sort((p1, p2) => p1.name.localeCompare(p2.name));
       this.getStudents();
     });
   }

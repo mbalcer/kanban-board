@@ -29,7 +29,7 @@ export class DialogFlowChart {
   getFlowRegister(): void {
     this.results = [];
     this.registerService.getAllByProject(this.data).subscribe(registerTab => {
-      this.mapResults(registerTab);
+      this.mapResults(registerTab.sort((r1, r2) => r1.date.localeCompare(r2.date)));
     });
   }
 
