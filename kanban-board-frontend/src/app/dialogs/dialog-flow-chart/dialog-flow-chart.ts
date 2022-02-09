@@ -1,9 +1,9 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Project} from "../../home/projects/project";
-import {RegisterService} from "../../flow-register/register.service";
-import {FlowRegister} from "../../flow-register/flow-register";
-import {NotificationService} from "../../notification.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Project} from '../../home/projects/project';
+import {RegisterService} from '../../flow-register/register.service';
+import {FlowRegister} from '../../flow-register/flow-register';
+import {NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-dialog-flow-chart',
@@ -34,11 +34,11 @@ export class DialogFlowChart {
   }
 
   mapResults(registerTab: FlowRegister[]): void {
-    let resultMap = new Map<string, SeriesEntry[]>();
-    resultMap.set("TODO", []);
-    resultMap.set("IN_PROGRESS", []);
-    resultMap.set("TESTING", []);
-    resultMap.set("DONE", []);
+    const resultMap = new Map<string, SeriesEntry[]>();
+    resultMap.set('TODO', []);
+    resultMap.set('IN_PROGRESS', []);
+    resultMap.set('TESTING', []);
+    resultMap.set('DONE', []);
     registerTab.forEach(register => {
       Object.keys(register.flow).map(key => {
         let currentSeries = [];
@@ -47,19 +47,19 @@ export class DialogFlowChart {
         }
         currentSeries.push(new SeriesEntry(register.date, register.flow[key]));
         resultMap.set(key, currentSeries);
-      })
+      });
     });
     this.convertToJson(resultMap);
   }
 
   convertToJson(resultMap: Map<string, SeriesEntry[]>): void {
     resultMap.forEach((value, key) => {
-      let seriesValue = [];
+      const seriesValue = [];
       value.forEach(entry => {
         seriesValue.push({
           name: entry.date,
           value: entry.count
-        })
+        });
       });
       this.results = [...this.results, {
         name: this.translateState(key),
@@ -69,16 +69,16 @@ export class DialogFlowChart {
   }
 
   translateState(state: string): string {
-    if (state == "TODO") {
-      return "Do zrobienia";
-    } else if (state == "IN_PROGRESS") {
-      return "W trakcie";
-    } else if (state == "TESTING") {
-      return "Testowanie";
-    } else if (state == "DONE") {
-      return "Zrobione";
+    if (state === 'TODO') {
+      return 'Do zrobienia';
+    } else if (state === 'IN_PROGRESS') {
+      return 'W trakcie';
+    } else if (state === 'TESTING') {
+      return 'Testowanie';
+    } else if (state === 'DONE') {
+      return 'Zrobione';
     } else {
-      return "Inne";
+      return 'Inne';
     }
   }
 
